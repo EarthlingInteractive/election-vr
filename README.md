@@ -18,6 +18,10 @@ Prototype 6: Add data from past elections so that the results from another year 
  
 Prototype 7: Allow comparison between the results of two different election years by superimposing the results.  Estimated effort: 5-7 days
  
+Prototype 8: Show estimated max possible voter turnout in the outermost ring of the tree. Draw boundaries to show the actual turn-out from previous years.
+
+Prototype 9: Show real-time updates of data from AP feed (for use in CNN Newsroom of the future)
+
 Challenges and Risks:
 * County-level voting data from the 2016 election is currently only available from 1) individual state and county clerk web sites or 2) from the Associated Press.  The data from the AP is rich and formatted for easy use in visualizations but there is a fee to access it.  The data from state and county web sites vary from state to state and county to county.  It is not formatted for use in visualization and would need to be compiled manually into a spreadsheet via copy and paste.
 * Country-level data may hit performance issues when rendering because of the number of objects involved.
@@ -28,6 +32,7 @@ Technologies:
 * D3.js for transforming map data into 2D paths that can be converted to 3D using Three.js
 * TopoJSON US Atlas for state and county boundaries
 * AP Data via Google for state-level voting results (copied and pasted into a CSV file)
+* [Elex](https://source.opennews.org/en-US/articles/introducing-elex-tool-make-election-coverage-bette/) for getting AP data
  
 Related Visualizations:
 * http://scribu.github.io/romania-3d/
