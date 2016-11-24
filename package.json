@@ -1,0 +1,24 @@
+{
+  "name": "ElectionVR",
+  "version": "1.0.0",
+  "description": "VR visualization of 2016 Presidential Election popular vote",
+  "main": "app/index.js",
+  "author": "Steve Brudz <sbrudz@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --config webpack.config.js --colors"
+  },
+  "dependencies": {
+    "aframe": "^0.3.2",
+    "d3": "^4.3.0",
+    "d3-geo": "^1.4.0",
+    "three": "^0.82.1",
+    "topojson-client": "^2.1.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.8",
+    "babel-preset-es2015": "^6.18.0",
+    "webpack": "^1.13.3"
+  }
+}
