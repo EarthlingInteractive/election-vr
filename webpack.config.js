@@ -11,5 +11,8 @@ module.exports = {
 			exclude: /node_modules/,
 			loader: 'babel-loader'
 		}]
+	},
+	devServer: {
+		publicPath: "http://localhost:3033/dist/"
 	}
 };
