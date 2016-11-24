@@ -4,7 +4,7 @@ module.exports = {
         filename: "bundle.js",
         path: "./dist",
     },
-    devtool: "cheap-module-eval-source-map",
+    devtool: "inline-source-map",
     module: {
         loaders: [{
             test: /\.js$/,
