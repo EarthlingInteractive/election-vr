@@ -1,0 +1,23 @@
+{
+	"env": {
+		"browser": true,
+		"es6": true
+	},
+	"extends": "airbnb-base",
+	"parser": "babel-eslint",
+	"rules": {
+		// indentation
+		"indent": [ 2, 4 ],
+
+		// spacing
+		"template-curly-spacing": [ 2, "always" ],
+		"computed-property-spacing": [ 2, "always" ],
+		"no-multiple-empty-lines": [ 2, { "max": 1, "maxEOF": 0, "maxBOF": 0 } ],
+
+		// strings
+		"quotes": [ 2, "double", "avoid-escape" ],
+
+		// keep it simple
+		"complexity": [ 1, 5 ]
+	}
+}
