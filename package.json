@@ -15,6 +15,7 @@
         "aframe": "^0.3.2",
         "d3": "^4.3.0",
         "d3-geo": "^1.4.0",
+        "lodash": "^4.17.2",
         "three": "^0.82.1",
         "topojson-client": "^2.1.0"
     },
@@ -22,6 +23,7 @@
         "babel-core": "^6.18.2",
         "babel-eslint": "^7.1.1",
         "babel-loader": "^6.2.8",
+        "babel-plugin-transform-object-rest-spread": "^6.19.0",
         "babel-preset-es2015": "^6.18.0",
         "eslint": "^3.9.1",
         "eslint-config-airbnb-base": "latest",
