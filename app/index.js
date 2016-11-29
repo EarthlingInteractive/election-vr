@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
-import { map, omit, orderBy, reduce, sumBy, keyBy } from "lodash";
+import { map, omit, orderBy, reduce, sumBy, keyBy, last } from "lodash";
 
 const svg = d3.select("svg");
 
@@ -39,7 +39,7 @@ const ready = (error, us, data) => {
         .attr("d", path)
         .attr("fill", "grey");
 
-    for (let index = 0; index < 5; index += 1) {
+    for (let index = 4; index >= 0; index -= 1) {
         statesContext
             .enter()
             .append("path")
@@ -48,7 +48,7 @@ const ready = (error, us, data) => {
             .attr("fill", d => colorForCandidate(dataByFipsCode[ d.id ].results[ index ].candidate))
             .attr("transform", (d) => {
                 const [centerX, centerY] = path.centroid(d);
-                const scale = dataByFipsCode[ d.id ].results[ index ].percentageOfVote;
+                const scale = dataByFipsCode[ d.id ].results[ index ].cumulativePercentage;
                 return `translate(${ centerX * scale }, ${ centerY * scale }) scale(${ scale })`;
             });
     }
@@ -85,18 +85,23 @@ const calculatePercentages = (d) => {
         fips: d.fips,
         totalVotes: d.totalVotes,
         results: reduce(d.results, (calcResults, currResult) => {
+            const percentageOfVote = (currResult.votes / d.totalVotes);
+
+            const prevResults = last(calcResults);
+            const prevPercentage = prevResults ? prevResults.cumulativePercentage : 0;
+            const cumulativePercentage = prevPercentage + percentageOfVote;
+
             const calcResult = {
                 ...currResult,
-                percentageOfVote: (currResult.votes / d.totalVotes),
+                percentageOfVote,
+                cumulativePercentage,
             };
             return calcResults.concat(calcResult);
         }, []),
     };
 };
 
-const transformRow = (d) => {
-    return calculatePercentages(calculateTotal(convertToArray(d)));
-};
+const transformRow = d => calculatePercentages(calculateTotal(convertToArray(d)));
 
 d3.queue()
     .defer(d3.json, "./data/us-10m.v1.json")
