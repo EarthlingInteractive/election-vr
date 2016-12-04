@@ -41,4 +41,5 @@ Related Visualizations:
 
 Data Sets: 
 * FIPS data: http://www2.census.gov/geo/docs/reference/state.txt
-
+* Popular vote tabulation: google
+* Total number of eligible voters: http://www.electproject.org/2016g

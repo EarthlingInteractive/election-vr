@@ -73,7 +73,8 @@ const convertToArray = (d) => {
     return {
         fips: d.fips,
         state: d.state,
-        results: orderBy(map(omit(d, ["fips", "state", "electoral_votes"]), (value, key) => {
+        eligiblePopulation: stringToNum(d.eligible_population),
+        results: orderBy(map(omit(d, ["fips", "state", "electoral_votes", "eligible_population"]), (value, key) => {
             return {
                 candidate: key,
                 votes: stringToNum(value),
@@ -94,7 +95,7 @@ const calculatePercentages = (d) => {
         fips: d.fips,
         totalVotes: d.totalVotes,
         results: reduce(d.results, (calcResults, currResult) => {
-            const percentageOfVote = (currResult.votes / d.totalVotes);
+            const percentageOfVote = (currResult.votes / d.eligiblePopulation);
 
             const prevResults = last(calcResults);
             const prevPercentage = prevResults ? prevResults.cumulativePercentage : 0;
