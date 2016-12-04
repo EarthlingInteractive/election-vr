@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
-import { map, omit, orderBy, reduce, sumBy, keyBy, last } from "lodash";
+import { map, omit, orderBy, reduce, sumBy, last } from "lodash";
 
 const svg = d3.select("svg");
 
@@ -25,31 +25,39 @@ const colorForCandidate = (candidate) => {
 
 const ready = (error, us, data) => {
     if (error) throw error;
-    const dataByFipsCode = keyBy(data, "fips");
 
-    const statesContext = svg.append("g")
-        .attr("class", "states")
+    svg.append("defs")
         .selectAll("path")
-        .data(topojson.feature(us, us.objects.states).features);
-
-    statesContext
+        .data(topojson.feature(us, us.objects.states).features)
         .enter()
         .append("path")
-        .attr("id", d => `fips-${ d.id }`)
-        .attr("d", path)
-        .attr("fill", "grey");
+        .attr("id", d => `state-template-${ d.id }`)
+        .attr("d", path);
+
+    const usContext = svg.append("g")
+        .selectAll("use")
+        .data(data)
+        .enter();
+
+    const stateContext = usContext
+        .append("g")
+        .attr("id", d => `state-${ d.fips }`);
+
+    stateContext
+        .append("use")
+        .attr("xlink:href", d => `#state-template-${ d.fips }`)
+        .attr("fill", "gray");
 
     for (let index = 4; index >= 0; index -= 1) {
-        statesContext
-            .enter()
-            .append("path")
-            .attr("id", d => `entry-first-${ d.id }`)
-            .attr("d", path)
-            .attr("fill", d => colorForCandidate(dataByFipsCode[ d.id ].results[ index ].candidate))
+        stateContext
+            .append("use")
+            .attr("xlink:href", d => `#state-template-${ d.fips }`)
+            .attr("fill", d => colorForCandidate(d.results[ index ].candidate))
             .attr("transform", (d) => {
-                const [centerX, centerY] = path.centroid(d);
-                const scale = dataByFipsCode[ d.id ].results[ index ].cumulativePercentage;
-                return `translate(${ centerX * scale }, ${ centerY * scale }) scale(${ scale })`;
+                const fipsPath = d3.select(`#state-template-${ d.fips }`);
+                const [centerX, centerY] = path.centroid(fipsPath.datum());
+                const scale = d.results[ index ].cumulativePercentage;
+                return `translate(${ centerX * (1 - scale) }, ${ centerY * (1 - scale) }) scale(${ scale })`;
             });
     }
 };
@@ -64,6 +72,7 @@ const stringToNum = (str) => {
 const convertToArray = (d) => {
     return {
         fips: d.fips,
+        state: d.state,
         results: orderBy(map(omit(d, ["fips", "state", "electoral_votes"]), (value, key) => {
             return {
                 candidate: key,
