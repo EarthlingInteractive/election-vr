@@ -22,11 +22,18 @@ Prototype 8: Show estimated max possible voter turnout in the outermost ring of 
 
 Prototype 9: Show real-time updates of data from AP feed (for use in CNN Newsroom of the future)
 
-Challenges and Risks:
-* County-level voting data from the 2016 election is currently only available from 1) individual state and county clerk web sites or 2) from the Associated Press.  The data from the AP is rich and formatted for easy use in visualizations but there is a fee to access it.  The data from state and county web sites vary from state to state and county to county.  It is not formatted for use in visualization and would need to be compiled manually into a spreadsheet via copy and paste.
+## Running the project
+
+```bash
+yarn install
+yarn start
+```
+
+## Challenges and Risks:
+* ~~County-level voting data from the 2016 election is currently only available from 1) individual state and county clerk web sites or 2) from the Associated Press.  The data from the AP is rich and formatted for easy use in visualizations but there is a fee to access it.  The data from state and county web sites vary from state to state and county to county.  It is not formatted for use in visualization and would need to be compiled manually into a spreadsheet via copy and paste.~~
 * Country-level data may hit performance issues when rendering because of the number of objects involved.
  
-Technologies:
+## Technologies:
 * WebVR using the A-Frame VR framework from Mozilla
 * Three.js is the underlying library used by A-Frame for rendering
 * D3.js for transforming map data into 2D paths that can be converted to 3D using Three.js
@@ -34,12 +41,13 @@ Technologies:
 * AP Data via Google for state-level voting results (copied and pasted into a CSV file)
 * [Elex](https://source.opennews.org/en-US/articles/introducing-elex-tool-make-election-coverage-bette/) for getting AP data
  
-Related Visualizations:
+## Related Visualizations:
 * http://scribu.github.io/romania-3d/
 * http://www.smartjava.org/content/render-geographic-information-3d-threejs-and-d3js
 * http://www.politico.com/2016-election/results/map/president
 
-Data Sets: 
+## Data Sets: 
 * FIPS data: http://www2.census.gov/geo/docs/reference/state.txt
-* Popular vote tabulation: google
+* State-level Popular vote tabulation: http://cookpolitical.com/story/10174
+* County-level election results: https://github.com/tonmcg/County_Level_Election_Results_12-16
 * Total number of eligible voters: http://www.electproject.org/2016g
