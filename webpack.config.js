@@ -15,6 +15,7 @@ module.exports = {
     module: {
         noParse: [
             /node_modules\/aframe\/dist\/aframe.js/,
+            /node_modules\/aframe\/dist\/aframe-master.js/,
         ],
         loaders: [{
             test: /\.js$/,
