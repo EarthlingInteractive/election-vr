@@ -4,6 +4,8 @@ module.exports = {
     context: path.resolve(__dirname, "app"),
     entry: {
         "2d-election-map": "./2d-election-map.js",
+        "aframe-hello-world": "./aframe-hello-world.js",
+        "aframe-svg": "./aframe-svg.js",
     },
     output: {
         filename: "[name].js",
@@ -11,6 +13,9 @@ module.exports = {
     },
     devtool: "inline-source-map",
     module: {
+        noParse: [
+            /node_modules\/aframe\/dist\/aframe.js/,
+        ],
         loaders: [{
             test: /\.js$/,
             exclude: /node_modules/,
