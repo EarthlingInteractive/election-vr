@@ -114,6 +114,6 @@ const calculatePercentages = (d) => {
 const transformRow = d => calculatePercentages(calculateTotal(convertToArray(d)));
 
 d3.queue()
-    .defer(d3.json, "./data/us-10m.v1.json")
-    .defer(d3.csv, "./data/StateElectionResults13Nov2016.csv", transformRow)
+    .defer(d3.json, "us-10m.v1.json")
+    .defer(d3.csv, "StateElectionResults13Nov2016.csv", transformRow)
     .await(ready);

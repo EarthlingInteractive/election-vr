@@ -1,7 +1,12 @@
+const path = require("path");
+
 module.exports = {
-    entry: "./app/index.js",
+    context: path.resolve(__dirname, "app"),
+    entry: {
+        "2d-election-map": "./2d-election-map.js",
+    },
     output: {
-        filename: "bundle.js",
+        filename: "[name].js",
         path: "./dist",
     },
     devtool: "inline-source-map",
@@ -14,5 +19,6 @@ module.exports = {
     },
     devServer: {
         publicPath: "http://localhost:3033/dist/",
+        contentBase: [path.join(__dirname, "www"), path.join(__dirname, "data")],
     },
 };
