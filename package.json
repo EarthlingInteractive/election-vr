@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "aframe": "^0.4.1",
+        "aframe-text-component": "^0.4.2",
         "d3": "^4.3.0",
         "d3-geo": "^1.4.0",
         "lodash": "^4.17.2",

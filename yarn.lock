@@ -35,6 +35,10 @@ adaptive-bezier-curve@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/adaptive-bezier-curve/-/adaptive-bezier-curve-1.0.3.tgz#477577abe87d7280d46ca41649f6c22646fe8227"
 
+aframe-text-component@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/aframe-text-component/-/aframe-text-component-0.4.2.tgz#3d2ebefe2cb1f9b83dec53f71e3ac405559fa2eb"
+
 aframe@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/aframe/-/aframe-0.4.1.tgz#cfdd8c1b53fb267c09fa55794fb2e9c87ed3bfca"
@@ -1480,7 +1484,7 @@ doctrine@1.5.0, doctrine@^1.2.2:
     esutils "^2.0.2"
     isarray "^1.0.0"
 
-"document-register-element@github:dmarcos/document-register-element#8ccc532b7":
+document-register-element@dmarcos/document-register-element#8ccc532b7:
   version "0.5.4"
   resolved "https://codeload.github.com/dmarcos/document-register-element/tar.gz/8ccc532b7"
 

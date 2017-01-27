@@ -6,6 +6,8 @@ module.exports = {
         "2d-election-map": "./2d-election-map.js",
         "aframe-hello-world": "./aframe-hello-world.js",
         "aframe-svg": "./aframe-svg.js",
+        "aframe-state-map": "./aframe-state-map.js",
+        "aframe-d3": "./aframe-d3.js"
     },
     output: {
         filename: "[name].js",
