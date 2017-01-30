@@ -7,11 +7,11 @@ module.exports = {
         "aframe-hello-world": "./aframe-hello-world.js",
         "aframe-svg": "./aframe-svg.js",
         "aframe-state-map": "./aframe-state-map.js",
-        "aframe-d3": "./aframe-d3.js"
+        "aframe-d3": "./aframe-d3.js",
     },
     output: {
         filename: "[name].js",
-        path: "./dist",
+        path: path.join(__dirname, "dist"),
     },
     devtool: "inline-source-map",
     module: {
@@ -19,7 +19,7 @@ module.exports = {
             /node_modules\/aframe\/dist\/aframe.js/,
             /node_modules\/aframe\/dist\/aframe-master.js/,
         ],
-        loaders: [{
+        rules: [{
             test: /\.js$/,
             exclude: /node_modules/,
             loader: "babel-loader",
