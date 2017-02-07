@@ -1,62 +1,29 @@
-import "aframe";
-import svgMesh3d from "svg-mesh-3d";
-import threeSimplicialComplex from "three-simplicial-complex";
-// import * as d3 from "d3";
-// import * as topojson from "topojson-client";
+import * as d3 from "d3";
+import "d3-selection";
+import * as topojson from "topojson-client";
 
-const AFRAME = window.AFRAME;
-const THREE = AFRAME.THREE;
+var path = d3.geoPath();
 
-const createGeometry = threeSimplicialComplex(THREE);
+var ready = (error, us) => {
+    if (error) throw error;
 
-AFRAME.registerComponent("svgpath", {
-    schema: {
-        color: { type: "color", default: "#c23d3e" },
-        svgPath: { type: "string", default: "M 15,1 29,37 H 15 L 1,1 Z" },
-    },
-    multiple: false,
-    init: function () {
-        const data = this.data;
-        const el = this.el;
-        const meshData = svgMesh3d(data.svgPath, {
-            delaunay: true,
-            clean: true,
-            exterior: false,
-            randomization: 0,
-            simplify: 0,
-            scale: 1,
+    d3.select("a-scene")
+        .selectAll(".state")
+        .data(topojson.feature(us, us.objects.states).features)
+        .enter()
+        .append("a-entity")
+        .classed("state", true)
+        .attr("position", function (d) {
+            var centroid = path.centroid(d);
+            return (centroid[ 0 ] / 100) + " -" + (centroid[ 1 ] / 100) + " 1";
+        })
+        //            .attr("scale", "0.5 0.5 1")
+        .attr("rotation", "0 0 0")
+        .attr("svgpath", function (d) {
+            return "svgPath: " + path(d) + "; color: red";
         });
-        this.geometry = createGeometry(meshData);
-        // Create material.
-        this.material = new THREE.MeshStandardMaterial({ color: data.color, side: THREE.DoubleSide });
-        this.mesh = new THREE.Mesh(this.geometry, this.material);// Create mesh.
-        el.setObject3D("mesh", this.mesh);// Set mesh on entity.
-    },
-    update: function () {
-    },
-    remove: function () {
-    },
-    pause: function () {
-    },
-    play: function () {
-    },
-});
+};
 
-//
-// const path = d3.geoPath();
-//
-// const ready = (error, us) => {
-//     if (error) throw error;
-//
-//     const scene = d3.select("#container");
-//
-//     const states = scene.selectAll("a-entity.state").data(topojson.feature(us, us.objects.nation).features);
-//     states.enter().append("a-entity").classed('state', true);
-//     states.attr("position", "1 1 3");
-//     states.attr("svgpath", "svgPath: M 15,1 29,37 H 15 L 1,1 Z");
-//     states.attr("color", "red");
-// };
-//
-// d3.queue()
-//     .defer(d3.json, "us-10m.v1.json")
-//     .await(ready);
+d3.queue()
+    .defer(d3.json, "us-10m.v1.json")
+    .await(ready);

@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack");
 
 module.exports = {
     context: path.resolve(__dirname, "app"),
@@ -8,11 +9,25 @@ module.exports = {
         "aframe-svg": "./aframe-svg.js",
         "aframe-state-map": "./aframe-state-map.js",
         "aframe-d3": "./aframe-d3.js",
+        "vendor-head": [
+            "aframe",
+            "./lib/svgpath-component.js",
+            "d3",
+            "d3-selection",
+            "topojson-client",
+        ],
     },
     output: {
         filename: "[name].js",
         path: path.join(__dirname, "dist"),
     },
+    plugins: [
+        new webpack.optimize.CommonsChunkPlugin({
+            names: ["vendor-head", "manifest"],
+            minChunks: Infinity,
+            filename: "[name].js",
+        }),
+    ],
     devtool: "inline-source-map",
     module: {
         noParse: [

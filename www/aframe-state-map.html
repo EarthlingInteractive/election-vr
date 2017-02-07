@@ -4,10 +4,8 @@
     <meta charset="utf-8">
     <title>State Map • A-Frame</title>
     <meta name="description" content="Election VR : State Map in A-Frame">
-    <script src="/dist/aframe-state-map.js"></script>
-    <script src="https://d3js.org/d3.v4.js"></script>
-    <script src="https://d3js.org/d3-selection.v1.min.js"></script>
-    <script src="https://d3js.org/topojson.v2.min.js"></script>
+    <script type="application/javascript" src="/dist/manifest.js"></script>
+    <script type="application/javascript" src="/dist/vendor-head.js"></script>
 </head>
 <body>
 <a-scene>
@@ -18,36 +16,6 @@
         <a-camera></a-camera>
     </a-entity>
 </a-scene>
-<script>
-    var path = d3.geoPath();
-
-    var ready = (error, us) => {
-        if (error) throw error;
-
-        var scene = d3.select("a-scene");
-
-        var states = scene
-            .selectAll(".state")
-            .data(topojson.feature(us, us.objects.states).features)
-            .enter()
-            .append("a-entity")
-            .classed('state', true)
-            .attr("position", function(d) {
-            	console.log(path(d));
-//            	var centroid = path.centroid(d);
-//            	return centroid[0]/100 + " -" + centroid[1]/100 + " 1";
-            	var bounds = path.bounds(d);
-            	return (bounds[0][0]/100)*1.25 + " -" + (bounds[1][1]/100)*1.25 + " 1";
-            })
-//            .attr("scale", "0.5 0.5 1")
-            .attr("rotation", "0 0 0")
-            .attr("svgpath", function(d) { return "svgPath: "+ path(d) +"; color: red" });
-    };
-
-    d3.queue()
-        .defer(d3.json, "us-10m.v1.json")
-        .await(ready);
-
-</script>
+<script type="application/javascript" src="/dist/aframe-state-map.js"></script>
 </body>
 </html>
