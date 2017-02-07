@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/8a76a783c2ba3d4779e92a892cc31fb0757fa4df/dist/aframe-extras.physics.min.js"></script>
+</head>
+<body>
+<a-scene antialias="true" physics>
+    <!-- Camera -->
+    <a-entity position="0 1.6 0">
+        <a-entity camera look-controls wasd-controls></a-entity>
+    </a-entity>
+
+    <a-entity id='container' position="0 1 -3">
+        <a-entity id="jenga" position="0 0.2 0"></a-entity>
+        <a-box id='platform' width='2' depth='2' height='0.1' color='grey' static-body></a-box>
+    </a-entity>
+
+    <a-plane rotation="-90 0 0" position='0 0 -1.5' width="4" height="4" color="black" static-body></a-plane>
+    <a-sky color="white"></a-sky>
+</a-scene>
+
+<script>
+    var colorScale = d3.scaleSequential(d3.interpolatePlasma);
+    var jenga = d3.select('#jenga');
+    var container = d3.select('#container');
+
+    var dataset = [];  // 10, 9, 8...1
+    for (var i = 10; i > 0; i--) {
+        dataset.push(i);
+    }
+
+    // Create tower of spheres
+    jenga.selectAll('a-sphere')
+        .data(dataset)
+        .enter()
+        .append('a-sphere')
+        .attr('radius', '0.1')
+        .attr('color', function(d, i) {
+            return colorScale(i / 10);
+        })
+        .attr('position', function(d, i) {
+            return '0 ' + (i * 0.2) + ' 0';
+        })
+        .attr('dynamic-body', '');
+
+    function start () {
+        // Knock it down
+        container.append('a-sphere')
+            .attr('id', 'ignition')
+            .attr('radius', '0.1')
+            .attr('color', 'red')
+            .attr('position', '0.1 10 0')
+            .attr('dynamic-body', '');
+
+        var t = d3.timeout(rebuild, 10000);  // Reset tower of spheres after 10 seconds
+    }
+
+    function rebuild () {
+
+        // Remove ignition sphere
+        d3.select('#ignition')
+            .remove();
+
+        // Update spheres, stack them up again
+        jenga.selectAll('a-sphere')
+            .data(dataset)
+            .attr('dynamic-body', null)  // <- Interesting, tower cannot be rebuilt if dynamic-body is on
+            .attr('radius', '0.1')
+            .attr('color', function(d, i) {
+                return colorScale(i / 10);
+            })
+            .attr('position', function(d, i) {
+                return '0 ' + (i * 0.2) + ' 0';
+            })
+            .attr('dynamic-body', '')  // <- Turn physics back on
+            .call(start);  // Knock it down again
+    }
+
+</script>
+</body>
+</html>
