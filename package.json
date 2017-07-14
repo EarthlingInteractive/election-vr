@@ -12,7 +12,7 @@
         "lint-fix": "eslint --fix *.js **/*.js"
     },
     "dependencies": {
-        "aframe": "^0.5.0",
+        "aframe": "^0.6.0",
         "aframe-text-component": "^0.4.2",
         "d3": "^4.3.0",
         "d3-geo": "^1.4.0",
@@ -34,7 +34,7 @@
         "eslint": "^3.9.1",
         "eslint-config-airbnb-base": "latest",
         "eslint-plugin-import": "^2.1.0",
-        "webpack": "beta",
-        "webpack-dev-server": "beta"
+        "webpack": "^3.2.0",
+        "webpack-dev-server": "^2.5.1"
     }
 }
