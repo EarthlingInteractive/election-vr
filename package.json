@@ -7,7 +7,7 @@
     "license": "MIT",
     "scripts": {
         "build": "webpack --config webpack.config.js --colors",
-        "start": "webpack-dev-server --port 3033 --inline --hot --open",
+        "start": "webpack-dev-server --port 3033 --host 192.168.0.7 --inline --hot --open",
         "lint": "eslint *.js **/*.js",
         "lint-fix": "eslint --fix *.js **/*.js"
     },

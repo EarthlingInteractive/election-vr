@@ -8,6 +8,7 @@ module.exports = {
         "aframe-hello-world": "./aframe-hello-world.js",
         "aframe-state-map": "./aframe-state-map.js",
         "aframe-d3": "./aframe-d3.js",
+        "vr-election-towers": "./vr-election-towers",
         "vendor-head": [
             "aframe",
             "./lib/svgpath-component.js",
@@ -41,7 +42,7 @@ module.exports = {
         }],
     },
     devServer: {
-        publicPath: "http://localhost:3033/dist/",
+        publicPath: "http://192.168.0.7:3033/dist/",
         contentBase: [path.join(__dirname, "www"), path.join(__dirname, "data")],
     },
 };
