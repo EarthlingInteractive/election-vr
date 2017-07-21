@@ -14,6 +14,7 @@ module.exports = {
             "d3",
             "d3-selection",
             "topojson-client",
+            "aframe-geojson-component",
         ],
     },
     output: {
