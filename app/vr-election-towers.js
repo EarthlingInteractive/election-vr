@@ -40,23 +40,22 @@ const ready = (error, us, data) => {
         .selectAll("a-text")
         .data(data);
 
-    for (let index = 4; index >= 0; index -= 1) {
+    for (let index = 0; index <= 4; index += 1) {
         towers.enter()
             .append("a-cylinder")
             .attr("color", d => colorForCandidate(d.results[ index ].candidate))
             .attr("position", (d, i) => {
                 const x = i * 2.5;
                 // cylinders are positioned by their center so we offset for their height
-                const y = 1 + hscale(d.results[ index ].votes) / 2;
-                const z = 0;
+                const prevY = (index === 0) ? 0 : (hscale(d.results[ index - 1 ].votes));
+                const y = (hscale(d.results[ index ].votes / 2)) + prevY;
+                const z = index;
                 return `${ x } ${ y } ${ z }`;
             })
             .attr("height", (d) => {
                 return hscale(d.results[ index ].votes);
             })
             .attr("radius", d => {
-                console.log("d.results[ index ].cumulativePercentage", d.results[ index ].cumulativePercentage);
-                console.log("rscale(d.results[ index ].cumulativePercentage)", rscale(d.results[ index ].cumulativePercentage));
                 return rscale(d.results[ index ].cumulativePercentage);
             });
     }
