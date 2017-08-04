@@ -9,10 +9,19 @@
     <script type="application/javascript" src="dist/vr-election-towers.js"></script>
 </head>
 <body>
-<a-scene id="my-scene">
+<a-scene>
     <a-sky color="#ECECEC"></a-sky>
+    <a-entity id="my-scene"></a-entity>
     <a-entity position="20 5 10">
-        <a-camera></a-camera>
+        <a-camera>
+            <a-entity id="infoText"
+                      position="1.2 0 -2"
+                      visible="false"
+                geometry="primitive: plane; height: auto; width: auto"
+                material="color: white"
+                text="width: 1.5; color: black; value: test"></a-entity>
+            <a-cursor color="#4CC3D9" fuse="true" timeout="10"></a-cursor>
+        </a-camera>
     </a-entity>
 </a-scene>
 </body>
