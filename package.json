@@ -8,6 +8,7 @@
     "scripts": {
         "build": "webpack --config webpack.config.js --colors",
         "start": "webpack-dev-server --port 3033 --host 192.168.0.7 --inline --hot --open",
+        "release": "cp -R www/* ./docs && cp data/* ./docs/data && cp dist/* ./docs/dist",
         "lint": "eslint *.js **/*.js",
         "lint-fix": "eslint --fix *.js **/*.js"
     },

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>State Map geojson • A-Frame</title>
+    <meta name="description" content="Election VR : State Map in A-Frame geojson">
+    <script type="application/javascript" src="/dist/manifest.js"></script>
+    <script type="application/javascript" src="/dist/vendor-head.js"></script>
+</head>
+<body>
+<a-scene>
+    <a-assets>
+        <a-asset-item id="json-states-10m" src="https://unpkg.com/us-atlas@1.0.2/us/10m.json" />
+    </a-assets>
+
+
+    <a-entity id="states-plate"
+              position="-2 0 -5"
+              class="gazeactivated"
+              geometry="primitive: plane; width: 10; height: 10;"
+              material="color: #000; transparent: true;"
+              geojson="src: #json-states-10m; topologyObject: states; lineWidth: 1;"
+              visible="true"
+              selection-to-text
+    >
+    </a-entity>
+
+    <a-camera id="camera"  user-height="0" wasd-controls-enabled="true" look-controls-enabled="true">
+        <a-text id="infoText" color="black" value="" position="0.5 0 -0.8" scale="0.4 0.4 0.4"></a-text>
+
+        <a-cursor fuse objects=".gazeactivated" interval="2000"></a-cursor>
+    </a-camera>
+</a-scene>
+<!--<script type="application/javascript" src="/dist/aframe-state-map.js"></script>-->
+</body>
+</html>
