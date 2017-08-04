@@ -21,6 +21,7 @@ module.exports = {
     output: {
         filename: "[name].js",
         path: path.join(__dirname, "dist"),
+        publicPath: "dist/",
     },
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({
@@ -42,7 +43,7 @@ module.exports = {
         }],
     },
     devServer: {
-        publicPath: "http://192.168.0.7:3033/dist/",
+        publicPath: "http://localhost:3033/dist/",
         contentBase: [path.join(__dirname, "www"), path.join(__dirname, "data")],
     },
 };
