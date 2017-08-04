@@ -20,6 +20,8 @@
 		// keep it simple
 		"complexity": [ 1, 6 ],
 
+        "max-len": ["error", 120],
+
         "arrow-body-style": ["error", "as-needed", { "requireReturnForObjectLiteral": true }]
 	}
 }

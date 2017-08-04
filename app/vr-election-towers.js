@@ -18,13 +18,52 @@ const colorForCandidate = (candidate) => {
     }
 };
 
+/*
+data = [
+    {
+        "fips": "01",
+        "state": "Alabama",
+        "totalVotes": 2078165,
+        "results": [{
+            "candidate": "trump",
+            "votes": 1306925,
+            "percentageOfVote": 0.36242031910902156,
+            "cumulativePercentage": 0.36242031910902156
+        }, {
+            "candidate": "clinton",
+            "votes": 718084,
+            "percentageOfVote": 0.19913019678029165,
+            "cumulativePercentage": 0.5615505158893133
+        }, {
+            "candidate": "johnson",
+            "votes": 43869,
+            "percentageOfVote": 0.012165209923288381,
+            "cumulativePercentage": 0.5737157258126017
+        }, {
+            "candidate": "stein",
+            "votes": 9287,
+            "percentageOfVote": 0.0025753562779543457,
+            "cumulativePercentage": 0.576291082090556
+        }, {
+            "candidate": "mcmullin",
+            "votes": 0,
+            "percentageOfVote": 0,
+            "cumulativePercentage": 0.576291082090556
+        }]
+    },
+    ...
+]
+*/
+
 const ready = (error, us, data) => {
     if (error) throw error;
 
+    // find the state with the most total votes and scale all other cylinders proportionally
     const hscale = d3.scaleLinear()
         .domain([0, d3.max(data, d => d.totalVotes)])
-        .range([0, 10]);
+        .range([0, 6]);
 
+    // scale the radius of the cylinders to be based on the percentage of the vote
     const rscale = d3.scaleLinear()
         .domain([0, 1])
         .range([0, 2]);
@@ -40,14 +79,17 @@ const ready = (error, us, data) => {
         .selectAll("a-text")
         .data(data);
 
-    for (let index = 4; index >= 0; index -= 1) {
+    for (let index = 0; index < 5; index += 1) {
         towers.enter()
             .append("a-cylinder")
             .attr("color", d => colorForCandidate(d.results[ index ].candidate))
             .attr("position", (d, i) => {
                 const x = i * 2.5;
                 // cylinders are positioned by their center so we offset for their height
-                const y = 1 + hscale(d.results[ index ].votes) / 2;
+                const cylHeight = hscale(d.results[ index ].votes);
+                // find the top of the previously placed cylinder so that we can stack this one on top
+                const prevCylTop = hscale(sumBy(d.results.slice(0, index), result => result.votes));
+                const y = prevCylTop + (cylHeight / 2);
                 const z = 0;
                 return `${ x } ${ y } ${ z }`;
             })
@@ -55,9 +97,7 @@ const ready = (error, us, data) => {
                 return hscale(d.results[ index ].votes);
             })
             .attr("radius", d => {
-                console.log("d.results[ index ].cumulativePercentage", d.results[ index ].cumulativePercentage);
-                console.log("rscale(d.results[ index ].cumulativePercentage)", rscale(d.results[ index ].cumulativePercentage));
-                return rscale(d.results[ index ].cumulativePercentage);
+                return rscale(d.results[ index ].percentageOfVote);
             });
     }
 
