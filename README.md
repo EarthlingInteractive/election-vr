@@ -23,11 +23,29 @@ If you have a mobile phone and a [Google Cardboard headset](https://vr.google.co
 - [ ] Allow comparison between the results of two different election years by superimposing the results.
 - [ ] Show real-time updates of data from the Associated Press data feed (e.g., for use in CNN Newsroom of the future)
 
-## Running the project
+## Developing
+
+### Pre-requisites
+
+* [Node.js v6.2+](https://nodejs.org/en/)
+* [Yarn v0.17+](https://yarnpkg.com/)
+
+### Running the project locally
 
 ```bash
 yarn install
 yarn start
+```
+
+### Releasing
+
+The site is hosted on GitHub pages.  All content is stored under the `/docs` directory in the master branch.  To release new changes:
+```bash
+git checkout master
+yarn build
+yarn release
+git commit -am "Your message here"
+git push
 ```
 
 ## Challenges and Risks:
