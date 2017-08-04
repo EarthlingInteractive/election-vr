@@ -4,6 +4,10 @@ The 2016 presidential election results show Donald Trump winning the electoral c
  
 The goal of this project is to build a visualization that leverages the 3D capabilities of virtual reality to show a more complete and nuanced view of the voting results.
 
+To view the project, go to: https://earthlinginteractive.github.io/election-vr/
+
+If you have a mobile phone and a [Google Cardboard headset](https://vr.google.com/cardboard/) (or a VR system like the HTC Vive or Occulus), you can view the project in VR.  You can also view it on a PC and use the mouse and w-a-s-d keys to navigate.
+
 ## Roadmap
 
 - [x] Show the proportion of votes that each candidate received by coloring proportionally sized sections of each state on the map.  This first prototype would be in 2D.  The candidate with the highest number of votes would have their area displayed in the center.  The shape of the area would be the same as the shape of the state scaled to the percentage of the vote that the candidate received.  The other candidates’ areas would be shaped similarly but would surround the winning candidate’s area like tree rings.
