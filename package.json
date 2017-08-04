@@ -14,6 +14,7 @@
     },
     "dependencies": {
         "aframe": "^0.6.0",
+        "aframe-event-set-component": "^3.0.3",
         "aframe-geojson-component": "^1.0.2",
         "aframe-text-component": "^0.4.2",
         "d3": "^4.3.0",
@@ -22,6 +23,7 @@
         "d3-selection": "^1.0.3",
         "d3-selection-multi": "^1.0.0",
         "lodash": "^4.17.2",
+        "numeral": "^2.0.6",
         "svg-mesh-3d": "^1.1.0",
         "three": "^0.83.0",
         "three-simplicial-complex": "^69.0.6",

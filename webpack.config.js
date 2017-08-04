@@ -16,6 +16,7 @@ module.exports = {
             "d3-selection",
             "topojson-client",
             "aframe-geojson-component",
+            "aframe-event-set-component",
         ],
     },
     output: {

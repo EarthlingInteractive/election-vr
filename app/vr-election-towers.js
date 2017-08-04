@@ -1,5 +1,6 @@
 import * as d3 from "d3";
-import { map, omit, orderBy, reduce, sumBy, last } from "lodash";
+import { map, omit, orderBy, reduce, sumBy, last, startCase } from "lodash";
+import numeral from "numeral";
 
 const colorForCandidate = (candidate) => {
     switch (candidate) {
@@ -66,7 +67,7 @@ const ready = (error, us, data) => {
     // scale the radius of the cylinders to be based on the percentage of the vote
     const rscale = d3.scaleLinear()
         .domain([0, 1])
-        .range([0, 2]);
+        .range([0, 1.5]);
 
     // we select the scene object just like an svg
     const scene = d3.select("#my-scene");
@@ -93,6 +94,15 @@ const ready = (error, us, data) => {
                 const z = 0;
                 return `${ x } ${ y } ${ z }`;
             })
+            .attr("event-set__1", (d) => {
+                const result = d.results[ index ];
+                const votes = numeral(result.votes).format("0,0");
+                const percentage = numeral(result.percentageOfVote).format("0.00%");
+                const candidate = startCase(result.candidate);
+                const infoText = `${ d.state }: ${ candidate } - ${ votes } votes / ${ percentage }`;
+                return `_event: mouseenter; _target: #infoText; visible: true; text.value: ${ infoText }`;
+            })
+            .attr("event-set__2", "_event: mouseleave; _target: #infoText; visible: false; text.value: ")
             .attr("height", (d) => {
                 return hscale(d.results[ index ].votes);
             })
@@ -149,7 +159,7 @@ const calculatePercentages = (d) => {
         state: d.state,
         totalVotes: d.totalVotes,
         results: reduce(d.results, (calcResults, currResult) => {
-            const percentageOfVote = (currResult.votes / d.eligiblePopulation);
+            const percentageOfVote = (currResult.votes / d.totalVotes);
 
             const prevResults = last(calcResults);
             const prevPercentage = prevResults ? prevResults.cumulativePercentage : 0;
