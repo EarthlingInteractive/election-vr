@@ -67,30 +67,60 @@ const ready = (error, us, data) => {
     // scale the radius of the cylinders to be based on the percentage of the vote
     const rscale = d3.scaleLinear()
         .domain([0, 1])
-        .range([0, 1.5]);
+        .range([0, 1]);
 
-    // we select the scene object just like an svg
-    const scene = d3.select("#my-scene");
+    // we select the container object just like an svg
+    const container = d3.select("#tower-container");
 
-    const towers = scene
-        .selectAll("a-cylinder")
+    const states = container
+        .selectAll("a-entity.state")
         .data(data);
 
-    const labels = scene
-        .selectAll("a-text")
-        .data(data);
+    const stateContainer = states.enter()
+        .append("a-entity")
+        .attr("class", "state")
+        .attr("id", d => `fips-${ d.fips }`)
+        .attr("position", (d, i) => {
+            const y = 0;
+            // place states in a circle around the viewer
+            const radius = 10;
+            const theta = (i / data.length) * (2 * Math.PI);
+            const x = radius * Math.cos(theta);
+            const z = radius * Math.sin(theta);
+            return `${ x } ${ y } ${ z }`;
+        });
+
+    stateContainer
+        .append("a-text")
+        .attr("value", d => d.state)
+        .attr("color", "black")
+        .attr("scale", "0.8 0.8 0.8")
+        .attr("align", "center")
+        .attr("position", (d) => {
+            const x = 0;
+            const y = 6;
+            const z = 0;
+            return `${ x } ${ y } ${ z }`;
+        })
+        .attr("rotation", (d, i) => {
+            const x = 0;
+            const z = 0;
+            const y = -((i / data.length) * 360) - 90;
+            return `${ x } ${ y } ${ z }`;
+        })
+    ;
 
     for (let index = 0; index < 5; index += 1) {
-        towers.enter()
+        stateContainer
             .append("a-cylinder")
             .attr("color", d => colorForCandidate(d.results[ index ].candidate))
             .attr("position", (d, i) => {
-                const x = i * 2.5;
                 // cylinders are positioned by their center so we offset for their height
                 const cylHeight = hscale(d.results[ index ].votes);
                 // find the top of the previously placed cylinder so that we can stack this one on top
                 const prevCylTop = hscale(sumBy(d.results.slice(0, index), result => result.votes));
                 const y = prevCylTop + (cylHeight / 2);
+                const x = 0;
                 const z = 0;
                 return `${ x } ${ y } ${ z }`;
             })
@@ -99,7 +129,7 @@ const ready = (error, us, data) => {
                 const votes = numeral(result.votes).format("0,0");
                 const percentage = numeral(result.percentageOfVote).format("0.00%");
                 const candidate = startCase(result.candidate);
-                const infoText = `${ d.state }: ${ candidate } - ${ votes } votes / ${ percentage }`;
+                const infoText = `${ d.state }\n${ candidate } - ${ votes } votes / ${ percentage }`;
                 return `_event: mouseenter; _target: #infoText; visible: true; text.value: ${ infoText }`;
             })
             .attr("event-set__2", "_event: mouseleave; _target: #infoText; visible: false; text.value: ")
@@ -110,19 +140,6 @@ const ready = (error, us, data) => {
                 return rscale(d.results[ index ].percentageOfVote);
             });
     }
-
-    labels.enter()
-        .append("a-text")
-        .attr("value", d => d.state)
-        .attr("color", "black")
-        .attr("scale", "1.5 1.5 1.5")
-        .attr("align", "center")
-        .attr("position", (d, i) => {
-            const x = i * 2.5;
-            const y = 9;
-            const z = 0;
-            return `${ x } ${ y } ${ z }`;
-        });
 };
 
 const stringToNum = (str) => {
