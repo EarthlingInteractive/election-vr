@@ -19,6 +19,8 @@ const colorForCandidate = (candidate) => {
     }
 };
 
+const orderByTotalVotes = d => orderBy(d, ["totalVotes"], ["desc"]);
+
 /*
 data = [
     {
@@ -59,22 +61,24 @@ data = [
 const ready = (error, us, data) => {
     if (error) throw error;
 
+    const sortedData = orderByTotalVotes(data);
+
     // find the state with the most total votes and scale all other cylinders proportionally
     const hscale = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.totalVotes)])
+        .domain([0, d3.max(sortedData, d => d.totalVotes)])
         .range([0, 6]);
 
     // scale the radius of the cylinders to be based on the percentage of the vote
     const rscale = d3.scaleLinear()
         .domain([0, 1])
-        .range([0, 1]);
+        .range([0, 0.75]);
 
     // we select the container object just like an svg
     const container = d3.select("#tower-container");
 
     const states = container
         .selectAll("a-entity.state")
-        .data(data);
+        .data(sortedData);
 
     const stateContainer = states.enter()
         .append("a-entity")
@@ -84,7 +88,7 @@ const ready = (error, us, data) => {
             const y = 0;
             // place states in a circle around the viewer
             const radius = 10;
-            const theta = (i / data.length) * (2 * Math.PI);
+            const theta = (i / sortedData.length) * (2 * Math.PI);
             const x = radius * Math.cos(theta);
             const z = radius * Math.sin(theta);
             return `${ x } ${ y } ${ z }`;
@@ -98,14 +102,14 @@ const ready = (error, us, data) => {
         .attr("align", "center")
         .attr("position", (d) => {
             const x = 0;
-            const y = 6;
+            const y = 7;
             const z = 0;
             return `${ x } ${ y } ${ z }`;
         })
         .attr("rotation", (d, i) => {
             const x = 0;
             const z = 0;
-            const y = -((i / data.length) * 360) - 90;
+            const y = -((i / sortedData.length) * 360) - 90;
             return `${ x } ${ y } ${ z }`;
         })
     ;
