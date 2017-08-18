@@ -11,13 +11,17 @@
 <body>
 <a-scene>
     <a-sky color="#ECECEC"></a-sky>
-    <a-entity id="my-scene"></a-entity>
-    <a-entity position="20 5 10">
+    <a-entity position="6 0 0" rotation="-60 -90 0" scale="10 10 10" text="color: black; value: 2016 US Presidential Election Popular Vote"></a-entity>
+    <a-entity position="5 0 0" rotation="-60 -90 0" scale="7 7 7" text="align: center; color: black; value: The height of each tower is based on the number of votes cast."></a-entity>
+    <a-entity position="4 0 0" rotation="-60 -90 0" scale="6 6 6" text="align: center; color: black; value: The width of each section is based on the percentage of the total vote the candidate received."></a-entity>
+    <a-entity position="3 0 0" rotation="-60 -90 0" scale="5 5 5" text="align: center; color: black; value: Data from CNN.com (http://www.cnn.com/election/results/president)"></a-entity>
+    <a-entity id="tower-container"></a-entity>
+    <a-entity position="0 3 0" rotation="0 270 0">
         <a-camera>
             <a-entity id="infoText"
                       position="0.9 0 -2"
                       visible="false"
-                geometry="primitive: plane; height: auto; width: auto"
+                geometry="primitive: plane; height: 0.2; width: 1.5"
                 material="color: white"
                 text="width: 1.5; color: black; value: test"></a-entity>
             <a-cursor color="#4CC3D9" fuse="true" timeout="10"></a-cursor>
