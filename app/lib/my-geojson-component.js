@@ -13,7 +13,6 @@ if (typeof AFRAME === "undefined") {
 
 require("pathseg"); // polyfill
 
-const FEATURE_SELECTED_EVENT = "geojson-feature-selected";
 const GEOJSON_GENERATED_EVENT = "geojson-loaded";
 
 function memcpy(src, srcOffset, dst, dstOffset, length) {
@@ -129,9 +128,6 @@ AFRAME.registerComponent("my-geojson", {
     },
     tick: function (time, delta) {
     },
-    getMaskMesh: function () {
-        return this.maskMesh;
-    },
     getData: function () {
         return this.geometryMap;
     },
@@ -211,8 +207,6 @@ AFRAME.registerComponent("my-geojson", {
 
         this.el.setObject3D("mesh", mesh);
         this.mesh = mesh;
-
-        this.maskMesh = this.generateMask(features);
 
         if (data.featureEventName) {
             this.el.addEventListener(data.featureEventName, this.select.bind(this));
@@ -607,152 +601,5 @@ AFRAME.registerComponent("my-geojson", {
         const z = radius * Math.sin(phi) * Math.sin(theta);
 
         return new THREE.Vector3(x, y, z);
-    },
-    selectFeature: function (feature) {
-        const data = this.data;
-        this.isSelecting = false;
-        if (!feature) return;
-
-        let selected = null;
-        const featureKey = Object.keys(feature.properties).length === 0 ? feature[data.featureKey] : feature.properties[data.featureKey];
-
-        if (this.dataMap.size > 0) {
-            selected = this.dataMap.get(featureKey);
-        } else {
-            selected = feature.properties;
-        }
-
-        const shape = this.shapesMap.get(featureKey);
-
-        if (!this._selectedFeature ||
-            (this._selectedFeature[data.featureKey] || this._selectedFeature[data.dataKey] !==
-            (selected[data.featureKey] || selected[data.dataKey]))) {
-            this._selectedFeature = selected;
-            this.el.emit(FEATURE_SELECTED_EVENT, { feature: selected, mesh: shape });
-        }
-    },
-    hitTest: function (obj) {
-        const self = this;
-        const pixelBuffer = new Uint8Array(4);
-
-        const renderer = this.el.sceneEl.renderer;
-
-        this.hitCamera.position.copy(obj.position);
-        this.hitCamera.rotation.copy(obj.rotation);
-        renderer.render(this.hitScene, this.hitCamera, this.hitTexture);
-
-        return new Promise(function (resolve, reject) {
-            let res = null;
-
-            renderer.readRenderTargetPixels(self.hitTexture, 0, 0, 1, 1, pixelBuffer);
-            if (pixelBuffer[0] === 255) { // encoding test
-                const multiplicator = pixelBuffer[1];
-                const number = pixelBuffer[2];
-
-                const code = (multiplicator * 255) + number;
-                res = self.codes.get(code);
-            }
-            resolve(res);
-        });
-    },
-    select: (function (evt) {
-        const dummy = new THREE.Object3D();
-        return function () {
-            const self = this;
-            if (this.isSelecting) return;
-
-            const entity = document.querySelector("[raycaster]");
-            const raycaster = entity.components.raycaster.raycaster;
-
-            const intersections = raycaster.intersectObject(this.maskMesh);
-            if (intersections.length > 0) {
-                this.isSelecting = true;
-                const p = intersections[0].point;
-
-                dummy.lookAt(p);
-                dummy.rotation.y += Math.PI;
-
-                this.hitTest(dummy).then(function (res) {
-                    self.selectFeature(res);
-                });
-            }
-            // entity.components.raycaster.refreshObjects()
-        };
-    }()),
-    generateMask: function (features) {
-        const self = this;
-
-        const CANVAS_DATA_FACTOR = 10;
-
-        const width = 512 * 2;
-        const height = 256 * 2;
-
-        const projection = d3.geoEquirectangular()
-            .scale(height / Math.PI)
-            .translate([width / 2, height / 2])
-            .rotate([0, 0, 0]);
-
-        const path = d3.geoPath(projection);
-
-        const canvas = d3
-            .select("body")
-            .append("canvas")
-            .attr("id", "mask-canvas")
-            .attr("image-rendering", "pixelated")
-            .attr("width", width + "px")
-            .attr("height", height + "px");
-        const ctx = d3.select("#mask-canvas").node().getContext("2d");
-        const ctxPath = path.context(ctx);
-
-        ctx.imageSmoothingEnabled = false;
-        ctx.globalAlpha = 1;
-
-        features.forEach(function (feature, i) {
-            const multiplicator = Math.floor(i / 255);
-            const number = i % 255;
-
-            self.codes.set((multiplicator * 255) + number, feature); // feature.id
-
-            ctx.save();
-            ctx.beginPath();
-            ctx.fillStyle = "rgb(255," + multiplicator + "," + number + ")";
-            ctx.strokeStyle = "rgb(255," + multiplicator + "," + number + ")";
-            ctx.lineWidth = CANVAS_DATA_FACTOR * self.data.raycasterAccuracy;
-            ctxPath(feature);
-            if (feature.geometry.type.includes("LineString")) {
-                ctx.stroke();
-            } else if (feature.geometry.type.includes("Polygon")) {
-                ctx.fill();
-            } else if (feature.geometry.type.includes("Point")) {
-                ctx.fill();
-            }
-            ctx.restore();
-        });
-
-        // console.log(canvas.node().toDataURL())
-        const texture = new THREE.CanvasTexture(canvas.node());
-
-        const geomComponent = this.el.components.geometry;
-
-        const mesh = new THREE.Mesh(
-            geomComponent.geometry.clone(),
-            new THREE.MeshBasicMaterial({
-                map: texture,
-                side: THREE.DoubleSide,
-                transparent: true,
-                opacity: 1
-            })
-        );
-
-        const scale = this.el.object3D.getWorldScale();
-        mesh.scale.x = scale.x;
-        mesh.scale.y = scale.y;
-        mesh.scale.z = scale.z;
-
-        this.hitScene.add(mesh);
-
-        canvas.remove();
-        return mesh;
     }
-
 });
