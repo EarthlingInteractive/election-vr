@@ -53,33 +53,11 @@ AFRAME.registerComponent("my-geojson", {
         topologyObject: {
             default: ""
         },
-        raycasterAccuracy: {
-            default: 1,
-            type: "int"
-        },
         projection: {
             default: "geoEquirectangular"
         },
-        featureEventName: {
-            default: "",
-            oneOf: ["", "click", "raycaster-intersected"]
-        },
         lineWidth: {
             default: 1
-        },
-        pointScale: {
-            default: 0.1
-        },
-        pointScaling: {
-            default: "linear",
-            oneOf: ["linear", "exponential"]
-        },
-        pointSizeFeature: {
-            default: ""
-        },
-        pointAs: {
-            default: "point",
-            oneOf: ["point", "line"]
         },
         omitBoundingBox: {
             default: false,
@@ -120,9 +98,6 @@ AFRAME.registerComponent("my-geojson", {
         if (this.mesh) {
             if (oldData.lineWidth !== data.lineWidth) {
                 this.mesh.material.linewidth = data.lineWidth;
-            }
-            if (oldData.pointScale !== data.pointScale) {
-                this.mesh.material.size = data.pointScale;
             }
         }
     },
@@ -180,10 +155,6 @@ AFRAME.registerComponent("my-geojson", {
             .style("stroke", "black"); // important for lines!
 
         this.geometryMap = this.generateLinesMap(svg.selectAll("path"), isTopojson);
-        const isPointData = this.geometryMap.size === 0;
-        if (isPointData) {
-            this.geometryMap = this.generatePointsMap(svg.selectAll("path"));
-        }
 
         svg.remove();
 
@@ -202,15 +173,10 @@ AFRAME.registerComponent("my-geojson", {
         this.hitTexture.setSize(100, 100);
 
         this.shapesMap = new Map();
-        const mesh = !isPointData ? this.generateLines() :
-            (data.pointAs === "point" ? this.generatePoints() : this.generateBars());
+        const mesh = this.generateLines();
 
         this.el.setObject3D("mesh", mesh);
         this.mesh = mesh;
-
-        if (data.featureEventName) {
-            this.el.addEventListener(data.featureEventName, this.select.bind(this));
-        }
 
         this.el.emit(GEOJSON_GENERATED_EVENT, { data: this.geometryMap });
     },
@@ -223,33 +189,6 @@ AFRAME.registerComponent("my-geojson", {
         contents.forEach(function (e) {
             self.dataMap.set(e[data.dataKey], e);
         });
-    },
-    generatePointsMap: function (paths) {
-        const self = this;
-
-        const map = new Map();
-
-        const pathNodes = paths.nodes();
-
-        pathNodes.forEach(function (p) {
-            const properties = p.__data__.properties;
-            const key = properties[self.data.featureKey];
-            const type = p.__data__.geometry.type; // Point, String, Polygon
-            // const pointSize = properties[self.data.pointSizeFeature] || 1;
-
-            const segments = p.pathSegList;
-            for (let i = 0; i < segments.numberOfItems; i++) {
-                const segment = segments.getItem(i);
-                if (segment instanceof SVGPathSegMovetoAbs) {
-                    if (type.includes("Point")) {
-                        const xy = new THREE.Vector2(segment.x, segment.y);
-                        map.set(key, { point: xy, properties: properties });
-                    }
-                }
-            }
-        });
-
-        return map;
     },
     generateLinesMap: function (paths, isTopojson) {
         const self = this;
@@ -363,104 +302,6 @@ AFRAME.registerComponent("my-geojson", {
         });
 
         return map;
-    },
-    generatePoints: function (features) {
-        const self = this;
-
-        const mapData = this.geometryMap;
-
-        const geometry = new THREE.BufferGeometry();
-        const positions = new Float32Array(mapData.size * 3);
-
-        // TODO? if data defines size or color
-        // const sizes = new Float32Array(mapData.size);
-        // const colors = new Float32Array(points)
-
-        let i = 0;
-        mapData.forEach(function (entry, idx) {
-            const pos = self.latLngToVec3(entry.point.y, entry.point.x);
-
-            positions[i * 3] = pos.x;
-            positions[(i * 3) + 1] = pos.y;
-            positions[(i * 3) + 2] = pos.z;
-
-            entry.position = new THREE.Vector3().copy(pos);
-
-            // sizes[i] = 0.01;
-
-            i += 1;
-        });
-
-        geometry.addAttribute("position", new THREE.BufferAttribute(positions, 3));
-        // geometry.addAttribute("size", new THREE.BufferAttribute(sizes, 1));
-        // does not work or?
-        geometry.computeBoundingSphere();
-
-        const material = new THREE.PointsMaterial({
-            size: this.data.pointScale,
-            sizeAttenuation: true,
-            transparent: this.matComponent.data.transparent,
-            color: this.matComponent.data.color,
-            opacity: this.matComponent.data.opacity
-        });
-
-        const mesh = new THREE.Points(
-            geometry,
-            material
-        );
-
-        return mesh;
-    },
-    generateBars: function () {
-        const self = this;
-
-        const mapData = this.geometryMap;
-
-        const geometry = new THREE.BufferGeometry();
-        const positions = new Float32Array(mapData.size * 3 * 2);
-
-        const tmp = new THREE.Vector3();
-        let i = 0;
-        mapData.forEach(function (entry, idx) {
-            const pos = self.latLngToVec3(entry.point.y, entry.point.x);
-            positions[i * 6] = pos.x;
-            positions[(i * 6) + 1] = pos.y;
-            positions[(i * 6) + 2] = pos.z;
-            entry.position = new THREE.Vector3().copy(pos);
-
-            let pointSize = entry.properties[self.data.pointSizeFeature] || 1;
-
-            if (self.data.pointScaling === "exponential") {
-                pointSize = pointSize ** 2;
-            }
-
-            const scalingFactor = pointSize * self.data.pointScale;
-            tmp.copy(pos).multiplyScalar(1 + scalingFactor);
-            positions[(i * 6) + 3] = tmp.x;
-            positions[(i * 6) + 4] = tmp.y;
-            positions[(i * 6) + 5] = tmp.z;
-            entry.endPosition = new THREE.Vector3().copy(tmp);
-
-            i += 1;
-        });
-
-        geometry.addAttribute("position", new THREE.BufferAttribute(positions, 3));
-        geometry.computeBoundingSphere();
-
-        const material = new THREE.LineBasicMaterial({
-            transparent: this.matComponent.data.transparent,
-            color: this.matComponent.data.color,
-            opacity: this.matComponent.data.opacity,
-            linewidth: this.data.lineWidth
-        });
-
-        const mesh = new THREE.LineSegments(
-            geometry,
-            material
-        );
-        // mesh.frustumCulled = false;
-
-        return mesh;
     },
     generateLines: function (features) {
         const self = this;
