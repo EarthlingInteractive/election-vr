@@ -49,9 +49,9 @@ aframe-event-set-component@^3.0.3:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/aframe-event-set-component/-/aframe-event-set-component-3.0.3.tgz#0b5556fefde3af81b55592e5f3c77e67fe2b76e2"
 
-aframe-geojson-component@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/aframe-geojson-component/-/aframe-geojson-component-1.0.2.tgz#49b3c1e111bfa49da9d68f83fbdafb59a9de594f"
+aframe-geojson-component@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/aframe-geojson-component/-/aframe-geojson-component-1.1.1.tgz#a6bfc15d4a3faf41877820ae80277d593adec53c"
   dependencies:
     d3 "^4.5.0"
     d3-geo-projection "^2.1.2"
