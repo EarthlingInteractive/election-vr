@@ -1,15 +1,17 @@
 /* Based on https://github.com/mattrei/aframe-geojson-component */
-/* globals AFRAME, THREE, SVGPathSegMovetoAbs, SVGPathSegLinetoRel, SVGPathSegLinetoVerticalRel, SVGPathSegLinetoHorizontalRel, SVGPathSegLinetoHorizontalAbs, SVGPathSegLinetoVerticalAbs, SVGPathSegClosePath, SVGPathSegLinetoAbs */
+/* globals SVGPathSegMovetoAbs, SVGPathSegLinetoRel, SVGPathSegLinetoVerticalRel, SVGPathSegLinetoHorizontalRel, SVGPathSegLinetoHorizontalAbs, SVGPathSegLinetoVerticalAbs, SVGPathSegClosePath, SVGPathSegLinetoAbs */
+import "aframe";
+import * as d3 from "d3";
+import * as topojson from "topojson-client";
+
+const AFRAME = window.AFRAME;
+const THREE = AFRAME.THREE;
 
 if (typeof AFRAME === "undefined") {
     throw new Error("Component attempted to register before AFRAME was available.");
 }
 
 require("pathseg"); // polyfill
-
-const d3 = require("d3");
-
-const topojson = require("topojson-client");
 
 const FEATURE_SELECTED_EVENT = "geojson-feature-selected";
 const GEOJSON_GENERATED_EVENT = "geojson-loaded";
