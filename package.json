@@ -24,6 +24,7 @@
         "d3-selection-multi": "^1.0.0",
         "lodash": "^4.17.2",
         "numeral": "^2.0.6",
+        "pathseg": "^1.1.0",
         "svg-mesh-3d": "^1.1.0",
         "three": "^0.83.0",
         "three-simplicial-complex": "^69.0.6",

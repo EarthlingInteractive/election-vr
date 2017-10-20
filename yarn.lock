@@ -4159,6 +4159,10 @@ pathseg@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/pathseg/-/pathseg-1.0.2.tgz#148fd63f2f4d97aff8e6069ef9fe70c05376d618"
 
+pathseg@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/pathseg/-/pathseg-1.1.0.tgz#72795be842feadfe8684a386ebc713932e646fcb"
+
 pbkdf2@^3.0.3:
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/pbkdf2/-/pbkdf2-3.0.9.tgz#f2c4b25a600058b3c3773c086c37dbbee1ffe693"
