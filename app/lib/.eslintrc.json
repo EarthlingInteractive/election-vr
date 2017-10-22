@@ -34,6 +34,7 @@
         "no-param-reassign": "warn",
         "prefer-template": "off",
         "no-nested-ternary": "warn",
-        "operator-assignment": "warn"
+        "operator-assignment": "warn",
+        "arrow-parens": "off"
 	}
 }
