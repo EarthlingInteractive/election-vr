@@ -20,10 +20,21 @@
 		// keep it simple
 		"complexity": [ 1, 6 ],
 
-        "max-len": ["error", 120],
+        "max-len": "off",
 
         "arrow-body-style": ["error", "as-needed", { "requireReturnForObjectLiteral": true }],
 
-        "comma-dangle": 0
+        "comma-dangle": 0,
+        "object-shorthand": "off",
+        "no-underscore-dangle": "off",
+        "func-names": "off",
+        "prefer-arrow-callback": "off",
+        "no-plusplus": "off",
+        "no-unused-vars": "off",
+        "no-param-reassign": "warn",
+        "prefer-template": "off",
+        "no-nested-ternary": "warn",
+        "operator-assignment": "warn",
+        "arrow-parens": "off"
 	}
 }
