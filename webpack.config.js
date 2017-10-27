@@ -14,6 +14,7 @@ module.exports = {
             "./lib/svgpath-component.js",
             "./lib/my-geojson-component.js",
             "./lib/globe-component.js",
+            "./lib/plane-map-component.js",
             "d3",
             "d3-selection",
             "topojson-client",
