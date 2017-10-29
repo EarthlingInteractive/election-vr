@@ -111,16 +111,20 @@ AFRAME.registerComponent("plane-map", {
             }
         };
         // const projection = d3.geoStereographic().scale(0.5).translate([0, 0]).center([-73.968285, 40.785091]);
+        const material = new THREE.MeshStandardMaterial({ color: "blue", side: THREE.DoubleSide });
 
-        const renderContext = new ThreeJSRenderContext();
-        const path = d3.geoPath(projectionInAFrameCoords, renderContext);
-        path(geoJsonMesh);
+        const group = new THREE.Group();
+        geoJsonMesh.features.forEach(feature => {
+            const renderContext = new ThreeJSRenderContext();
+            const path = d3.geoPath(projectionInAFrameCoords, renderContext);
+            path(feature);
 
-        const shapes = renderContext.toShapes();
-        const geometry = new THREE.ShapeGeometry(shapes);
-        const material = new THREE.MeshBasicMaterial({ color: "blue", side: THREE.DoubleSide });
-        const mesh = new THREE.Mesh(geometry, material);
-        this.el.setObject3D("line", mesh);
+            const shapes = renderContext.toShapes();
+            const geometry = new THREE.ShapeGeometry(shapes);
+            const mesh = new THREE.Mesh(geometry, material);
+            group.add(mesh);
+        });
+        this.el.setObject3D("line", group);
         console.log("Ready");
     },
 });
