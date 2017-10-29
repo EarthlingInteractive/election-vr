@@ -113,18 +113,21 @@ AFRAME.registerComponent("plane-map", {
         // const projection = d3.geoStereographic().scale(0.5).translate([0, 0]).center([-73.968285, 40.785091]);
         const material = new THREE.MeshStandardMaterial({ color: "blue", side: THREE.DoubleSide });
 
-        const group = new THREE.Group();
         geoJsonMesh.features.forEach(feature => {
             const renderContext = new ThreeJSRenderContext();
             const path = d3.geoPath(projectionInAFrameCoords, renderContext);
             path(feature);
+            const [centerX, centerY] = path.centroid(feature);
 
             const shapes = renderContext.toShapes();
             const geometry = new THREE.ShapeGeometry(shapes);
+            geometry.translate(-centerX, -centerY, 0);
             const mesh = new THREE.Mesh(geometry, material);
-            group.add(mesh);
+            const entity = document.createElement("a-entity");
+            entity.setAttribute("position", `${ centerX } ${ centerY } 0`);
+            entity.setObject3D("mesh", mesh);
+            this.el.append(entity);
         });
-        this.el.setObject3D("line", group);
         console.log("Ready");
     },
 });
