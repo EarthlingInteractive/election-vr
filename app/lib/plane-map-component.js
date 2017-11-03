@@ -34,6 +34,17 @@ class ThreeJSRenderContext {
     toShapes() {
         return this.shapePath.toShapes(true);
     }
+    toVertexes() {
+        const geometry = new THREE.Geometry();
+        this.shapePath.subPaths.forEach((line) => {
+            line.curves.forEach((lineCurve) => {
+                const a = new THREE.Vector3(lineCurve.v1.x, lineCurve.v1.y, 0);
+                const b = new THREE.Vector3(lineCurve.v2.x, lineCurve.v2.y, 0);
+                geometry.vertices.push(a, b);
+            });
+        });
+        return geometry;
+    }
 }
 
 AFRAME.registerComponent("plane-map", {
@@ -111,8 +122,12 @@ AFRAME.registerComponent("plane-map", {
             }
         };
         // const projection = d3.geoStereographic().scale(0.5).translate([0, 0]).center([-73.968285, 40.785091]);
-        const material = new THREE.MeshStandardMaterial({ color: "blue", side: THREE.DoubleSide });
-
+        // const material = new THREE.MeshBasicMaterial({ color: "gray" });
+        const material = new THREE.LineBasicMaterial({
+            linewidth: 1,
+            color: "#ff00f1",
+            side: THREE.DoubleSide
+        });
         geoJsonMesh.features.forEach(feature => {
             const renderContext = new ThreeJSRenderContext();
             const path = d3.geoPath(projectionInAFrameCoords, renderContext);
@@ -120,10 +135,12 @@ AFRAME.registerComponent("plane-map", {
             const [centerX, centerY] = path.centroid(feature);
             const [[x0, y0], [x1, y1]] = path.bounds(feature);
 
-            const shapes = renderContext.toShapes();
-            const geometry = new THREE.ShapeGeometry(shapes);
+            // const shapes = renderContext.toShapes();
+            // console.log(shapes);
+            // const geometry = new THREE.ShapeBufferGeometry(shapes);
+            const geometry = renderContext.toVertexes();
             geometry.translate(-centerX, -centerY, 0);
-            const mesh = new THREE.Mesh(geometry, material);
+            const mesh = new THREE.LineSegments(geometry, material);
             const entity = document.createElement("a-entity");
             entity.setAttribute("position", `${ centerX } ${ centerY } 0`);
             entity.setAttribute("width", `${ x1 - x0 }`);

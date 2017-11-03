@@ -89,7 +89,7 @@ const ready = (error, data) => {
 
         const width = +stateContainer.attr("width");
         const height = +stateContainer.attr("height");
-        const maxRadius = (d3.min([width, height]) / 2);
+        const maxRadius = (d3.min([width, height]) / 3);
         rscale.range([0, maxRadius]);
 
         let prevCylTop = 0;
