@@ -118,6 +118,7 @@ AFRAME.registerComponent("plane-map", {
             const path = d3.geoPath(projectionInAFrameCoords, renderContext);
             path(feature);
             const [centerX, centerY] = path.centroid(feature);
+            const [[x0, y0], [x1, y1]] = path.bounds(feature);
 
             const shapes = renderContext.toShapes();
             const geometry = new THREE.ShapeGeometry(shapes);
@@ -125,6 +126,8 @@ AFRAME.registerComponent("plane-map", {
             const mesh = new THREE.Mesh(geometry, material);
             const entity = document.createElement("a-entity");
             entity.setAttribute("position", `${ centerX } ${ centerY } 0`);
+            entity.setAttribute("width", `${ x1 - x0 }`);
+            entity.setAttribute("height", `${ y1 - y0 }`);
             entity.setAttribute("id", `fips-${ feature.properties.STATE }`);
             entity.setObject3D("mesh", mesh);
             this.el.append(entity);

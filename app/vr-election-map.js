@@ -67,13 +67,12 @@ const ready = (error, data) => {
     // find the state with the most total votes and scale all other cylinders proportionally
     const hscale = d3.scaleLinear()
         .domain([0, d3.max(sortedData, d => d.totalVotes)])
-        .range([0, 6]);
+        .range([0, 4]);
 
     // scale the radius of the cylinders to be based on the percentage of the vote
     // but set the range for each state based on the dimensions of that state
     const rscale = d3.scaleLinear()
-        .domain([0, 1])
-        .range([0, 0.75]);
+        .domain([0, 1]);
 
     // we select the container object just like an svg
     const container = d3.select("#plane-map");
@@ -87,6 +86,11 @@ const ready = (error, data) => {
         const datum = sortedData[dataIndex];
         const stateContainer = container
             .select(`#fips-${numeral(datum.fips).format("00")}`);
+
+        const width = +stateContainer.attr("width");
+        const height = +stateContainer.attr("height");
+        const maxRadius = (d3.min([width, height]) / 2);
+        rscale.range([0, maxRadius]);
 
         let prevCylTop = 0;
         stateContainer
