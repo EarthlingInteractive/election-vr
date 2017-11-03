@@ -9,6 +9,7 @@ module.exports = {
         "aframe-state-map": "./aframe-state-map.js",
         "aframe-d3": "./aframe-d3.js",
         "vr-election-towers": "./vr-election-towers",
+        "vr-election-map": "./vr-election-map",
         "vendor-head": [
             "aframe",
             "./lib/svgpath-component.js",

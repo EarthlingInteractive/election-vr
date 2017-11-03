@@ -125,9 +125,11 @@ AFRAME.registerComponent("plane-map", {
             const mesh = new THREE.Mesh(geometry, material);
             const entity = document.createElement("a-entity");
             entity.setAttribute("position", `${ centerX } ${ centerY } 0`);
+            entity.setAttribute("id", `fips-${ feature.properties.STATE }`);
             entity.setObject3D("mesh", mesh);
             this.el.append(entity);
         });
         console.log("Ready");
+        this.el.emit(GEOJSON_GENERATED_EVENT, { });
     },
 });

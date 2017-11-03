@@ -10,7 +10,7 @@
 		"indent": [ 2, 4 ],
 
 		// spacing
-		"template-curly-spacing": [ 2, "always" ],
+		"template-curly-spacing": "off",
 		"computed-property-spacing": 0,
 		"no-multiple-empty-lines": [ 2, { "max": 1, "maxEOF": 0, "maxBOF": 0 } ],
 
