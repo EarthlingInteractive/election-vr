@@ -1,54 +1,46 @@
-const path = require("path");
-const webpack = require("webpack");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-    context: path.resolve(__dirname, "app"),
-    entry: {
-        "2d-election-map": "./2d-election-map.js",
-        "aframe-hello-world": "./aframe-hello-world.js",
-        "aframe-state-map": "./aframe-state-map.js",
-        "aframe-d3": "./aframe-d3.js",
-        "vr-election-towers": "./vr-election-towers",
-        "vr-election-map": "./vr-election-map",
-        "vendor-head": [
-            "aframe",
-            "./lib/svgpath-component.js",
-            "./lib/my-geojson-component.js",
-            "./lib/globe-component.js",
-            "./lib/plane-map-component.js",
-            "d3",
-            "d3-selection",
-            "topojson-client",
-            "aframe-geojson-component",
-            "aframe-event-set-component",
-        ],
-    },
+    mode: "development",
+    devtool: "cheap-module-eval-source-map",
+    entry: ['babel-polyfill', "./src/index.js"],
     output: {
-        filename: "[name].js",
-        path: path.join(__dirname, "dist"),
-        publicPath: "dist/",
+        path: path.resolve(__dirname, 'dist'),
+        filename: "bundle.js"
+    },
+    resolve: {
+        extensions: [".js"]
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: [/node_modules/, 'src/assets'],
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['babel-preset-env']
+                    }
+                }
+            }
+        ]
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            names: ["vendor-head", "manifest"],
-            minChunks: Infinity,
-            filename: "[name].js",
+        new HtmlWebpackPlugin({
+            template: './src/index.html',
+            path: path.resolve(__dirname, "dist"),
+            filename: 'index.html',
+            inject: 'head'
         }),
+        new CopyWebpackPlugin([{ from: 'src/assets', to: 'assets' }])
     ],
-    devtool: "inline-source-map",
-    module: {
-        noParse: [
-            /node_modules\/aframe\/dist\/aframe.js/,
-            /node_modules\/aframe\/dist\/aframe-master.js/,
-        ],
-        rules: [{
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: "babel-loader",
-        }],
-    },
-    devServer: {
-        publicPath: "http://localhost:3033/dist/",
-        contentBase: [path.join(__dirname, "www"), path.join(__dirname, "data")],
-    },
+    externals: {
+        aframe: {
+            commonjs: "aframe",
+            amd: "aframe",
+            root: "AFRAME" // global variable
+        }
+    }
 };
