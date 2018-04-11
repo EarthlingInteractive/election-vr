@@ -14,8 +14,11 @@
         "lint:fix": "eslint --fix src/**/*.js"
     },
     "dependencies": {
-        "aframe": "^0.8.1",
-        "aframe-geo-projection-component": "^2.0.0"
+        "aframe": "^0.8.0",
+        "aframe-geo-projection-component": "^2.0.0",
+        "d3-array": "^1.2.1",
+        "d3-fetch": "^1.1.0",
+        "d3-scale": "^2.0.0"
     },
     "devDependencies": {
         "babel-core": "^6.26.0",

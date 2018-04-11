@@ -1,6 +1,9 @@
-import * as AFRAME from 'aframe';
+import 'aframe';
+import { min } from 'd3-array';
+import { scaleLinear } from 'd3-scale';
 import * as constants from './constants';
 
+const { AFRAME } = window;
 const { THREE } = AFRAME;
 
 const createCylinders = (height, stateShapes, percentage, zPosition, geometry) => {
@@ -8,10 +11,10 @@ const createCylinders = (height, stateShapes, percentage, zPosition, geometry) =
     shapeGeometry.computeBoundingBox();
     const size = shapeGeometry.boundingBox.getSize();
     const center = shapeGeometry.boundingBox.getCenter();
-    const radius = (d3.min([size.x, size.y]) / 3) * percentage;
+    const radius = (min([size.x, size.y]) / 3) * percentage;
     const cylinderGeometry = new THREE.CylinderGeometry(radius, radius, height, 24);
     cylinderGeometry.rotateX(Math.PI / 2);
-    cylinderGeometry.translate(center.x, center.y, zPosition + height / 2);
+    cylinderGeometry.translate(center.x, center.y, zPosition + (height / 2));
     geometry.merge(cylinderGeometry);
 };
 const createExtrudedAndScaledGeometry = (height, stateShapes, percentage, zPosition, extrudeGeometry) => {
@@ -51,74 +54,53 @@ const createExtrudedAndScaledGeometryPerShape = (height, stateShapes, percentage
     });
 };
 
-AFRAME.registerComponent('data-for-map', {
+AFRAME.registerComponent('cartogram-renderer', {
     dependencies: ['geo-projection'],
     schema: {
         maxExtrudeHeight: {
-            default: 4
+            default: 1.6
         },
         geometryType: {
             oneOf: ['shapePerState', 'manyShapesPerState', 'cylinder'],
-            default: 'cylinder'
+            default: 'shapePerState'
         }
     },
     init() {
         this.geoProjectionComponent = this.el.components['geo-projection'];
+        this.system = this.el.sceneEl.systems['geo-projection'];
+        this.ready = false;
 
-        // Wait for geoJson to finish loading to avoid race conditions
-        this.el.addEventListener('geo-src-loaded', this.geoJsonReady.bind(this));
+        const geoDataLoaderPromise = new Promise(((resolve) => {
+            this.el.addEventListener('geo-data-ready', resolve);
+        }));
+        const electionDataLoaderPromise = new Promise(((resolve) => {
+            this.el.addEventListener('election-data-loaded', resolve);
+        }));
+
+        // Wait until all files to finish loading to avoid race conditions
+        Promise.all([geoDataLoaderPromise, electionDataLoaderPromise]).then((result) => {
+            const electionDataLoadEvent = result[1].detail;
+            this.votesByFipsCode = electionDataLoadEvent.votesByFipsCode;
+            this.maxTotalVoters = electionDataLoadEvent.maxTotalVoters;
+            this.ready = true;
+            this.render();
+        }, (error) => { console.error(error); });
     },
     update(oldData) {
         if (this.data.maxExtrudeHeight !== oldData.maxExtrudeHeight ||
             this.data.geometryType !== oldData.geometryType) {
-            this.geoJsonReady();
+            this.render();
         }
     },
-    geoJsonReady() {
-        // Override the render method of geoProjectionComponent with the custom one on this component
-        // this allows us to push the data that needs to be visualized into the rendering pipeline
-        this.geoProjectionComponent.render = this.render;
-
-        // Now kick off loading the data
-        d3.queue()
-            .defer(d3.csv, '../data/us-presidential-election-CNN-16Feb2017.csv', (d) => {
-                return {
-                    fips: d.fips,
-                    state: d.state,
-                    clinton: +d.clinton,
-                    trump: +d.trump,
-                    johnson: +d.johnson,
-                    stein: +d.stein,
-                    mcmullin: +d.mcmullin,
-                    totalVoters: (+d.clinton + +d.trump + +d.johnson + +d.stein + +d.mcmullin),
-                    nonVoters: (+d.eligible_population - +d.clinton - +d.trump - +d.johnson - +d.stein - +d.mcmullin),
-                    electoralVotes: +d.electoral_votes,
-                    eligiblePopulation: +d.eligible_population
-                };
-            })
-            .await(this.onDataLoaded.bind(this));
-    },
-    onDataLoaded(error, votingData) {
-        if (error) throw error;
-        const votesByFipsCode = votingData.reduce((accum, d) => {
-            accum[d.fips] = d;
-            return accum;
-        }, {});
+    render() {
+        if (!this.ready || !this.votesByFipsCode || !this.geoProjectionComponent.geoJson) return;
 
         // Determine the vertical scale for the entire country using the state with the largest number of total voters
         // as equaling the max extrude height
-        const maxTotalVoters = d3.max(votingData, d => d.totalVoters);
-        const extrudeScale = d3.scaleLinear()
-            .domain([0, maxTotalVoters])
+        const extrudeScale = scaleLinear()
+            .domain([0, this.maxTotalVoters])
             .range([0, this.data.maxExtrudeHeight]);
 
-        this.geoProjectionComponent.render(votesByFipsCode, extrudeScale, this.data.geometryType);
-    },
-    // Custom rendering function that does all the work
-    // Note that the `this` for this function is the geoProjectionComponent instead of this data-for-map component
-    // So that we can use all the functions and data of the geoProjectionComponent to help with rendering
-    render(votesByFipsCode, extrudeScale, geometryType) {
-        if (!votesByFipsCode || !this.geoJson) return;
         const candidateLayers = {
             clinton: {
                 geometry: new THREE.Geometry(),
@@ -143,9 +125,9 @@ AFRAME.registerComponent('data-for-map', {
         };
         // Split the geoJson into features and render each one individually so that we can set a different
         // extrusion height for each based on the population.
-        this.geoJson.features.forEach((feature) => {
-            const votingData = votesByFipsCode[feature.id];
-            const mapRenderContext = this.renderer.renderToContext(feature, this.projection);
+        this.geoProjectionComponent.geoJson.features.forEach((feature) => {
+            const votingData = this.votesByFipsCode[feature.id];
+            const mapRenderContext = this.system.renderToContext(feature, this.geoProjectionComponent.projection);
             const stateShapes = mapRenderContext.toShapes(this.data.isCCW);
 
             const candidatesOrderedByVoteCount = Object.keys(votingData)
@@ -162,7 +144,7 @@ AFRAME.registerComponent('data-for-map', {
                 const percentage = (candidateVotes / totalVotes);
                 const height = extrudeScale(candidateVotes);
                 const extrudeGeometry = candidateLayers[candidate].geometry;
-                switch (geometryType) {
+                switch (this.data.geometryType) {
                 case 'shapePerState':
                     createExtrudedAndScaledGeometry(height, stateShapes, percentage, zPosition, extrudeGeometry);
                     break;
@@ -172,6 +154,8 @@ AFRAME.registerComponent('data-for-map', {
                 case 'cylinder':
                     createCylinders(height, stateShapes, percentage, zPosition, extrudeGeometry);
                     break;
+                default:
+                    throw new Error('Invalid geometry type');
                 }
                 zPosition += height;
             });
@@ -183,13 +167,12 @@ AFRAME.registerComponent('data-for-map', {
             const extrudeBufferGeometry = new THREE.BufferGeometry();
             extrudeBufferGeometry.fromGeometry(layer.geometry);
 
-            const topMaterial = new THREE.MeshBasicMaterial({ color: layer.color });
-            const sideMaterial = new THREE.MeshStandardMaterial({ color: layer.color });
-            const extrudedMap = new THREE.Mesh(extrudeBufferGeometry, [topMaterial, sideMaterial]);
+            const material = new THREE.MeshLambertMaterial({ color: layer.color });
+            const extrudedMap = new THREE.Mesh(extrudeBufferGeometry, material);
             this.el.setObject3D(candidate, extrudedMap);
         });
 
-        const mapRenderContextForOutline = this.renderer.renderToContext(this.geoJson, this.projection);
+        const mapRenderContextForOutline = this.system.renderToContext(this.geoProjectionComponent.geoJson, this.geoProjectionComponent.projection);
         const stateOutlineGeometry = new THREE.BufferGeometry();
         const stateOutlineVertices = mapRenderContextForOutline.toVertices();
         stateOutlineGeometry.addAttribute('position', new THREE.Float32BufferAttribute(stateOutlineVertices, 3));

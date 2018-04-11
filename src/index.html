@@ -1,52 +1,29 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Election VR</title>
+    <meta charset="utf-8">
+    <title>ElectionVR - Popular Vote in U.S. Presidential Election 2016</title>
+    <meta name="description" content="ElectionVR - Popular Vote in U.S. Presidential Election 2016"></meta>
+    <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
 </head>
 <body>
-<h1>Election VR</h1>
-<h2>Data visualizations of election data in virtual reality</h2>
-<h3>by Steve Brudz of <a href="https://earthlinginteractive.com/">Earthling Interactive</a></h3>
-<hr />
-<section>
-    <h4>Overview</h4>
-
-    <p>
-        The 2016 presidential election results show Donald Trump winning the electoral college but Hillary Clinton
-        winning the popular vote. The existing visualizations showing states or counties as red or blue provides
-        information about the majority vote but they hide any sense of scale and they conceal the number of votes
-        that non-majority candidates received.
-    </p>
-
-    <p>
-        The goal of this project is to build a visualization that leverages the 3D capabilities of virtual reality
-        to show a more complete and nuanced view of the voting results.
-    </p>
-
-    <p>
-        If you have a mobile phone and a Google Cardboard headset (or a VR system like the HTC Vive or Occulus),
-        you can view the project in VR. You can also view it on a PC and use the mouse and w-a-s-d keys to navigate.
-    </p>
-</section>
-<section>
-    <h4>Election Data Visualizations</h4>
-    <ul>
-        <li><a href="2d-election-map.html" target="_blank">2D Election Map</a> - A 2D map of the US showing the popular vote in the 2016 US Presidential election</li>
-        <li><a href="vr-election-towers.html" target="_blank">VR Election Towers</a> - Tower visualization in VR showing the popular vote in the 2016 US Presidential election</li>
-        <li><a href="vr-election-map.html" target="_blank">VR Election Map</a> - US Map visualization in VR showing the popular vote in the 2016 US Presidential election</li>
-    </ul>
-</section>
-<section>
-    <h4>Technology Experiments</h4>
-    <ul>
-        <li><a href="aframe-hello-world.html" target="_blank">A-Frame Hello World</a> - The most basic example</li>
-        <li><a href="aframe-svg.html" target="_blank">A-Frame SVG Example</a> - using <a href="https://github.com/7dir/aframe-svgpath-component">aframe-svgpath-component</a> </li>
-        <li><a href="aframe-d3.html" target="_blank">A-Frame plus d3.js</a> - based on <a href="https://bl.ocks.org/enjalot/8be32e6f1f32920ba841">Ian Johnson's work</a> but upgraded to work with D3 v4 and A-Frame v0.4</li>
-        <li><a href="aframe-state-map.html" target="_blank">Map of US States in A-Frame</a> using <a href="https://github.com/7dir/aframe-svgpath-component">aframe-svgpath-component</a></li>
-        <li><a href="aframe-state-map-geojson.html" target="_blank">Map of US States in A-Frame</a> using <a href="https://github.com/mattrei/aframe-geojson-component">aframe-geojson-component</a></li>
-        <li><a href="aframe-state-map-custom-geojson.html" target="_blank">Map of US States in A-Frame</a> using a custom geojson rendering component</li>
-        <li><a href="aframe-globe.html" target="_blank">Globe in A-Frame</a> inspired by <a href="https://bl.ocks.org/mbostock/2b85250396c17a79155302f91ec21224">Mike Bostock's Three.JS globe</a> </li>
-        <li><a href="aframe-plane-map.html" target="_blank">Planar Map in A-Frame</a> </li>
-    </ul>
-</section>
+<a-scene>
+    <a-assets>
+        <a-asset-item id="json-us" src="https://unpkg.com/us-atlas@1/us/10m.json" />
+    </a-assets>
+    <a-sky color="#ECECEC"></a-sky>
+    <a-entity id="map"
+              rotation="-90 0 0"
+              topojson-loader="src: #json-us; topologyObject: states;"
+              election-data-loader
+              geo-projection="
+                  projection: geoIdentity;
+                  height: 10;
+                  width: 20;"
+              geo-outline-renderer="color: #A46C39;"
+              cartogram-renderer
+    >
+    </a-entity>
+</a-scene>
 </body>
 </html>
