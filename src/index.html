@@ -7,11 +7,10 @@
     <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
 </head>
 <body>
-<a-scene>
+<a-scene background="color: beige;">
     <a-assets>
         <a-asset-item id="json-us" src="https://unpkg.com/us-atlas@1/us/10m.json" />
     </a-assets>
-    <a-sky color="#ECECEC"></a-sky>
     <a-entity id="map"
               rotation="-90 0 0"
               topojson-loader="src: #json-us; topologyObject: states;"
