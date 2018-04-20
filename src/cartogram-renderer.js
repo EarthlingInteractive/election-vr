@@ -1,22 +1,10 @@
 import 'aframe';
-import { min } from 'd3-array';
 import { scaleLinear } from 'd3-scale';
 import * as constants from './constants';
 
 const { AFRAME } = window;
 const { THREE } = AFRAME;
 
-const createCylinders = (height, stateShapes, percentage, zPosition, geometry) => {
-    const shapeGeometry = new THREE.ShapeGeometry(stateShapes);
-    shapeGeometry.computeBoundingBox();
-    const size = shapeGeometry.boundingBox.getSize();
-    const center = shapeGeometry.boundingBox.getCenter();
-    const radius = (min([size.x, size.y]) / 3) * percentage;
-    const cylinderGeometry = new THREE.CylinderGeometry(radius, radius, height, 24);
-    cylinderGeometry.rotateX(Math.PI / 2);
-    cylinderGeometry.translate(center.x, center.y, zPosition + (height / 2));
-    geometry.merge(cylinderGeometry);
-};
 const createExtrudedAndScaledGeometry = (height, stateShapes, percentage, zPosition, extrudeGeometry) => {
     const extrudeSettings = {
         amount: height,
@@ -44,12 +32,6 @@ const createExtrudedAndScaledGeometryPerShape = (height, stateShapes, percentage
         extrudedFeatureGeometry.scale(percentage, percentage, 1);
         extrudedFeatureGeometry.translate(center.x, center.y, center.z + zPosition);
 
-        // if the scaled-down shape is too small, then don't render it
-        // const size = extrudedFeatureGeometry.boundingBox.getSize();
-        // if (size.x < 0.02 || size.y < 0.02) {
-        //   return;
-        // }
-
         extrudeGeometry.merge(extrudedFeatureGeometry);
     });
 };
@@ -59,10 +41,6 @@ AFRAME.registerComponent('cartogram-renderer', {
     schema: {
         maxExtrudeHeight: {
             default: 1.6
-        },
-        geometryType: {
-            oneOf: ['shapePerState', 'manyShapesPerState', 'cylinder'],
-            default: 'shapePerState'
         }
     },
     init() {
@@ -144,18 +122,12 @@ AFRAME.registerComponent('cartogram-renderer', {
                 const percentage = (candidateVotes / totalVotes);
                 const height = extrudeScale(candidateVotes);
                 const extrudeGeometry = candidateLayers[candidate].geometry;
-                switch (this.data.geometryType) {
-                case 'shapePerState':
-                    createExtrudedAndScaledGeometry(height, stateShapes, percentage, zPosition, extrudeGeometry);
-                    break;
-                case 'manyShapesPerState':
+
+                // Hawaii and Michigan look better when rendered per shape
+                if (feature.id === '15' || feature.id === '26') {
                     createExtrudedAndScaledGeometryPerShape(height, stateShapes, percentage, zPosition, extrudeGeometry);
-                    break;
-                case 'cylinder':
-                    createCylinders(height, stateShapes, percentage, zPosition, extrudeGeometry);
-                    break;
-                default:
-                    throw new Error('Invalid geometry type');
+                } else {
+                    createExtrudedAndScaledGeometry(height, stateShapes, percentage, zPosition, extrudeGeometry);
                 }
                 zPosition += height;
             });
