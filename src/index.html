@@ -11,6 +11,21 @@
     <a-assets>
         <a-asset-item id="json-us" src="https://unpkg.com/us-atlas@1/us/10m.json" />
     </a-assets>
+
+    <a-camera id="viewer" position="0 1.6 0">
+        <a-cursor fuse="true" fuseTimeout="1000" raycaster="objects: .selectable">
+            <a-animation begin="click" easing="ease-in" attribute="scale"
+                         fill="forwards" from="0.2 0.2 0.2" to="1 1 1" dur="150"></a-animation>
+            <a-animation begin="fusing" easing="ease-in" attribute="scale"
+                         fill="backwards" from="1 1 1" to="0.2 0.2 0.2" dur="1500"></a-animation>
+        </a-cursor>
+    </a-camera>
+    <a-entity id="info-panel" rotation="-45 0 0" position="0 1 -5"
+        geometry="primitive: plane; height: 0.5; width: 2"
+        material="color: black"
+        look-at="#viewer"
+        text="value: Select something to see details; color: yellow;"></a-entity>
+
     <a-entity id="map"
               rotation="-90 0 0"
               topojson-loader="src: #json-us; topologyObject: states;"
@@ -21,6 +36,7 @@
                   width: 20;"
               geo-outline-renderer="color: #A46C39;"
               cartogram-renderer
+              selection
     >
     </a-entity>
 </a-scene>

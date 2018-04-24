@@ -5,7 +5,9 @@ import * as constants from './constants';
 const { AFRAME } = window;
 const { THREE } = AFRAME;
 
-const createExtrudedAndScaledGeometry = (height, stateShapes, percentage, zPosition, extrudeGeometry) => {
+const invisibleMaterial = new THREE.MeshBasicMaterial({ visible: false });
+
+const createExtrudedAndScaledGeometry = (height, stateShapes, percentage, zPosition) => {
     const extrudeSettings = {
         amount: height,
         bevelEnabled: false
@@ -17,13 +19,14 @@ const createExtrudedAndScaledGeometry = (height, stateShapes, percentage, zPosit
     extrudedFeatureGeometry.center();
     extrudedFeatureGeometry.scale(percentage, percentage, 1);
     extrudedFeatureGeometry.translate(center.x, center.y, center.z + zPosition);
-    extrudeGeometry.merge(extrudedFeatureGeometry);
+    return extrudedFeatureGeometry;
 };
-const createExtrudedAndScaledGeometryPerShape = (height, stateShapes, percentage, zPosition, extrudeGeometry) => {
+const createExtrudedAndScaledGeometryPerShape = (height, stateShapes, percentage, zPosition) => {
     const extrudeSettings = {
         amount: height,
         bevelEnabled: false
     };
+    const extrudeGeometry = new THREE.Geometry();
     stateShapes.forEach((stateShape) => {
         const extrudedFeatureGeometry = new THREE.ExtrudeGeometry(stateShape, extrudeSettings);
         extrudedFeatureGeometry.computeBoundingBox();
@@ -34,6 +37,25 @@ const createExtrudedAndScaledGeometryPerShape = (height, stateShapes, percentage
 
         extrudeGeometry.merge(extrudedFeatureGeometry);
     });
+    return extrudeGeometry;
+};
+
+const createSelectionMask = (inputGeometry, name, attributes) => {
+    const selectionMaskGeometry = new THREE.BufferGeometry();
+    selectionMaskGeometry.fromGeometry(inputGeometry);
+    selectionMaskGeometry.computeBoundingBox();
+    const center = selectionMaskGeometry.boundingBox.getCenter();
+    selectionMaskGeometry.translate(-center.x, -center.y, -center.z);
+
+    const mesh = new THREE.Mesh(selectionMaskGeometry, invisibleMaterial);
+    mesh.name = name;
+    const selectionMaskEntity = document.createElement('a-entity');
+    selectionMaskEntity.setAttribute('id', name);
+    selectionMaskEntity.setAttribute('position', center);
+    selectionMaskEntity.setAttribute('class', 'selectable');
+    selectionMaskEntity.setAttribute('selection-info', attributes);
+    selectionMaskEntity.setObject3D('mesh', mesh);
+    return selectionMaskEntity;
 };
 
 AFRAME.registerComponent('cartogram-renderer', {
@@ -62,7 +84,9 @@ AFRAME.registerComponent('cartogram-renderer', {
             this.maxTotalVoters = electionDataLoadEvent.maxTotalVoters;
             this.ready = true;
             this.render();
-        }, (error) => { console.error(error); });
+        }, (error) => {
+            console.error(error);
+        });
     },
     update(oldData) {
         if (this.data.maxExtrudeHeight !== oldData.maxExtrudeHeight ||
@@ -124,11 +148,21 @@ AFRAME.registerComponent('cartogram-renderer', {
                 const extrudeGeometry = candidateLayers[candidate].geometry;
 
                 // Hawaii and Michigan look better when rendered per shape
+                let featureGeometry;
                 if (feature.id === '15' || feature.id === '26') {
-                    createExtrudedAndScaledGeometryPerShape(height, stateShapes, percentage, zPosition, extrudeGeometry);
+                    featureGeometry = createExtrudedAndScaledGeometryPerShape(height, stateShapes, percentage, zPosition);
                 } else {
-                    createExtrudedAndScaledGeometry(height, stateShapes, percentage, zPosition, extrudeGeometry);
+                    featureGeometry = createExtrudedAndScaledGeometry(height, stateShapes, percentage, zPosition);
                 }
+                extrudeGeometry.merge(featureGeometry);
+                const attributes = {
+                    state: feature.id,
+                    candidate,
+                    votes: candidateVotes,
+                    percentage
+                };
+                const selectionMask = createSelectionMask(featureGeometry, `${feature.id}-${candidate}`, attributes);
+                this.el.appendChild(selectionMask);
                 zPosition += height;
             });
         });
