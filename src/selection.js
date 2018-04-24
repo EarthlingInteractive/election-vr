@@ -1,4 +1,5 @@
 import 'aframe';
+import { format } from 'd3-format';
 
 const { AFRAME } = window;
 const { THREE } = AFRAME;
@@ -25,6 +26,9 @@ AFRAME.registerComponent('selection', {
         this.infoPanel = document.querySelector('#info-panel');
         this.viewer = document.querySelector('#viewer');
 
+        this.voteFormatter = format(',');
+        this.percentageFormatter = format('.3p');
+
         this.handleSelection = this.handleSelection.bind(this);
         this.el.addEventListener(this.data.selectionStartEvent, this.handleSelection);
         this.handleSelectionEnd = this.handleSelectionEnd.bind(this);
@@ -50,8 +54,8 @@ AFRAME.registerComponent('selection', {
         if (selectionInfoComp) {
             const infoText = `State: ${selectionInfoComp.data.state}
             Candidate: ${selectionInfoComp.data.candidate}
-            Votes: ${selectionInfoComp.data.votes}
-            Percentage: ${selectionInfoComp.data.percentage}`;
+            Votes: ${this.voteFormatter(selectionInfoComp.data.votes)}
+            Percentage: ${this.percentageFormatter(selectionInfoComp.data.percentage)}`;
             this.infoPanel.setAttribute('text', 'value', infoText);
             const { x, z } = this.selected.object3D.getWorldPosition();
             this.infoPanel.setAttribute('position', { x, y: 1, z });
