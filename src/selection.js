@@ -45,10 +45,21 @@ AFRAME.registerComponent('selection', {
 
     handleSelection(evt) {
         this.selected = evt.target;
-        console.log(this.selected);
         const selectedObj = this.selected.getObject3D('mesh');
         this.selectionBox.setFromObject(selectedObj);
         this.selectionBox.visible = true;
+
+        // find point opposite the camera
+        selectedObj.geometry.computeBoundingSphere();
+        selectedObj.geometry.computeBoundingBox();
+        const { boundingSphere, boundingBox } = selectedObj.geometry;
+        const viewerPos = this.viewer.object3D.getWorldPosition();
+        const viewerWorldPos = new THREE.Vector3().copy(viewerPos);
+        viewerWorldPos.setY(0);
+        const localViewerPos = selectedObj.worldToLocal(viewerWorldPos);
+        const pointOnSphere = boundingSphere.clampPoint(localViewerPos);
+        pointOnSphere.negate();
+        const targetPoint = selectedObj.localToWorld(pointOnSphere);
 
         const selectionInfoComp = this.selected.components['selection-info'];
         if (selectionInfoComp) {
@@ -57,8 +68,11 @@ AFRAME.registerComponent('selection', {
             Votes: ${this.voteFormatter(selectionInfoComp.data.votes)}
             Percentage: ${this.percentageFormatter(selectionInfoComp.data.percentage)}`;
             this.infoPanel.setAttribute('text', 'value', infoText);
-            const { x, z } = this.selected.object3D.getWorldPosition();
-            this.infoPanel.setAttribute('position', { x, y: 1, z });
+
+            const { x, z } = targetPoint;
+            const topOfBox = selectedObj.localToWorld(new THREE.Vector3().copy(boundingBox.max));
+            const yPos = (topOfBox.y + 0.5);
+            this.infoPanel.setAttribute('position', { x, y: yPos, z });
         }
     },
 
