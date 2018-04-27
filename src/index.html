@@ -21,10 +21,11 @@
         </a-cursor>
     </a-camera>
     <a-entity id="info-panel" rotation="0 0 0" position="0 1 -5"
-        geometry="primitive: plane; height: 0.5; width: 2"
-        material="color: black"
+        geometry="primitive: plane; height: auto; width: auto"
+        material="color: black; opacity: 0.8;"
         look-at="#viewer"
-        text="value: Select something to see details; color: yellow;"></a-entity>
+        visible="false"
+        text="value: \nState:\nCandidate:\nVotes:\nPercentage:\n; color: white; xOffset: 0.025;"></a-entity>
 
     <a-entity id="map"
               rotation="-90 0 0"

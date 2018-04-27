@@ -73,10 +73,12 @@ AFRAME.registerComponent('selection', {
             const topOfBox = selectedObj.localToWorld(new THREE.Vector3().copy(boundingBox.max));
             const yPos = (topOfBox.y + 0.5);
             this.infoPanel.setAttribute('position', { x, y: yPos, z });
+            this.infoPanel.object3D.visible = true;
         }
     },
 
     handleSelectionEnd() {
+        this.infoPanel.object3D.visible = false;
         this.selectionBox.visible = false;
         this.selected = null;
     }
