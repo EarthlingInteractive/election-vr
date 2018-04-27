@@ -16,12 +16,5 @@ AFRAME.registerComponent('selection-info', {
         percentage: {
             type: 'number'
         }
-    },
-
-    init() {
-    },
-
-    update(oldData) {
-
     }
 });
