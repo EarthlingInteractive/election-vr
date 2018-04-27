@@ -10,6 +10,7 @@
 <a-scene background="color: beige;">
     <a-assets>
         <a-asset-item id="json-us" src="https://unpkg.com/us-atlas@1/us/10m.json" />
+        <img id="ei-logo" src="assets/earthling-logo.png">
     </a-assets>
 
     <a-camera id="viewer" position="0 1.6 0">
@@ -20,6 +21,24 @@
                          fill="backwards" from="1 1 1" to="0.2 0.2 0.2" dur="1500"></a-animation>
         </a-cursor>
     </a-camera>
+
+    <a-plane material="color:black"
+             position="0 1.5 -5"
+             width="4"
+             height="1"
+    >
+        <a-plane id="legend"
+                 width="3.95"
+                 height="0.95"
+                 position="0 0 0.001"
+                 material="color: white;">
+            <a-text id="title" color="black" height="0.5" position="-1.8 0.25 0.01" value="Popular vote for U.S. President"></a-text>
+            <a-text id="year" color="black" height="0.5" position="1.25 0.25 0.01" value="2016"></a-text>
+            <a-text color="black" height="0.35" position="-1.8 -0.25 0.01" scale="0.75 0.75 0.75" value="created by"></a-text>
+            <a-plane height="0.35" width="2" position="0 -0.25 0.01" material="src: #ei-logo"></a-plane>
+        </a-plane>
+    </a-plane>
+
     <a-entity id="info-panel" rotation="0 0 0" position="0 1 -5"
         geometry="primitive: plane; height: auto; width: auto"
         material="color: black; opacity: 0.8;"
