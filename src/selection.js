@@ -28,6 +28,7 @@ AFRAME.registerComponent('selection', {
         this.el.sceneEl.setObject3D('selectionBox', this.selectionBox);
 
         this.infoPanel = document.querySelector('#info-panel');
+        this.infoLine = document.querySelector('#info-line');
         this.viewer = document.querySelector('#viewer');
 
         this.voteFormatter = format(',');
@@ -79,11 +80,18 @@ AFRAME.registerComponent('selection', {
 
             this.infoPanel.setAttribute('position', { x, y: yPos, z });
             this.infoPanel.object3D.visible = true;
+            this.infoLine.object3D.visible = true;
+
+            const selectionCenterOrig = boundingBox.getCenter();
+            const boxCenterInWorld = selectedObj.localToWorld(selectionCenterOrig);
+            this.infoLine.setAttribute('line', 'start', boxCenterInWorld);
+            this.infoLine.setAttribute('line', 'end', this.infoPanel.object3D.getWorldPosition());
         }
     },
 
     turnSelectionOff() {
         this.infoPanel.object3D.visible = false;
+        this.infoLine.object3D.visible = false;
         this.selectionBox.visible = false;
         this.selected = null;
     }
