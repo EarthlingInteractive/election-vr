@@ -54,6 +54,7 @@ const createSelectionMask = (inputGeometry, name, attributes) => {
     selectionMaskEntity.setAttribute('position', center);
     selectionMaskEntity.setAttribute('class', 'selectable');
     selectionMaskEntity.setAttribute('selection-info', attributes);
+    selectionMaskEntity.setAttribute('hoverable', '');
     selectionMaskEntity.setObject3D('mesh', mesh);
     return selectionMaskEntity;
 };

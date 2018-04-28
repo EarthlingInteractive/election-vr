@@ -20,24 +20,19 @@ const findPointOppositeViewer = (selectedObj, viewer) => {
  * Responds to a click event on part of the map.
  */
 AFRAME.registerComponent('selection', {
-    dependencies: ['geo-projection'],
-
     init() {
         this.selectionBox = new THREE.BoxHelper(undefined, 'black');
         this.selectionBox.visible = false;
         this.el.sceneEl.setObject3D('selectionBox', this.selectionBox);
 
         this.infoPanel = document.querySelector('#info-panel');
-        this.viewer = document.querySelector('#viewer');
+        this.viewer = document.querySelector('a-camera');
 
         this.voteFormatter = format(',');
         this.percentageFormatter = format('.3p');
 
         this.handleSelection = this.handleSelection.bind(this);
         this.el.addEventListener('click', this.handleSelection);
-    },
-
-    update(oldData) {
     },
 
     remove() {

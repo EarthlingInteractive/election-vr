@@ -6,21 +6,21 @@ const { THREE } = AFRAME;
 /**
  * Responds to a raycaster event intersecting part of the map.
  */
-AFRAME.registerComponent('hover', {
+AFRAME.registerComponent('hover-handler', {
     init() {
         this.hoverBox = new THREE.BoxHelper(undefined, 'darkgrey');
         this.hoverBox.visible = false;
         this.el.sceneEl.setObject3D('hoverbox', this.hoverBox);
 
         this.handleSelection = this.handleSelection.bind(this);
-        this.el.addEventListener('mouseenter', this.handleSelection);
+        this.el.addEventListener('hover-start', this.handleSelection);
         this.handleSelectionEnd = this.handleSelectionEnd.bind(this);
-        this.el.addEventListener('mouseleave', this.handleSelectionEnd);
+        this.el.addEventListener('hover-end', this.handleSelectionEnd);
     },
 
     remove() {
-        this.el.removeEventListener('mouseenter', this.handleSelection);
-        this.el.removeEventListener('mouseleave', this.handleSelectionEnd);
+        this.el.removeEventListener('hover-start', this.handleSelection);
+        this.el.removeEventListener('hover-end', this.handleSelectionEnd);
     },
 
     handleSelection(evt) {

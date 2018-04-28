@@ -5,22 +5,25 @@
     <title>ElectionVR - Popular Vote in U.S. Presidential Election 2016</title>
     <meta name="description" content="ElectionVR - Popular Vote in U.S. Presidential Election 2016"></meta>
     <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.12.4/dist/aframe-extras.min.js"></script>
+    <script src="https://rawgit.com/wmurphyrd/aframe-super-hands-component/master/dist/super-hands.min.js"></script>
+    <script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js"></script>
 </head>
 <body>
 <a-scene background="color: beige;">
     <a-assets>
         <a-asset-item id="json-us" src="https://unpkg.com/us-atlas@1/us/10m.json" />
         <img id="ei-logo" src="assets/earthling-logo.png">
+        <a-mixin id="gaze-cursor" cursor="fuse: true;"
+                 animation__fusing="property: scale; dur: 1500; dir: backwards;
+                                  from: 1 1 1; to: 0.2 0.2 0.2; startEvents: fusing"
+                 animation__stopfusing="property: scale; dur: 150; dir: forwards;
+                                  from: 0.2 0.2 0.2; to: 1 1 1; startEvents: click"
+        >
+        </a-mixin>
     </a-assets>
 
-    <a-camera id="viewer" position="0 1.6 0">
-        <a-cursor fuse="true" fuseTimeout="1000" raycaster="objects: .selectable">
-            <a-animation begin="click" easing="ease-in" attribute="scale"
-                         fill="forwards" from="0.2 0.2 0.2" to="1 1 1" dur="150"></a-animation>
-            <a-animation begin="fusing" easing="ease-in" attribute="scale"
-                         fill="backwards" from="1 1 1" to="0.2 0.2 0.2" dur="1500"></a-animation>
-        </a-cursor>
-    </a-camera>
+    <a-entity progressive-controls="objects: .selectable; gazeMixin: gaze-cursor"></a-entity>
 
     <a-plane material="color:black"
              position="0 1.5 -5"
@@ -43,7 +46,7 @@
     <a-entity id="info-panel" rotation="0 0 0" position="0 1 -5"
         geometry="primitive: plane; height: auto; width: auto"
         material="color: black; opacity: 0.8;"
-        look-at="#viewer"
+        look-at="a-camera"
         visible="false"
         text="value: \nState:\nCandidate:\nVotes:\nPercentage:\n; color: white; xOffset: 0.025;"></a-entity>
 
@@ -57,7 +60,7 @@
                   width: 20;"
               geo-outline-renderer="color: #A46C39;"
               cartogram-renderer
-              hover
+              hover-handler
               selection
     >
     </a-entity>
