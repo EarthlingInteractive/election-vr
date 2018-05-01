@@ -148,9 +148,9 @@ AFRAME.registerComponent('cartogram-renderer', {
                 const height = extrudeScale(candidateVotes);
                 const extrudeGeometry = candidateLayers[candidate].geometry;
 
-                // Hawaii and Michigan look better when rendered per shape
+                // Hawaii looks better when rendered per shape
                 let featureGeometry;
-                if (feature.id === '15' || feature.id === '26') {
+                if (feature.id === '15') {
                     featureGeometry = createExtrudedAndScaledGeometryPerShape(height, stateShapes, percentage, zPosition);
                 } else {
                     featureGeometry = createExtrudedAndScaledGeometry(height, stateShapes, percentage, zPosition);
