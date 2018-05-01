@@ -33,10 +33,12 @@ AFRAME.registerComponent('selection', {
 
         this.handleSelection = this.handleSelection.bind(this);
         this.el.addEventListener('click', this.handleSelection);
+        this.el.addEventListener('grab-end', this.handleSelection);
     },
 
     remove() {
         this.el.removeEventListener('click', this.handleSelection);
+        this.el.removeEventListener('grab-end', this.handleSelection);
     },
 
     handleSelection(evt) {
