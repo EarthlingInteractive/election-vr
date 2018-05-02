@@ -105,23 +105,23 @@ AFRAME.registerComponent('cartogram-renderer', {
             .range([0, this.data.maxExtrudeHeight]);
 
         const candidateLayers = {
-            clinton: {
+            Clinton: {
                 geometry: new THREE.Geometry(),
                 color: constants.DEMOCRAT_BLUE
             },
-            trump: {
+            Trump: {
                 geometry: new THREE.Geometry(),
                 color: constants.REPUBLICAN_RED
             },
-            stein: {
+            Stein: {
                 geometry: new THREE.Geometry(),
                 color: constants.GREEN_PARTY_GREEN
             },
-            johnson: {
+            Johnson: {
                 geometry: new THREE.Geometry(),
                 color: constants.LIBERTARIAN_GOLD
             },
-            mcmullin: {
+            McMullin: {
                 geometry: new THREE.Geometry(),
                 color: constants.INDEPENDENT_PURPLE
             }
@@ -134,7 +134,7 @@ AFRAME.registerComponent('cartogram-renderer', {
             const stateShapes = mapRenderContext.toShapes(this.data.isCCW);
 
             const candidatesOrderedByVoteCount = Object.keys(votingData)
-                .filter(key => ['clinton', 'trump', 'johnson', 'stein', 'mcmullin'].indexOf(key) !== -1)
+                .filter(key => ['Clinton', 'Trump', 'Johnson', 'Stein', 'McMullin'].indexOf(key) !== -1)
                 .sort((a, b) => votingData[a] <= votingData[b]);
 
             const totalVotes = votingData.totalVoters;
