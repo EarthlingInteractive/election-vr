@@ -160,7 +160,8 @@ AFRAME.registerComponent('cartogram-renderer', {
                     state: feature.properties.name,
                     candidate,
                     votes: candidateVotes,
-                    percentage
+                    percentage,
+                    totalVotes
                 };
                 const selectionMask = createSelectionMask(featureGeometry, `${feature.id}-${candidate}`, attributes);
                 this.el.appendChild(selectionMask);

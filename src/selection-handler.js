@@ -1,5 +1,4 @@
 import 'aframe';
-import { format } from 'd3-format';
 
 const { AFRAME } = window;
 const { THREE } = AFRAME;
@@ -28,9 +27,6 @@ AFRAME.registerComponent('selection-handler', {
         this.infoPanel = document.querySelector('#info-panel');
         this.infoPanelText = document.querySelector('#info-panel-text');
         this.viewer = document.querySelector('a-camera');
-
-        this.voteFormatter = format(',');
-        this.percentageFormatter = format('.3p');
 
         this.gazeCursor = document.querySelector('#gaze-cursor');
         this.handleSelection = this.handleSelection.bind(this);
@@ -87,11 +83,7 @@ AFRAME.registerComponent('selection-handler', {
 
     showInfoPanel(selectedObj) {
         const selectionInfoComp = this.selected.components['selection-info'];
-        const infoText = `${selectionInfoComp.data.state}
-            ${selectionInfoComp.data.candidate}
-            ${this.voteFormatter(selectionInfoComp.data.votes)} votes
-            ${this.percentageFormatter(selectionInfoComp.data.percentage)} of total`;
-        this.infoPanelText.setAttribute('value', infoText);
+        this.infoPanelText.setAttribute('value', selectionInfoComp.getInfoText());
 
         const { x, z } = findPointOppositeViewer(selectedObj, this.viewer);
 
