@@ -19,7 +19,7 @@ const findPointOppositeViewer = (selectedObj, viewer) => {
 /**
  * Responds to a click event on part of the map.
  */
-AFRAME.registerComponent('selection', {
+AFRAME.registerComponent('selection-handler', {
     init() {
         this.selectionBox = new THREE.BoxHelper(undefined, 'black');
         this.selectionBox.visible = false;
