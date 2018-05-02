@@ -87,7 +87,7 @@ AFRAME.registerComponent('selection-handler', {
 
     showInfoPanel(selectedObj) {
         const selectionInfoComp = this.selected.components['selection-info'];
-        const infoText = `State: ${selectionInfoComp.data.state}
+        const infoText = `${selectionInfoComp.data.state}
             ${selectionInfoComp.data.candidate}
             ${this.voteFormatter(selectionInfoComp.data.votes)} votes
             ${this.percentageFormatter(selectionInfoComp.data.percentage)} of total`;

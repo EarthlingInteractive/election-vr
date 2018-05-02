@@ -157,7 +157,7 @@ AFRAME.registerComponent('cartogram-renderer', {
                 }
                 extrudeGeometry.merge(featureGeometry);
                 const attributes = {
-                    state: feature.id,
+                    state: feature.properties.name,
                     candidate,
                     votes: candidateVotes,
                     percentage
