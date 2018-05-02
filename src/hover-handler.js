@@ -4,33 +4,42 @@ const { AFRAME } = window;
 const { THREE } = AFRAME;
 
 /**
- * Responds to a raycaster event intersecting part of the map.
+ * Responds to the pointer hovering over a 'hoverable' part of the map.
  */
 AFRAME.registerComponent('hover-handler', {
     init() {
-        this.hoverBox = new THREE.BoxHelper(undefined, 'darkgrey');
+        this.hoverBox = new THREE.Box3Helper(new THREE.Box3(), 'darkgrey');
         this.hoverBox.visible = false;
-        this.el.sceneEl.setObject3D('hoverbox', this.hoverBox);
+        this.el.setObject3D('hoverBox', this.hoverBox);
 
-        this.handleSelection = this.handleSelection.bind(this);
-        this.el.addEventListener('hover-start', this.handleSelection);
-        this.handleSelectionEnd = this.handleSelectionEnd.bind(this);
-        this.el.addEventListener('hover-end', this.handleSelectionEnd);
+        this.handleHoverStart = this.handleHoverStart.bind(this);
+        this.el.addEventListener('hover-start', this.handleHoverStart);
+        this.handleHoverEnd = this.handleHoverEnd.bind(this);
+        this.el.addEventListener('hover-end', this.handleHoverEnd);
     },
 
     remove() {
-        this.el.removeEventListener('hover-start', this.handleSelection);
-        this.el.removeEventListener('hover-end', this.handleSelectionEnd);
+        this.el.removeEventListener('hover-start', this.handleHoverStart);
+        this.el.removeEventListener('hover-end', this.handleHoverEnd);
     },
 
-    handleSelection(evt) {
+    handleHoverStart(evt) {
         this.selected = evt.target;
-        const selectedObj = this.selected.getObject3D('mesh');
-        this.hoverBox.setFromObject(selectedObj);
-        this.hoverBox.visible = true;
+        if (this.selected.components.hoverable) {
+            const selectedObj = this.selected.getObject3D('mesh');
+            const selectedObjWorldCenter = selectedObj.getWorldPosition();
+            const boxCenter = this.el.object3D.worldToLocal(selectedObjWorldCenter);
+
+            selectedObj.geometry.computeBoundingBox();
+            const selectionBox = new THREE.Box3();
+            selectionBox.setFromCenterAndSize(boxCenter, selectedObj.geometry.boundingBox.getSize());
+
+            this.hoverBox.box = selectionBox;
+            this.hoverBox.visible = true;
+        }
     },
 
-    handleSelectionEnd() {
+    handleHoverEnd() {
         this.hoverBox.visible = false;
         this.selected = null;
     }
