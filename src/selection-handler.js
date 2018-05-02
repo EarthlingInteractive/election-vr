@@ -21,9 +21,9 @@ const findPointOppositeViewer = (selectedObj, viewer) => {
  */
 AFRAME.registerComponent('selection-handler', {
     init() {
-        this.selectionBox = new THREE.BoxHelper(undefined, 'black');
+        this.selectionBox = new THREE.Box3Helper(new THREE.Box3(), 'black');
         this.selectionBox.visible = false;
-        this.el.sceneEl.setObject3D('selectionBox', this.selectionBox);
+        this.el.setObject3D('selectionBox', this.selectionBox);
 
         this.infoPanel = document.querySelector('#info-panel');
         this.infoPanelText = document.querySelector('#info-panel-text');
@@ -32,21 +32,29 @@ AFRAME.registerComponent('selection-handler', {
         this.voteFormatter = format(',');
         this.percentageFormatter = format('.3p');
 
+        this.gazeCursor = document.querySelector('#gaze-cursor');
         this.handleSelection = this.handleSelection.bind(this);
-        this.el.addEventListener('click', this.handleSelection);
-        this.el.addEventListener('grab-end', this.handleSelection);
+        if (this.gazeCursor) {
+            this.el.addEventListener('click', this.handleSelection);
+        } else {
+            this.el.addEventListener('grab-end', this.handleSelection);
+        }
     },
 
     remove() {
-        this.el.removeEventListener('click', this.handleSelection);
-        this.el.removeEventListener('grab-end', this.handleSelection);
+        if (this.gazeCursor) {
+            this.el.removeEventListener('click', this.handleSelection);
+        } else {
+            this.el.removeEventListener('grab-end', this.handleSelection);
+        }
     },
 
     handleSelection(evt) {
-        if (this.isAlreadySelected(evt.target)) {
+        const targetEl = evt.target;
+        if (this.isAlreadySelected(targetEl)) {
             this.turnSelectionOff();
-        } else {
-            this.setSelectionTo(evt.target);
+        } else if (this.isSelectable(targetEl)) {
+            this.setSelectionTo(targetEl);
         }
     },
 
@@ -54,30 +62,45 @@ AFRAME.registerComponent('selection-handler', {
         return (targetEl === this.selected);
     },
 
+    isSelectable(targetEl) {
+        return !!(targetEl.components['selection-info']);
+    },
+
     setSelectionTo(targetEl) {
         this.selected = targetEl;
         const selectedObj = this.selected.getObject3D('mesh');
-        this.selectionBox.setFromObject(selectedObj);
-        this.selectionBox.visible = true;
+        selectedObj.geometry.computeBoundingBox();
+        this.showSelectionBoxFor(selectedObj);
+        this.showInfoPanel(selectedObj);
+    },
 
+    showSelectionBoxFor(selectedObj) {
+        const selectedObjWorldCenter = selectedObj.getWorldPosition();
+        const boxCenter = this.el.object3D.worldToLocal(selectedObjWorldCenter);
+
+        const selectionBox = new THREE.Box3();
+        selectionBox.setFromCenterAndSize(boxCenter, selectedObj.geometry.boundingBox.getSize());
+
+        this.selectionBox.box = selectionBox;
+        this.selectionBox.visible = true;
+    },
+
+    showInfoPanel(selectedObj) {
         const selectionInfoComp = this.selected.components['selection-info'];
-        if (selectionInfoComp) {
-            const infoText = `State: ${selectionInfoComp.data.state}
+        const infoText = `State: ${selectionInfoComp.data.state}
             ${selectionInfoComp.data.candidate}
             ${this.voteFormatter(selectionInfoComp.data.votes)} votes
             ${this.percentageFormatter(selectionInfoComp.data.percentage)} of total`;
-            this.infoPanelText.setAttribute('value', infoText);
+        this.infoPanelText.setAttribute('value', infoText);
 
-            const { x, z } = findPointOppositeViewer(selectedObj, this.viewer);
+        const { x, z } = findPointOppositeViewer(selectedObj, this.viewer);
 
-            selectedObj.geometry.computeBoundingBox();
-            const { boundingBox } = selectedObj.geometry;
-            const topOfBox = selectedObj.localToWorld(new THREE.Vector3().copy(boundingBox.max));
-            const yPos = (topOfBox.y + 0.5);
+        const { boundingBox } = selectedObj.geometry;
+        const topOfBox = selectedObj.localToWorld(new THREE.Vector3().copy(boundingBox.max));
+        const yPos = (topOfBox.y + 0.5);
 
-            this.infoPanel.setAttribute('position', { x, y: yPos, z });
-            this.infoPanel.object3D.visible = true;
-        }
+        this.infoPanel.setAttribute('position', { x, y: yPos, z });
+        this.infoPanel.object3D.visible = true;
     },
 
     turnSelectionOff() {
