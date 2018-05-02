@@ -26,6 +26,7 @@ AFRAME.registerComponent('selection', {
         this.el.sceneEl.setObject3D('selectionBox', this.selectionBox);
 
         this.infoPanel = document.querySelector('#info-panel');
+        this.infoPanelText = document.querySelector('#info-panel-text');
         this.viewer = document.querySelector('a-camera');
 
         this.voteFormatter = format(',');
@@ -62,10 +63,10 @@ AFRAME.registerComponent('selection', {
         const selectionInfoComp = this.selected.components['selection-info'];
         if (selectionInfoComp) {
             const infoText = `State: ${selectionInfoComp.data.state}
-            Candidate: ${selectionInfoComp.data.candidate}
-            Votes: ${this.voteFormatter(selectionInfoComp.data.votes)}
-            Percentage: ${this.percentageFormatter(selectionInfoComp.data.percentage)}`;
-            this.infoPanel.setAttribute('text', 'value', infoText);
+            ${selectionInfoComp.data.candidate}
+            ${this.voteFormatter(selectionInfoComp.data.votes)} votes
+            ${this.percentageFormatter(selectionInfoComp.data.percentage)} of total`;
+            this.infoPanelText.setAttribute('value', infoText);
 
             const { x, z } = findPointOppositeViewer(selectedObj, this.viewer);
 
