@@ -95,10 +95,24 @@ AFRAME.registerComponent('selection-handler', {
 
         const { boundingBox } = selectedObj.geometry;
         const topOfBox = selectedObj.localToWorld(new THREE.Vector3().copy(boundingBox.max));
-        const yPos = (topOfBox.y + 0.5);
+        const y = (topOfBox.y + 0.5);
 
-        this.infoPanel.setAttribute('position', { x, y: yPos, z });
+        const worldPosition = new THREE.Vector3(x, y, z);
+        const position = this.el.object3D.worldToLocal(worldPosition);
+        this.infoPanel.object3D.position.copy(position);
+
         this.infoPanel.object3D.visible = true;
+    },
+
+    tick() {
+        if (this.selected) {
+            const infoPanelPositon = this.infoPanel.object3D.position;
+            const viewerLocalPosition = this.el.object3D.worldToLocal(new THREE.Vector3().copy(this.viewer.object3D.position));
+            const rotationMatrix = new THREE.Matrix4();
+            const up = new THREE.Vector3(0, 0, 1);
+            rotationMatrix.lookAt(viewerLocalPosition, infoPanelPositon, up);
+            this.infoPanel.object3D.quaternion.setFromRotationMatrix(rotationMatrix);
+        }
     },
 
     turnSelectionOff() {

@@ -44,14 +44,6 @@
         </a-plane>
     </a-plane>
 
-    <a-entity id="info-panel" rotation="0 0 0" position="0 1 -5"
-        geometry="primitive: plane; height: 0.6; width: 1.2"
-        material="color: black;"
-        look-at="a-camera"
-        visible="false">
-        <a-text id="info-panel-text" scale="0.5 0.5 0.5" position="-0.55 0 0.01" color="white"></a-text>
-    </a-entity>
-
     <a-entity id="map"
               rotation="-90 0 0"
               topojson-loader="src: #json-us; topologyObject: states;"
@@ -68,6 +60,12 @@
               stretchable="startButtons: gripdown, gripclose; endButtons: gripup, gripopen"
               grabbable="startButtons: triggerdown; endButtons: triggerup; suppressY: false;"
     >
+        <a-entity id="info-panel" rotation="90 0 0" position="0 1 -5"
+                  geometry="primitive: plane; height: 0.6; width: 1.2"
+                  material="color: black; side: double;"
+                  visible="false">
+            <a-text id="info-panel-text" scale="0.5 0.5 0.5" position="-0.55 0 0.01" color="white"></a-text>
+        </a-entity>
         <a-plane height="10" width="20" material="visible: false;" class="selectable"></a-plane>
     </a-entity>
 </a-scene>
