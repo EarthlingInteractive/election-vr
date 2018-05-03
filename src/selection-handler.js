@@ -81,12 +81,12 @@ AFRAME.registerComponent('selection-handler', {
 
         const stateBox = new THREE.Box3();
         stateBox.setFromObject(this.selected.parentEl.object3D);
-        const y = (stateBox.max.y + 0.75);
+        const { y } = stateBox.max;// + 0.75);
         const { x, z } = stateBox.getCenter();
 
         const worldPosition = new THREE.Vector3(x, y, z);
         const position = this.el.object3D.worldToLocal(worldPosition);
-        this.infoPanel.object3D.position.copy(position);
+        this.infoPanel.object3D.position.set(position.x, position.y, position.z + 0.75);
 
         this.infoPanel.object3D.visible = true;
     },
