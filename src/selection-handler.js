@@ -28,21 +28,27 @@ AFRAME.registerComponent('selection-handler', {
         this.infoPanelText = document.querySelector('#info-panel-text');
         this.viewer = document.querySelector('a-camera');
 
-        this.gazeCursor = document.querySelector('#gaze-cursor');
+        this.superHands = document.querySelector('[progressive-controls]');
+        this.handleControllerChange = this.handleControllerChange.bind(this);
+        this.superHands.addEventListener('controller-progressed', this.handleControllerChange);
+
         this.handleSelection = this.handleSelection.bind(this);
-        if (this.gazeCursor) {
+    },
+
+    handleControllerChange(evt) {
+        if (evt.detail.level === 'gaze') {
+            this.el.removeEventListener('grab-end', this.handleSelection);
             this.el.addEventListener('click', this.handleSelection);
         } else {
+            this.el.removeEventListener('click', this.handleSelection);
             this.el.addEventListener('grab-end', this.handleSelection);
         }
     },
 
     remove() {
-        if (this.gazeCursor) {
-            this.el.removeEventListener('click', this.handleSelection);
-        } else {
-            this.el.removeEventListener('grab-end', this.handleSelection);
-        }
+        this.el.removeEventListener('click', this.handleSelection);
+        this.el.removeEventListener('grab-end', this.handleSelection);
+        this.el.removeEventListener('controller-progressed', this.handleControllerChange);
     },
 
     handleSelection(evt) {
