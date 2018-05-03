@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ElectionVR - Popular Vote in U.S. Presidential Election 2016</title>
+    <meta name="description" content="ElectionVR - Popular Vote in U.S. Presidential Election 2016"></meta>
+    <script src="https://rawgit.com/aframevr/aframe/2e14ef3/dist/aframe-master.min.js"></script>
+    <script src="https://rawgit.com/wmurphyrd/aframe-super-hands-component/master/dist/super-hands.min.js"></script>
+    <script src="https://unpkg.com/aframe-haptics-component/dist/aframe-haptics-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js"></script>
+<script type="text/javascript" src="bundle.js"></script></head>
+<body>
+<a-scene background="color: beige;">
+    <a-assets>
+        <a-asset-item id="json-us" src="assets/cb_2017_us_state_20m-albers-quantized.topo.json" />
+        <img id="ei-logo" src="assets/earthling-logo.png">
+        <a-mixin id="gaze-cursor" cursor="fuse: true;"
+                 animation__fusing="property: scale; dur: 1500; dir: backwards;
+                                  from: 1 1 1; to: 0.2 0.2 0.2; startEvents: fusing"
+                 animation__stopfusing="property: scale; dur: 150; dir: forwards;
+                                  from: 0.2 0.2 0.2; to: 1 1 1; startEvents: click"
+        >
+        </a-mixin>
+        <a-mixin id="hand-pointer" haptics="events: hover-start; eventsFrom: #map; dur: 10; force: 0.2"></a-mixin>
+    </a-assets>
+
+    <a-entity progressive-controls="objects: .selectable; gazeMixin: gaze-cursor; pointMixin: hand-pointer; maxLevel: point;"></a-entity>
+
+    <a-plane material="color:black"
+             position="0 1.5 -5"
+             width="4"
+             height="1"
+    >
+        <a-plane id="legend"
+                 width="3.95"
+                 height="0.95"
+                 position="0 0 0.01"
+                 material="color: white;">
+            <a-text id="title" color="black" height="0.5" position="-1.8 0.25 0.01" value="Popular vote for U.S. President"></a-text>
+            <a-text id="year" color="black" height="0.5" position="1.25 0.25 0.01" value="2016"></a-text>
+            <a-text color="black" height="0.35" position="-1.8 0 0.01" scale="0.65 0.65 0.65" value="data source: CNN"></a-text>
+            <a-text color="black" height="0.35" position="-1.8 -0.25 0.01" scale="0.65 0.65 0.65" value="created by"></a-text>
+            <a-plane height="0.5" width="3" scale="0.65 0.65 0.65" position="-0.15 -0.25 0.01" material="src: #ei-logo"></a-plane>
+        </a-plane>
+    </a-plane>
+
+    <a-entity id="map"
+              rotation="-90 0 0"
+              topojson-loader="src: #json-us; topologyObject: states;"
+              election-data-loader
+              geo-projection="
+                  projection: geoIdentity;
+                  height: 10;
+                  width: 20;"
+              geo-outline-renderer="color: #A46C39;"
+              cartogram-renderer
+              hover-handler
+              hoverable
+              selection-handler
+              stretchable="startButtons: gripdown, gripclose; endButtons: gripup, gripopen"
+              grabbable="startButtons: triggerdown; endButtons: triggerup; suppressY: false;"
+    >
+        <a-entity id="info-panel" rotation="90 0 0" position="0 1 -5"
+                  geometry="primitive: plane; height: 0.6; width: 1.2"
+                  material="color: black; side: double;"
+                  visible="false">
+            <a-text id="info-panel-text" scale="0.5 0.5 0.5" position="-0.55 0 0.01" color="white"></a-text>
+        </a-entity>
+        <a-plane height="10" width="20" material="visible: false;" class="selectable"></a-plane>
+    </a-entity>
+</a-scene>
+</body>
+</html>
