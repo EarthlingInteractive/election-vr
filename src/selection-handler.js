@@ -3,20 +3,8 @@ import 'aframe';
 const { AFRAME } = window;
 const { THREE } = AFRAME;
 
-const findPointOppositeViewer = (selectedObj, viewer) => {
-    selectedObj.geometry.computeBoundingSphere();
-    const { boundingSphere } = selectedObj.geometry;
-    const viewerPos = viewer.object3D.getWorldPosition();
-    const viewerWorldPos = new THREE.Vector3().copy(viewerPos);
-    viewerWorldPos.setY(0);
-    const localViewerPos = selectedObj.worldToLocal(viewerWorldPos);
-    const pointOnSphere = boundingSphere.clampPoint(localViewerPos);
-    pointOnSphere.negate();
-    return selectedObj.localToWorld(pointOnSphere);
-};
-
 /**
- * Responds to a click event on part of the map.
+ * Responds to a selection event on part of the map.
  */
 AFRAME.registerComponent('selection-handler', {
     init() {
@@ -87,15 +75,14 @@ AFRAME.registerComponent('selection-handler', {
         this.selectionBox.visible = true;
     },
 
-    showInfoPanel(selectedObj) {
+    showInfoPanel() {
         const selectionInfoComp = this.selected.components['selection-info'];
         this.infoPanelText.setAttribute('value', selectionInfoComp.getInfoText());
 
-        const { x, z } = findPointOppositeViewer(selectedObj, this.viewer);
-
-        const { boundingBox } = selectedObj.geometry;
-        const topOfBox = selectedObj.localToWorld(new THREE.Vector3().copy(boundingBox.max));
-        const y = (topOfBox.y + 0.5);
+        const stateBox = new THREE.Box3();
+        stateBox.setFromObject(this.selected.parentEl.object3D);
+        const y = (stateBox.max.y + 0.75);
+        const { x, z } = stateBox.getCenter();
 
         const worldPosition = new THREE.Vector3(x, y, z);
         const position = this.el.object3D.worldToLocal(worldPosition);

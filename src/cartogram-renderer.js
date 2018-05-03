@@ -139,6 +139,10 @@ AFRAME.registerComponent('cartogram-renderer', {
 
             const totalVotes = votingData.totalVoters;
             let zPosition = 0;
+
+            const stateSelectionEntity = document.createElement('a-entity');
+            stateSelectionEntity.setAttribute('id', `state-${feature.id}`);
+
             candidatesOrderedByVoteCount.forEach((candidate) => {
                 const candidateVotes = votingData[candidate];
                 if (!candidateVotes || candidateVotes <= 0) {
@@ -164,9 +168,10 @@ AFRAME.registerComponent('cartogram-renderer', {
                     totalVotes
                 };
                 const selectionMask = createSelectionMask(featureGeometry, `${feature.id}-${candidate}`, attributes);
-                this.el.appendChild(selectionMask);
+                stateSelectionEntity.appendChild(selectionMask);
                 zPosition += height;
             });
+            this.el.appendChild(stateSelectionEntity);
         });
 
         Object.keys(candidateLayers).forEach((candidate) => {
