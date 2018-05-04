@@ -146,7 +146,8 @@ AFRAME.registerComponent('cartogram-renderer', {
                     candidate: candidateName,
                     votes: candidateData.votes,
                     percentage,
-                    totalVotes: candidateData.totalVoters
+                    totalVotes: candidateData.totalVoters,
+                    color: candidateMetadatum.color.getHexString()
                 };
                 const selectionMask = createSelectionMask(featureGeometry, `${feature.id}-${candidateMetadatum.lastName}`, attributes);
                 stateSelectionEntity.appendChild(selectionMask);

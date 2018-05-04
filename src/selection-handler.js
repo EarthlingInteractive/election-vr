@@ -14,6 +14,7 @@ AFRAME.registerComponent('selection-handler', {
 
         this.infoPanel = document.querySelector('#info-panel');
         this.infoPanelText = document.querySelector('#info-panel-text');
+        this.infoPanelHighlight = document.querySelector('#info-panel-highlight');
         this.viewer = document.querySelector('a-camera');
 
         this.superHands = document.querySelector('[progressive-controls]');
@@ -87,6 +88,8 @@ AFRAME.registerComponent('selection-handler', {
         const worldPosition = new THREE.Vector3(x, y, z);
         const position = this.el.object3D.worldToLocal(worldPosition);
         this.infoPanel.object3D.position.set(position.x, position.y, position.z + 0.75);
+
+        this.infoPanelHighlight.setAttribute('color', `#${selectionInfoComp.data.color}`);
 
         this.infoPanel.object3D.visible = true;
     },

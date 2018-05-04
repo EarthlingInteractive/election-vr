@@ -19,6 +19,9 @@ AFRAME.registerComponent('selection-info', {
         },
         percentage: {
             type: 'number'
+        },
+        color: {
+            type: 'color'
         }
     },
 
