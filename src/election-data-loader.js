@@ -6,13 +6,20 @@ const { AFRAME } = window;
 AFRAME.registerComponent('election-data-loader', {
     schema: {
         year: {
-            type: 'number'
+            type: 'string'
         }
     },
 
     init() {
         this.handleDataLoaded = this.handleDataLoaded.bind(this);
+        this.handleYearChanged = this.handleYearChanged.bind(this);
+        this.yearSelector = document.querySelector('[year-selector]');
+        this.yearSelector.addEventListener('year-changed', this.handleYearChanged);
         this.yearText = document.querySelector('#year');
+    },
+
+    remove() {
+        this.yearSelector.removeEventListener('year-changed', this.handleYearChanged);
     },
 
     update(oldData) {
@@ -23,6 +30,10 @@ AFRAME.registerComponent('election-data-loader', {
                 .then(() => { this.yearText.setAttribute('value', this.data.year); })
                 .catch((error) => { console.error(error); });
         }
+    },
+
+    handleYearChanged(evt) {
+        this.el.setAttribute('election-data-loader', 'year', evt.detail.year);
     },
 
     handleDataLoaded(votingData) {

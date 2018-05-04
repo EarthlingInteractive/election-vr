@@ -70,34 +70,36 @@ AFRAME.registerComponent('cartogram-renderer', {
     init() {
         this.geoProjectionComponent = this.el.components['geo-projection'];
         this.system = this.el.sceneEl.systems['geo-projection'];
-        this.ready = false;
-
-        const geoDataLoaderPromise = new Promise(((resolve) => {
-            this.el.addEventListener('geo-data-ready', resolve);
-        }));
-        const electionDataLoaderPromise = new Promise(((resolve) => {
-            this.el.addEventListener('election-data-loaded', resolve);
-        }));
-
-        // Wait until all files to finish loading to avoid race conditions
-        Promise.all([geoDataLoaderPromise, electionDataLoaderPromise]).then((result) => {
-            const electionDataLoadEvent = result[1].detail;
-            this.votesByFipsCode = electionDataLoadEvent.votesByFipsCode;
-            this.maxTotalVoters = electionDataLoadEvent.maxTotalVoters;
-            this.ready = true;
-            this.render();
-        }, (error) => {
-            console.error(error);
-        });
+        this.handleGeoDataReady = this.handleGeoDataReady.bind(this);
+        this.handleElectionDataReady = this.handleElectionDataReady.bind(this);
+        this.el.addEventListener('geo-data-ready', this.handleGeoDataReady);
+        this.el.addEventListener('election-data-loaded', this.handleElectionDataReady);
+    },
+    remove() {
+        this.el.removeEventListener('geo-data-ready', this.handleGeoDataReady);
+        this.el.removeEventListener('election-data-loaded', this.handleElectionDataReady);
+        this.clearMap(true);
     },
     update(oldData) {
-        if (this.data.maxExtrudeHeight !== oldData.maxExtrudeHeight ||
-            this.data.geometryType !== oldData.geometryType) {
+        if (this.data.maxExtrudeHeight !== oldData.maxExtrudeHeight) {
             this.render();
         }
     },
+    handleGeoDataReady() {
+        this.render();
+    },
+    handleElectionDataReady(evt) {
+        const electionDataLoadEvent = evt.detail;
+        this.votesByFipsCode = electionDataLoadEvent.votesByFipsCode;
+        this.maxTotalVoters = electionDataLoadEvent.maxTotalVoters;
+        this.render();
+    },
+    isReady() {
+        return !!(this.votesByFipsCode && this.geoProjectionComponent.geoJson);
+    },
     render() {
-        if (!this.ready || !this.votesByFipsCode || !this.geoProjectionComponent.geoJson) return;
+        this.clearMap();
+        if (!this.isReady()) return;
 
         // Determine the vertical scale for the entire country using the state with the largest number of total voters
         // as equaling the max extrude height
@@ -174,5 +176,12 @@ AFRAME.registerComponent('cartogram-renderer', {
         const stateOutlineMaterial = new THREE.LineBasicMaterial({ color: constants.DARK_GRAY });
         const stateOutlines = new THREE.LineSegments(stateOutlineGeometry, stateOutlineMaterial);
         this.el.setObject3D('lines', stateOutlines);
+    },
+    clearMap(clearAll = false) {
+        Object.keys(this.el.object3DMap).forEach((key) => {
+            if (clearAll || !['hoverBox', 'selectionBox', 'outlineMap'].includes(key)) {
+                this.el.removeObject3D(key);
+            }
+        });
     }
 });

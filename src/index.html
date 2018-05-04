@@ -29,12 +29,12 @@
     <a-plane material="color:black"
              position="0 1.5 -5"
              width="4"
-             height="1"
+             height="1.5"
     >
         <a-plane id="legend"
                  width="3.95"
                  height="0.95"
-                 position="0 0 0.01"
+                 position="0 0.255 0.01"
                  material="color: white;">
             <a-text id="title" color="black" height="0.5" position="-1.8 0.25 0.01" value="Popular vote for U.S. President"></a-text>
             <a-text id="year" color="black" height="0.5" position="1.25 0.25 0.01" value="2016"></a-text>
@@ -42,12 +42,14 @@
             <a-text color="black" height="0.35" position="-1.8 -0.25 0.01" scale="0.65 0.65 0.65" value="created by"></a-text>
             <a-plane height="0.5" width="3" scale="0.85 0.65 0.65" position="0.15 -0.25 0.01" material="src: #ei-logo"></a-plane>
         </a-plane>
+        <a-text color="white" height="0.35" scale="0.85 0.85 0.85" position="-1.8 -0.45 0.01" value="Choose a year:"></a-text>
+        <a-entity year-selector position="-0.25 -0.455 0.01"></a-entity>
     </a-plane>
 
     <a-entity id="map"
               rotation="-90 0 0"
               topojson-loader="src: #json-us; topologyObject: states;"
-              election-data-loader="year: 2016;"
+              election-data-loader
               geo-projection="
                   projection: geoIdentity;
                   height: 5;
