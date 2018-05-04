@@ -50,10 +50,10 @@
               election-data-loader="year: 2016;"
               geo-projection="
                   projection: geoIdentity;
-                  height: 10;
-                  width: 20;"
+                  height: 5;
+                  width: 10;"
               geo-outline-renderer="color: #A46C39;"
-              cartogram-renderer
+              cartogram-renderer="maxExtrudeHeight: 1.2;"
               hover-handler
               hoverable
               selection-handler
@@ -68,7 +68,7 @@
             <a-plane position="0 0 -0.01" height="0.62" width="1.22" material="shader: flat; color: white;"></a-plane>
             <a-text id="info-panel-text" scale="0.5 0.5 0.5" position="-0.55 0 0.01" color="white"></a-text>
         </a-entity>
-        <a-plane height="10" width="20" material="visible: false;" class="selectable"></a-plane>
+        <a-plane height="5" width="10" material="visible: false;" class="selectable"></a-plane>
     </a-entity>
 </a-scene>
 </body>
