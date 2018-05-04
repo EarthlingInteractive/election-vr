@@ -7,6 +7,9 @@
 
 rm temp/*.*
 
+# convert the FIPS code to state mapping file to ndjson for later use
+dsv2json statefips.csv -n -o temp/statefips.ndjson
+
 # Source data files downloaded from the FEC website: https://transition.fec.gov/pubrec/electionresults.shtml
 YEARS=( 2004 2008 2012 2016 )
 for YEAR in "${YEARS[@]}"
@@ -43,6 +46,11 @@ do
         | ndjson-map 'd[0]' \
         > temp/${FILE_BASE}.clean.ndjson
 
+    # add in the FIPS code for each state
+    ndjson-join 'd.state' temp/${FILE_BASE}.clean.ndjson temp/statefips.ndjson \
+        | ndjson-map 'Object.assign({fips: d[1].fips}, d[0])' \
+        > temp/${FILE_BASE}.fips.ndjson
+
     # get the total votes for each state
     cat temp/${FILE_BASE}.ndjson \
         | ndjson-filter 'd["TOTAL VOTES"].trim() === "Total State Votes:"' \
@@ -50,7 +58,7 @@ do
         > temp/${FILE_BASE}.totals.ndjson
 
     # add the state totals and filter out the minor candidates
-    ndjson-join 'd.state' temp/${FILE_BASE}.clean.ndjson temp/${FILE_BASE}.totals.ndjson \
+    ndjson-join 'd.state' temp/${FILE_BASE}.fips.ndjson temp/${FILE_BASE}.totals.ndjson \
         | ndjson-map 'Object.assign(d[0], {totalVoters: d[1].totalVoters})' \
         | ndjson-filter '["Trump, Donald J.", "Clinton, Hillary", "Johnson, Gary", "Stein, Jill", "McMullin, Evan", "Obama, Barack", "McCain, John", "Nader, Ralph", "Barr, Bob", "Bush, George W.", "Kerry, John F.", "Badnarik, Michael"].includes(d.name)' \
         > temp/${FILE_BASE}.final.ndjson
