@@ -37,6 +37,12 @@ const candidateInfo = {
         party: 'Democrat',
         color: constants.DEMOCRAT_BLUE
     },
+    'Romney, Mitt': {
+        firstName: 'Mitt',
+        lastName: 'Romney',
+        party: 'Republican',
+        color: constants.REPUBLICAN_RED
+    },
     'McCain, John': {
         firstName: 'John',
         lastName: 'McCain',

@@ -33,6 +33,7 @@ do
         | ndjson-filter 'd["TOTAL VOTES"] !== "Total State Votes:"' \
         | ndjson-filter '+d["GENERAL RESULTS"] > 0 || +d["TOTAL VOTES #"] > 0' \
         | ndjson-map 'd = {state: d["STATE ABBREVIATION"], name: d["LAST NAME,  FIRST"].trim(), party: d["PARTY"], votes: (+d["GENERAL RESULTS"] || +d["TOTAL VOTES #"]), winner: (d["WINNER INDICATOR"]==="W")}' \
+        | sed -f data-clean.sed \
         > temp/${FILE_BASE}.candidates.ndjson
 
     # find all the "Combined Parties:" special cases
@@ -60,7 +61,7 @@ do
     # add the state totals and filter out the minor candidates
     ndjson-join 'd.state' temp/${FILE_BASE}.fips.ndjson temp/${FILE_BASE}.totals.ndjson \
         | ndjson-map 'Object.assign(d[0], {totalVoters: d[1].totalVoters})' \
-        | ndjson-filter '["Trump, Donald J.", "Clinton, Hillary", "Johnson, Gary", "Stein, Jill", "McMullin, Evan", "Obama, Barack", "McCain, John", "Nader, Ralph", "Barr, Bob", "Bush, George W.", "Kerry, John F.", "Badnarik, Michael"].includes(d.name)' \
+        | ndjson-filter '["Trump, Donald J.", "Clinton, Hillary", "Johnson, Gary", "Stein, Jill", "McMullin, Evan", "Obama, Barack", "Romney, Mitt", "McCain, John", "Nader, Ralph", "Barr, Bob", "Bush, George W.", "Kerry, John F.", "Badnarik, Michael"].includes(d.name)' \
         > temp/${FILE_BASE}.final.ndjson
 
     # convert the ndjson files into json
