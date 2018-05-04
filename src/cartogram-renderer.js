@@ -1,6 +1,7 @@
 import 'aframe';
 import { scaleLinear } from 'd3-scale';
 import * as constants from './constants';
+import candidateInfo from './candidate-info';
 
 const { AFRAME } = window;
 const { THREE } = AFRAME;
@@ -104,53 +105,31 @@ AFRAME.registerComponent('cartogram-renderer', {
             .domain([0, this.maxTotalVoters])
             .range([0, this.data.maxExtrudeHeight]);
 
-        const candidateLayers = {
-            Clinton: {
-                geometry: new THREE.Geometry(),
-                color: constants.DEMOCRAT_BLUE
-            },
-            Trump: {
-                geometry: new THREE.Geometry(),
-                color: constants.REPUBLICAN_RED
-            },
-            Stein: {
-                geometry: new THREE.Geometry(),
-                color: constants.GREEN_PARTY_GREEN
-            },
-            Johnson: {
-                geometry: new THREE.Geometry(),
-                color: constants.LIBERTARIAN_GOLD
-            },
-            McMullin: {
-                geometry: new THREE.Geometry(),
-                color: constants.INDEPENDENT_PURPLE
-            }
-        };
-        // Split the geoJson into features and render each one individually so that we can set a different
-        // extrusion height for each based on the population.
+        const candidateMetadata = {};
+
         this.geoProjectionComponent.geoJson.features.forEach((feature) => {
             const votingData = this.votesByFipsCode[feature.id];
             const mapRenderContext = this.system.renderToContext(feature, this.geoProjectionComponent.projection);
-            const stateShapes = mapRenderContext.toShapes(this.data.isCCW);
+            const stateShapes = mapRenderContext.toShapes();
 
-            const candidatesOrderedByVoteCount = Object.keys(votingData)
-                .filter(key => ['Clinton', 'Trump', 'Johnson', 'Stein', 'McMullin'].indexOf(key) !== -1)
-                .sort((a, b) => votingData[a] <= votingData[b]);
-
-            const totalVotes = votingData.totalVoters;
             let zPosition = 0;
 
             const stateSelectionEntity = document.createElement('a-entity');
             stateSelectionEntity.setAttribute('id', `state-${feature.id}`);
 
-            candidatesOrderedByVoteCount.forEach((candidate) => {
-                const candidateVotes = votingData[candidate];
-                if (!candidateVotes || candidateVotes <= 0) {
-                    return;
+            votingData.forEach((candidateData) => {
+                const percentage = (candidateData.votes / candidateData.totalVoters);
+                const height = extrudeScale(candidateData.votes);
+
+                if (!candidateMetadata[candidateData.name]) {
+                    const info = candidateInfo[candidateData.name];
+                    candidateMetadata[candidateData.name] = {
+                        geometry: new THREE.Geometry(),
+                        ...info
+                    };
                 }
-                const percentage = (candidateVotes / totalVotes);
-                const height = extrudeScale(candidateVotes);
-                const extrudeGeometry = candidateLayers[candidate].geometry;
+                const candidateMetadatum = candidateMetadata[candidateData.name];
+                const extrudeGeometry = candidateMetadatum.geometry;
 
                 // Hawaii looks better when rendered per shape
                 let featureGeometry;
@@ -160,29 +139,31 @@ AFRAME.registerComponent('cartogram-renderer', {
                     featureGeometry = createExtrudedAndScaledGeometry(height, stateShapes, percentage, zPosition);
                 }
                 extrudeGeometry.merge(featureGeometry);
+
+                const candidateName = `${candidateMetadatum.firstName} ${candidateMetadatum.lastName}`;
                 const attributes = {
                     state: feature.properties.name,
-                    candidate,
-                    votes: candidateVotes,
+                    candidate: candidateName,
+                    votes: candidateData.votes,
                     percentage,
-                    totalVotes
+                    totalVotes: candidateData.totalVoters
                 };
-                const selectionMask = createSelectionMask(featureGeometry, `${feature.id}-${candidate}`, attributes);
+                const selectionMask = createSelectionMask(featureGeometry, `${feature.id}-${candidateMetadatum.lastName}`, attributes);
                 stateSelectionEntity.appendChild(selectionMask);
                 zPosition += height;
             });
             this.el.appendChild(stateSelectionEntity);
         });
 
-        Object.keys(candidateLayers).forEach((candidate) => {
-            const layer = candidateLayers[candidate];
+        Object.keys(candidateMetadata).forEach((candidateName) => {
+            const candidateMetadatum = candidateMetadata[candidateName];
             // Convert the extrude geometry into a buffer geometry for better rendering performance
             const extrudeBufferGeometry = new THREE.BufferGeometry();
-            extrudeBufferGeometry.fromGeometry(layer.geometry);
+            extrudeBufferGeometry.fromGeometry(candidateMetadatum.geometry);
 
-            const material = new THREE.MeshLambertMaterial({ color: layer.color });
+            const material = new THREE.MeshLambertMaterial({ color: candidateMetadatum.color });
             const extrudedMap = new THREE.Mesh(extrudeBufferGeometry, material);
-            this.el.setObject3D(candidate, extrudedMap);
+            this.el.setObject3D(candidateName, extrudedMap);
         });
 
         const mapRenderContextForOutline = this.system.renderToContext(this.geoProjectionComponent.geoJson, this.geoProjectionComponent.projection);
