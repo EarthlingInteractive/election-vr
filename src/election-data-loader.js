@@ -13,13 +13,12 @@ AFRAME.registerComponent('election-data-loader', {
     init() {
         this.handleDataLoaded = this.handleDataLoaded.bind(this);
         this.handleYearChanged = this.handleYearChanged.bind(this);
-        this.yearSelector = document.querySelector('[year-selector]');
-        this.yearSelector.addEventListener('year-changed', this.handleYearChanged);
+        this.el.sceneEl.addEventListener('year-changed', this.handleYearChanged);
         this.yearText = document.querySelector('#year');
     },
 
     remove() {
-        this.yearSelector.removeEventListener('year-changed', this.handleYearChanged);
+        this.el.sceneEl.removeEventListener('year-changed', this.handleYearChanged);
     },
 
     update(oldData) {

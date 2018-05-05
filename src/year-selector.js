@@ -36,7 +36,7 @@ AFRAME.registerComponent('year-selector', {
             });
         }
         if (this.data.selectedYear !== oldData.selectedYear) {
-            this.el.emit('year-changed', { year: this.data.selectedYear });
+            this.el.emit('year-changed', { year: this.data.selectedYear }, true);
         }
     },
 

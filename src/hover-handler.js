@@ -16,11 +16,13 @@ AFRAME.registerComponent('hover-handler', {
         this.el.addEventListener('hover-start', this.handleHoverStart);
         this.handleHoverEnd = this.handleHoverEnd.bind(this);
         this.el.addEventListener('hover-end', this.handleHoverEnd);
+        this.el.sceneEl.addEventListener('year-changed', this.handleHoverEnd);
     },
 
     remove() {
         this.el.removeEventListener('hover-start', this.handleHoverStart);
         this.el.removeEventListener('hover-end', this.handleHoverEnd);
+        this.el.sceneEl.removeEventListener('year-changed', this.handleHoverEnd);
     },
 
     handleHoverStart(evt) {
