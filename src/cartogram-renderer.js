@@ -118,6 +118,7 @@ AFRAME.registerComponent('cartogram-renderer', {
 
             const stateSelectionEntity = document.createElement('a-entity');
             stateSelectionEntity.setAttribute('id', `state-${feature.id}`);
+            stateSelectionEntity.setAttribute('class', 'state-selection-mask');
 
             votingData.forEach((candidateData) => {
                 const percentage = (candidateData.votes / candidateData.totalVoters);
@@ -182,6 +183,9 @@ AFRAME.registerComponent('cartogram-renderer', {
             if (clearAll || !['hoverBox', 'selectionBox', 'outlineMap'].includes(key)) {
                 this.el.removeObject3D(key);
             }
+        });
+        this.el.querySelectorAll('.state-selection-mask').forEach((maskEl) => {
+            this.el.removeChild(maskEl);
         });
     }
 });
