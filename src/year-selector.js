@@ -66,6 +66,7 @@ AFRAME.registerComponent('year-selector', {
     handleHoverStart(evt) {
         const buttonBorder = evt.target;
         buttonBorder.setAttribute('material', 'color', this.data.selectionColor);
+        evt.detail.hand.components.haptics.pulse(0.2, 10);
     },
 
     handleHoverEnd(evt) {
