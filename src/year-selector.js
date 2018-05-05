@@ -94,7 +94,7 @@ AFRAME.registerComponent('year-selector', {
             const buttonBorder = document.createElement('a-plane');
             buttonBorder.setAttribute('class', 'border');
             buttonBorder.setAttribute('hoverable', {});
-            buttonBorder.setAttribute('position', '0 0 -0.001');
+            buttonBorder.setAttribute('position', '0 0 -0.005');
             buttonBorder.setAttribute('material', 'shader', 'flat');
             buttonBorder.setAttribute('material', 'color', 'black');
             buttonBorder.setAttribute('height', 0.29);
