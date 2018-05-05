@@ -36,6 +36,7 @@ AFRAME.registerComponent('hover-handler', {
             const selectionBox = new THREE.Box3();
             selectionBox.setFromCenterAndSize(boxCenter, selectedObj.geometry.boundingBox.getSize());
 
+            evt.detail.hand.components.haptics.pulse(0.2, 10);
             this.hoverBox.box = selectionBox;
             this.hoverBox.visible = true;
         }
