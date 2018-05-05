@@ -27,23 +27,29 @@
     <a-entity progressive-controls="objects: .selectable; gazeMixin: gaze-cursor; pointMixin: hand-pointer; maxLevel: point;"></a-entity>
 
     <a-plane material="color:black"
-             position="0 1.5 -5"
+             position="0 2 -5"
              width="4"
-             height="1.5"
+             height="2"
     >
         <a-plane id="legend"
                  width="3.95"
-                 height="0.95"
-                 position="0 0.255 0.01"
+                 height="1.95"
+                 position="0 0 0.01"
                  material="color: white;">
-            <a-text id="title" color="black" height="0.5" position="-1.8 0.25 0.01" value="Popular vote for U.S. President"></a-text>
-            <a-text id="year" color="black" height="0.5" position="1.25 0.25 0.01" value=""></a-text>
-            <a-text color="black" height="0.35" position="-1.8 0 0.01" scale="0.65 0.65 0.65" value="data source: https://www.fec.gov/"></a-text>
-            <a-text color="black" height="0.35" position="-1.8 -0.25 0.01" scale="0.65 0.65 0.65" value="created by"></a-text>
-            <a-plane height="0.5" width="3" scale="0.85 0.65 0.65" position="0.15 -0.25 0.01" material="src: #ei-logo"></a-plane>
+            <a-entity position="0 0.7 0.01">
+                <a-text id="title" color="black" height="0.5" position="-1.8 0 0" value="Popular vote for U.S. President"></a-text>
+                <a-text id="year" color="black" height="0.5" position="1.25 0 0" value=""></a-text>
+            </a-entity>
+            <a-entity position="0 0.25 0.01">
+                <a-text color="black" height="0.35" position="-1.8 0 0" scale="0.65 0.65 0.65" value="created by"></a-text>
+                <a-plane height="0.5" width="3" scale="0.85 0.65 0.65" position="0.15 0 0" material="src: #ei-logo"></a-plane>
+            </a-entity>
+            <a-plane position="0 -0.25 0.01" width="3.95" height="0.5" color="black">
+                <a-text color="white" height="0.35" scale="0.85 0.85 0.85" position="-1.8 0 0.01" value="Choose a year:"></a-text>
+                <a-entity year-selector position="-0.25 0 0.01"></a-entity>
+            </a-plane>
+            <a-text color="black" height="0.35" position="-1.6 -0.75 0.01" scale="0.65 0.65 0.65" value="Certified election data from https://www.fec.gov/"></a-text>
         </a-plane>
-        <a-text color="white" height="0.35" scale="0.85 0.85 0.85" position="-1.8 -0.45 0.01" value="Choose a year:"></a-text>
-        <a-entity year-selector position="-0.25 -0.455 0.1"></a-entity>
     </a-plane>
 
     <a-entity id="map"

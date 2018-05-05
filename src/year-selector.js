@@ -90,6 +90,7 @@ AFRAME.registerComponent('year-selector', {
             button.setAttribute('text', 'color', 'black');
             button.setAttribute('text', 'wrapCount', '4');
             button.setAttribute('text', 'align', 'center');
+            button.setAttribute('text', 'zOffset', '0.05');
 
             const buttonBorder = document.createElement('a-plane');
             buttonBorder.setAttribute('class', 'border');
