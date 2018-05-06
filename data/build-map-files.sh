@@ -4,7 +4,6 @@
 # npm install -g shapefile
 # npm install -g d3-geo-projection
 # npm install -g ndjson-cli
-# npm install -g d3-dsv
 # npm install -g topojson
 
 rm temp/*.*
