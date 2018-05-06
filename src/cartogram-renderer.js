@@ -147,6 +147,7 @@ AFRAME.registerComponent('cartogram-renderer', {
                 const attributes = {
                     state: feature.properties.name,
                     candidate: candidateName,
+                    party: candidateMetadatum.party,
                     votes: candidateData.votes,
                     percentage,
                     totalVotes: candidateData.totalVoters,
