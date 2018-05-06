@@ -15,12 +15,13 @@
     },
     "dependencies": {
         "aframe": "^0.8.2",
+        "aframe-animation-component": "^4.2.0",
         "aframe-geo-projection-component": "^2.0.0",
+        "aframe-haptics-component": "^1.4.1",
         "aframe-look-at-component": "^0.6.0",
-        "d3-array": "^1.2.1",
-        "d3-fetch": "^1.1.0",
         "d3-format": "^1.2.2",
-        "d3-scale": "^2.0.0"
+        "d3-scale": "^2.0.0",
+        "super-hands": "wmurphyrd/aframe-super-hands-component#06469351ecf1b3211e1dd490faf9acd4a7a73002"
     },
     "devDependencies": {
         "babel-core": "^6.26.3",
