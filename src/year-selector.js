@@ -85,6 +85,7 @@ AFRAME.registerComponent('year-selector', {
             button.setAttribute('geometry', { primitive: 'plane', height: 0.25, width: buttonWidth });
             button.setAttribute('class', 'selectable');
             button.setAttribute('clickable', {});
+            button.setAttribute('onclick', 'this.emit("grab-start", {}); this.emit("grab-end", {});');
             button.addEventListener('stateadded', this.handleStateChange);
             button.setAttribute('position', `${xPos} 0 0`);
             button.setAttribute('material', 'shader', 'flat');
