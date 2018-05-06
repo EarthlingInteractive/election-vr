@@ -104,9 +104,11 @@ AFRAME.registerComponent('selection-handler', {
     },
 
     tick() {
-        if (this.selected && this.needsPositionUpdate()) {
+        if (this.selected) {
             this.calculateInfoPanelAnchorPosition();
-            this.infoPanel.object3D.position.copy(this.infoPanelAnchorPosition);
+            if (this.needsPositionUpdate()) {
+                this.infoPanel.object3D.position.copy(this.infoPanelAnchorPosition);
+            }
         }
     },
 
