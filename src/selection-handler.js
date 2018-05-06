@@ -12,10 +12,12 @@ AFRAME.registerComponent('selection-handler', {
         this.selectionBox.visible = false;
         this.el.setObject3D('selectionBox', this.selectionBox);
 
+        this.stateBox = new THREE.Box3();
+        this.infoPanelAnchorPosition = new THREE.Vector3();
+
         this.infoPanel = document.querySelector('#info-panel');
         this.infoPanelText = document.querySelector('#info-panel-text');
         this.infoPanelHighlight = document.querySelector('#info-panel-highlight');
-        this.viewer = document.querySelector('a-camera');
 
         this.superHands = document.querySelector('[progressive-controls]');
         this.handleControllerChange = this.handleControllerChange.bind(this);
@@ -83,28 +85,28 @@ AFRAME.registerComponent('selection-handler', {
         const selectionInfoComp = this.selected.components['selection-info'];
         this.infoPanelText.setAttribute('value', selectionInfoComp.getInfoText());
 
-        const stateBox = new THREE.Box3();
-        stateBox.setFromObject(this.selected.parentEl.object3D);
-        const { y } = stateBox.max;// + 0.75);
-        const { x, z } = stateBox.getCenter();
-
-        const worldPosition = new THREE.Vector3(x, y, z);
-        const position = this.el.object3D.worldToLocal(worldPosition);
-        this.infoPanel.object3D.position.set(position.x, position.y, position.z + 0.75);
+        this.calculateInfoPanelAnchorPosition();
+        this.infoPanel.object3D.position.copy(this.infoPanelAnchorPosition);
 
         this.infoPanelHighlight.setAttribute('color', `#${selectionInfoComp.data.color}`);
 
         this.infoPanel.object3D.visible = true;
     },
 
+    calculateInfoPanelAnchorPosition() {
+        this.stateBox.setFromObject(this.selected.parentEl.object3D);
+        this.stateBox.getCenter(this.infoPanelAnchorPosition);
+        this.infoPanelAnchorPosition.setY(this.stateBox.max.y + 0.75);
+    },
+
+    needsPositionUpdate() {
+        return !(this.infoPanel.object3D.position.equals(this.infoPanelAnchorPosition));
+    },
+
     tick() {
-        if (this.selected) {
-            const infoPanelPositon = this.infoPanel.object3D.position;
-            const viewerLocalPosition = this.el.object3D.worldToLocal(new THREE.Vector3().copy(this.viewer.object3D.position));
-            const rotationMatrix = new THREE.Matrix4();
-            const up = new THREE.Vector3(0, 0, 1);
-            rotationMatrix.lookAt(viewerLocalPosition, infoPanelPositon, up);
-            this.infoPanel.object3D.quaternion.setFromRotationMatrix(rotationMatrix);
+        if (this.selected && this.needsPositionUpdate()) {
+            this.calculateInfoPanelAnchorPosition();
+            this.infoPanel.object3D.position.copy(this.infoPanelAnchorPosition);
         }
     },
 
