@@ -7,7 +7,7 @@
     "license": "MIT",
     "scripts": {
         "start": "webpack-dev-server --port 3000 --open",
-        "build": "webpack",
+        "build": "NODE_ENV=production webpack",
         "predeploy": "npm run build",
         "deploy": "gh-pages -d dist",
         "lint": "eslint src/**/*.js",
@@ -27,7 +27,6 @@
         "babel-eslint": "^8.2.3",
         "babel-loader": "^7.1.4",
         "babel-plugin-transform-object-rest-spread": "^6.26.0",
-        "babel-polyfill": "^6.26.0",
         "babel-preset-env": "^1.6.1",
         "babel-preset-stage-0": "^6.24.1",
         "copy-webpack-plugin": "^4.5.1",

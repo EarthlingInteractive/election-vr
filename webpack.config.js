@@ -2,16 +2,18 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+const isProd = (process.env.NODE_ENV === 'production');
+
 module.exports = {
-    mode: "development",
-    devtool: "cheap-module-eval-source-map",
-    entry: ['babel-polyfill', "./src/index.js"],
+    mode: isProd ? 'production' : 'development',
+    devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
+    entry: ['./src/index.js'],
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: "bundle.js"
+        filename: 'bundle.js'
     },
     resolve: {
-        extensions: [".js"]
+        extensions: ['.js']
     },
     module: {
         rules: [
@@ -30,7 +32,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: './src/index.html',
-            path: path.resolve(__dirname, "dist"),
+            path: path.resolve(__dirname, 'dist'),
             filename: 'index.html',
             inject: 'head'
         }),
