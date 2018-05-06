@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>ElectionVR - Popular Vote in U.S. Presidential Elections</title>
     <meta name="description" content="ElectionVR - Popular Vote in U.S. Presidential Elections"></meta>
-<script type="text/javascript" src="aframe.bundle.js?a356c6d46ddcfb5b8095"></script><script type="text/javascript" src="app.bundle.js?a356c6d46ddcfb5b8095"></script></head>
+<script type="text/javascript" src="aframe.bundle.js?394b6f4c0854c340bc3e"></script><script type="text/javascript" src="app.bundle.js?394b6f4c0854c340bc3e"></script></head>
 <body>
 <a-scene background="color: beige;">
     <a-assets>
@@ -48,11 +48,11 @@
         </a-plane>
     </a-plane>
 
-    <a-entity id="info-panel" rotation="90 0 0" position="0 1 -5"
+    <a-entity id="info-panel" position="0 1 -5"
               geometry="primitive: plane; height: 0.6; width: 1.2"
               material="color: black; side: double;"
               visible="false"
-              look-at="[camera]"
+              look-at="a-camera"
     >
         <a-plane id="info-panel-highlight" position="0 0 -0.02" height="0.7" width="1.3" material="shader: flat; color: white;"></a-plane>
         <a-plane position="0 0 -0.01" height="0.62" width="1.22" material="shader: flat; color: white;"></a-plane>
