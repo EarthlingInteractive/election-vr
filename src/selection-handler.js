@@ -41,7 +41,7 @@ AFRAME.registerComponent('selection-handler', {
     remove() {
         this.el.removeEventListener('click', this.handleSelection);
         this.el.removeEventListener('grab-end', this.handleSelection);
-        this.el.removeEventListener('controller-progressed', this.handleControllerChange);
+        this.superHands.removeEventListener('controller-progressed', this.handleControllerChange);
         this.el.sceneEl.removeEventListener('year-changed', this.turnSelectionOff);
     },
 
