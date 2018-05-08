@@ -43,7 +43,11 @@ AFRAME.registerComponent('help', {
 
     setupGazeHelp(controlsEl) {
         this.clearPointerHelpEls();
-        const gazeHelp = this.createTextPanel('Gaze at something for 1 second to select it');
+        let helpText = 'Gaze at something for 1 second to select it.';
+        if (!AFRAME.utils.device.isMobile()) {
+            helpText += '\nUse the w-a-s-d keys to move around.';
+        }
+        const gazeHelp = this.createTextPanel(helpText);
         gazeHelp.setAttribute('text', 'wrapCount', '15');
         gazeHelp.setAttribute('geometry', 'width', '0.5');
         gazeHelp.setAttribute('text', 'align', 'center');
