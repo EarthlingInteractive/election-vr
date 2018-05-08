@@ -31,7 +31,7 @@ AFRAME.registerComponent('help', {
 
     createTextPanel(text) {
         const textPanel = document.createElement('a-entity');
-        textPanel.setAttribute('geometry', { primitive: 'plane', height: 'auto', width: 'auto' });
+        textPanel.setAttribute('geometry', { primitive: 'plane', height: 'auto' });
         textPanel.setAttribute('material', 'shader', 'flat');
         textPanel.setAttribute('material', 'color', 'white');
         textPanel.setAttribute('material', 'opacity', '0.75');
@@ -45,10 +45,11 @@ AFRAME.registerComponent('help', {
         this.clearPointerHelpEls();
         const gazeHelp = this.createTextPanel('Gaze at something for 1 second to select it');
         gazeHelp.setAttribute('text', 'wrapCount', '15');
+        gazeHelp.setAttribute('geometry', 'width', '0.5');
         gazeHelp.setAttribute('text', 'align', 'center');
-        gazeHelp.setAttribute('position', '0 0.25 -2');
+        gazeHelp.setAttribute('position', '0.3 0 -2');
         const gazeEl = controlsEl.components['progressive-controls'].caster;
-        gazeEl.appendChild(gazeHelp);
+        gazeEl.parentEl.appendChild(gazeHelp);
         this.helpEls.gazeHelp = gazeHelp;
     },
 
