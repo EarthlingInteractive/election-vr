@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>ElectionVR - Popular Vote in U.S. Presidential Elections</title>
     <meta name="description" content="ElectionVR - Popular Vote in U.S. Presidential Elections"></meta>
-<script type="text/javascript" src="aframe.bundle.js?394b6f4c0854c340bc3e"></script><script type="text/javascript" src="app.bundle.js?394b6f4c0854c340bc3e"></script></head>
+<script type="text/javascript" src="aframe.bundle.js?a6776d80cea7f5479bc5"></script><script type="text/javascript" src="app.bundle.js?a6776d80cea7f5479bc5"></script></head>
 <body>
 <a-scene background="color: beige;">
     <a-assets>
@@ -20,7 +20,7 @@
         <a-mixin id="hand-pointer" haptics></a-mixin>
     </a-assets>
 
-    <a-entity progressive-controls="objects: .selectable; gazeMixin: gaze-cursor; pointMixin: hand-pointer; maxLevel: point;"></a-entity>
+    <a-entity id="controls" progressive-controls="objects: .selectable; gazeMixin: gaze-cursor; pointMixin: hand-pointer; maxLevel: point;" help></a-entity>
 
     <a-plane material="color:black"
              position="0 2 -5"
