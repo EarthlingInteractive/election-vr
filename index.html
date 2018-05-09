@@ -4,17 +4,21 @@
     <meta charset="utf-8">
     <title>ElectionVR - Popular Vote in U.S. Presidential Elections</title>
     <meta name="description" content="ElectionVR - Popular Vote in U.S. Presidential Elections"></meta>
-<script type="text/javascript" src="aframe.bundle.js?14305a6595db91dfbb2a"></script><script type="text/javascript" src="app.bundle.js?14305a6595db91dfbb2a"></script></head>
+<script type="text/javascript" src="aframe.bundle.js?ef7271f436d8b73d66b2"></script><script type="text/javascript" src="app.bundle.js?ef7271f436d8b73d66b2"></script></head>
 <body>
 <a-scene background="color: beige;">
     <a-assets>
         <a-asset-item id="json-us" src="assets/cb_2017_us_state_20m-albers-quantized.topo.json" />
         <img id="ei-logo" src="assets/earthling-logo.png">
         <a-mixin id="gaze-cursor" cursor="fuse: true;"
+                 geometry="primitive: ring; radius-inner: 0.002; radius-outer: 0.003;"
+                 position="0 0 -0.2"
+                 material="color: black; shader: flat"
+                 text="value: +; color: white; align: center; height: 0.005; width: 0.005; wrapCount: 1; xOffset: -0.0001;"
                  animation__fusing="property: scale; dur: 1500; dir: backwards;
                                   from: 1 1 1; to: 0.2 0.2 0.2; startEvents: fusing"
                  animation__stopfusing="property: scale; dur: 150; dir: forwards;
-                                  from: 0.2 0.2 0.2; to: 1 1 1; startEvents: click"
+                                  to: 1 1 1; startEvents: click, mouseleave"
         >
         </a-mixin>
         <a-mixin id="hand-pointer" haptics></a-mixin>
