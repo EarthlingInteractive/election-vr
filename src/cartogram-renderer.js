@@ -134,9 +134,9 @@ AFRAME.registerComponent('cartogram-renderer', {
                 const candidateMetadatum = candidateMetadata[candidateData.name];
                 const extrudeGeometry = candidateMetadatum.geometry;
 
-                // Hawaii looks better when rendered per shape
+                // Hawaii, Alaska, and Michigan look better when rendered per shape
                 let featureGeometry;
-                if (feature.id === '15') {
+                if (feature.id === '15' || feature.id === '02' || feature.id === '26') {
                     featureGeometry = createExtrudedAndScaledGeometryPerShape(height, stateShapes, percentage, zPosition);
                 } else {
                     featureGeometry = createExtrudedAndScaledGeometry(height, stateShapes, percentage, zPosition);
