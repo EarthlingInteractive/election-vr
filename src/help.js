@@ -76,8 +76,10 @@ AFRAME.registerComponent('help', {
 
     setupLeftPointerHelp(controlsEl) {
         this.clearGazeHelpEl();
+        /* eslint-disable max-len */
         const helpText = `To resize the map, point both the lasers at the map, hold down both triggers, and move the controllers apart or together.\n
         To resize and move the map at the same time, point both the lasers at the map, hold down the grip buttons on both controllers, and move the controllers around.`;
+        /* eslint-enable max-len */
         const leftPointerHelpEl = this.createTextPanel(helpText);
         leftPointerHelpEl.setAttribute('geometry', 'width', '0.18');
         leftPointerHelpEl.setAttribute('text', 'wrapCount', '20');
