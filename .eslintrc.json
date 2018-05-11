@@ -15,15 +15,18 @@
 		"no-multiple-empty-lines": [ 2, { "max": 1, "maxEOF": 0, "maxBOF": 0 } ],
 
 		// strings
-		"quotes": [ 2, "double", "avoid-escape" ],
+		"quotes": [ 2, "single", "avoid-escape" ],
 
 		// keep it simple
 		"complexity": [ 1, 6 ],
 
-        "max-len": ["error", 120],
+        "max-len": ["error", 160],
 
         "arrow-body-style": ["error", "as-needed", { "requireReturnForObjectLiteral": true }],
 
-        "comma-dangle": 0
+        "comma-dangle": 0,
+
+        "no-param-reassign": "off",
+        "no-console": "off"
 	}
 }

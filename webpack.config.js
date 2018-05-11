@@ -1,54 +1,64 @@
-const path = require("path");
-const webpack = require("webpack");
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+const isProd = (process.env.NODE_ENV === 'production');
 
 module.exports = {
-    context: path.resolve(__dirname, "app"),
+    mode: isProd ? 'production' : 'development',
+    devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
     entry: {
-        "2d-election-map": "./2d-election-map.js",
-        "aframe-hello-world": "./aframe-hello-world.js",
-        "aframe-state-map": "./aframe-state-map.js",
-        "aframe-d3": "./aframe-d3.js",
-        "vr-election-towers": "./vr-election-towers",
-        "vr-election-map": "./vr-election-map",
-        "vendor-head": [
-            "aframe",
-            "./lib/svgpath-component.js",
-            "./lib/my-geojson-component.js",
-            "./lib/globe-component.js",
-            "./lib/plane-map-component.js",
-            "d3",
-            "d3-selection",
-            "topojson-client",
-            "aframe-geojson-component",
-            "aframe-event-set-component",
+        aframe: [
+            'aframe',
+            'aframe-animation-component',
+            'aframe-geo-projection-component',
+            'aframe-haptics-component',
+            'aframe-look-at-component',
+            'super-hands'
         ],
+        app: ['./src/index.js']
     },
     output: {
-        filename: "[name].js",
-        path: path.join(__dirname, "dist"),
-        publicPath: "dist/",
+        path: path.resolve(__dirname, 'dist'),
+        filename: '[name].bundle.js'
+    },
+    resolve: {
+        extensions: ['.js']
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: [/node_modules/, 'src/assets'],
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['babel-preset-env']
+                    }
+                }
+            }
+        ]
+    },
+    optimization: {
+        splitChunks: {
+            cacheGroups: {
+                commons: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name: 'aframe',
+                    chunks: 'all'
+                }
+            }
+        }
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            names: ["vendor-head", "manifest"],
-            minChunks: Infinity,
-            filename: "[name].js",
+        new HtmlWebpackPlugin({
+            template: './src/index.html',
+            path: path.resolve(__dirname, 'dist'),
+            filename: 'index.html',
+            inject: 'head',
+            hash: true
         }),
-    ],
-    devtool: "inline-source-map",
-    module: {
-        noParse: [
-            /node_modules\/aframe\/dist\/aframe.js/,
-            /node_modules\/aframe\/dist\/aframe-master.js/,
-        ],
-        rules: [{
-            test: /\.js$/,
-            exclude: /node_modules/,
-            loader: "babel-loader",
-        }],
-    },
-    devServer: {
-        publicPath: "http://localhost:3033/dist/",
-        contentBase: [path.join(__dirname, "www"), path.join(__dirname, "data")],
-    },
+        new CopyWebpackPlugin([{ from: 'src/assets', to: 'assets' }])
+    ]
 };
