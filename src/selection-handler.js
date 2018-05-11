@@ -47,6 +47,7 @@ AFRAME.registerComponent('selection-handler', {
 
     handleSelection(evt) {
         const targetEl = evt.target;
+        this.el.emit('target-selected', { targetEl }, true);
         if (this.isAlreadySelected(targetEl)) {
             this.turnSelectionOff();
         } else if (this.isSelectable(targetEl)) {

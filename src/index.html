@@ -46,7 +46,7 @@
             </a-entity>
             <a-plane position="0 -0.25 0.01" width="3.95" height="0.5" color="black">
                 <a-text color="white" height="0.35" scale="0.85 0.85 0.85" position="-1.8 0 0.01" value="Choose a year:"></a-text>
-                <a-entity year-selector position="-0.25 0 0.01"></a-entity>
+                <a-entity year-selector="selectedYear: 2016;" position="-0.25 0 0.01"></a-entity>
             </a-plane>
             <a-text color="black" height="0.35" position="-1.6 -0.75 0.01" scale="0.65 0.65 0.65" value="Certified election data from https://www.fec.gov/"></a-text>
         </a-plane>
@@ -66,7 +66,7 @@
     <a-entity id="map"
               rotation="-90 0 0"
               topojson-loader="src: #json-us; topologyObject: states;"
-              election-data-loader
+              election-data-loader="year: 2016;"
               geo-projection="
                   projection: geoIdentity;
                   height: 5;

@@ -9,12 +9,14 @@ AFRAME.registerComponent('help', {
         this.superHands.addEventListener('controller-progressed', this.handleControllerChange);
         this.hideHelp = this.hideHelp.bind(this);
         this.el.sceneEl.addEventListener('year-changed', this.hideHelp);
+        this.el.sceneEl.addEventListener('target-selected', this.hideHelp);
         this.helpEls = {};
     },
 
     remove() {
         this.superHands.removeEventListener('controller-progressed', this.handleControllerChange);
         this.el.sceneEl.removeEventListener('year-changed', this.hideHelp);
+        this.el.sceneEl.removeEventListener('target-selected', this.hideHelp);
         this.clearHelpEls();
     },
 
