@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html prefix="og: http://ogp.me/ns#">
 <head>
     <meta charset="utf-8">
     <title>ElectionVR - Popular Vote in U.S. Presidential Elections</title>
-    <meta name="description" content="ElectionVR - Popular Vote in U.S. Presidential Elections"></meta>
-<script type="text/javascript" src="aframe.bundle.js?ef7271f436d8b73d66b2"></script><script type="text/javascript" src="app.bundle.js?ef7271f436d8b73d66b2"></script></head>
+    <meta name="description" content="A visualization of the populatar vote in recent U.S. Presidential elections using WebVR." />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:creator" content="@stevebrudz" />
+    <meta name="twitter:site" content="@WeAreEarthling" />
+    <meta property="og:url" content="https://earthlinginteractive.github.io/election-vr/" />
+    <meta property="og:title" content="ElectionVR - Popular Vote in U.S. Presidential Elections" />
+    <meta property="og:description" content="A visualization of the populatar vote in recent U.S. Presidential elections using WebVR." />
+    <meta property="og:image" content="https://earthlinginteractive.github.io/election-vr/assets/preview.png" />
+<script type="text/javascript" src="aframe.bundle.js?143f339556ddb59ca7b5"></script><script type="text/javascript" src="app.bundle.js?143f339556ddb59ca7b5"></script></head>
 <body>
 <a-scene background="color: beige;">
     <a-assets>
@@ -14,7 +21,7 @@
                  geometry="primitive: ring; radius-inner: 0.002; radius-outer: 0.003;"
                  position="0 0 -0.2"
                  material="color: black; shader: flat"
-                 text="value: +; color: white; align: center; height: 0.005; width: 0.005; wrapCount: 1; xOffset: -0.0001;"
+                 text="value: +; color: white; align: center; height: 0.005; width: 0.005; wrapCount: 1; xOffset: -0.00015;"
                  animation__fusing="property: scale; dur: 1500; dir: backwards;
                                   from: 1 1 1; to: 0.2 0.2 0.2; startEvents: fusing"
                  animation__stopfusing="property: scale; dur: 150; dir: forwards;
@@ -46,7 +53,7 @@
             </a-entity>
             <a-plane position="0 -0.25 0.01" width="3.95" height="0.5" color="black">
                 <a-text color="white" height="0.35" scale="0.85 0.85 0.85" position="-1.8 0 0.01" value="Choose a year:"></a-text>
-                <a-entity year-selector position="-0.25 0 0.01"></a-entity>
+                <a-entity year-selector="selectedYear: 2016;" position="-0.25 0 0.01"></a-entity>
             </a-plane>
             <a-text color="black" height="0.35" position="-1.6 -0.75 0.01" scale="0.65 0.65 0.65" value="Certified election data from https://www.fec.gov/"></a-text>
         </a-plane>
@@ -66,7 +73,7 @@
     <a-entity id="map"
               rotation="-90 0 0"
               topojson-loader="src: #json-us; topologyObject: states;"
-              election-data-loader
+              election-data-loader="year: 2016;"
               geo-projection="
                   projection: geoIdentity;
                   height: 5;
