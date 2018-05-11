@@ -10,6 +10,8 @@ for Donald Trump or any other candidate.  In fact, over one million people in Ma
 The goal of this project is to build a visualization that leverages the 3D capabilities of virtual reality 
 to show a more complete and nuanced view of voting results.
 
+[![Election VR](./src/assets/preview.png)](https://earthlinginteractive.github.io/election-vr/)
+
 To view the project, go to: https://earthlinginteractive.github.io/election-vr/
 
 The visualization can be viewed using the HTC Vive, Occulus Rift, Google Cardboard, or a Desktop browser.  The Vive and
