@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  apache:
+    build:
+      context: .
+    ports:
+      - "8080:80"
