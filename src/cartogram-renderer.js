@@ -2,6 +2,9 @@ import 'aframe';
 import { scaleLinear } from 'd3-scale';
 import * as constants from './constants';
 import candidateInfo from './candidate-info';
+import ExtruderWorker from './extruder.worker';
+
+const extruderWorker = new ExtruderWorker();
 
 const { AFRAME } = window;
 const { THREE } = AFRAME;

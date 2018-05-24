@@ -1,5 +1,8 @@
 import 'aframe';
 import { YEARS } from './constants';
+import Worker from './test.worker';
+
+const myWorker = new Worker();
 
 const { AFRAME } = window;
 
@@ -56,6 +59,8 @@ AFRAME.registerComponent('year-selector', {
                 if (button === evt.target) {
                     button.setAttribute('material', 'color', this.data.selectionColor);
                     this.el.setAttribute('year-selector', 'selectedYear', year);
+                    myWorker.postMessage(['Hello', year]);
+                    console.log('Message posted to worker');
                 } else {
                     button.setAttribute('material', 'color', '#FFFFFF');
                 }
@@ -115,3 +120,7 @@ AFRAME.registerComponent('year-selector', {
         });
     }
 });
+
+myWorker.onmessage = (e) => {
+    console.log('Message received from worker', e.data);
+};
