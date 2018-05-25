@@ -4,7 +4,7 @@
     "description": "A visualization of the popular vote in recent U.S. Presidential elections using WebVR",
     "main": "app/index.js",
     "author": "Steve Brudz <sbrudz@gmail.com>",
-    "license": "GPL-3.0",
+    "license": "MIT",
     "keywords": [
         "virtual reality",
         "aframe",
