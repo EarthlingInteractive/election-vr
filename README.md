@@ -1,18 +1,18 @@
 # Mapping the popular vote for US President in VR
 
-The 2016 presidential election results show Donald Trump winning the electoral college but Hillary Clinton 
-winning the popular vote.  The existing visualizations showing states or counties as red or blue provides 
-information about the majority vote but they hide any sense of scale and they conceal the number of votes 
-that non-majority candidates received.  For example, if one looks at the Google’s visualization of the 
-Massachusetts voting results, all of the counties are blue and one would get the impression that no one voted 
-for Donald Trump or any other candidate.  In fact, over one million people in Massachusetts voted for Donald Trump. 
-
 The goal of this project is to build a visualization that leverages the 3D capabilities of virtual reality 
 to show a more complete and nuanced view of voting results.
 
-[![Election VR](./src/assets/preview.png)](https://earthlinginteractive.github.io/election-vr/)
+For example, the 2016 presidential election results show Donald Trump winning the electoral college but Hillary Clinton 
+winning the popular vote.  The existing visualizations showing states or counties as red or blue provides 
+information about the majority vote but they hide any sense of scale and they conceal the number of votes 
+that non-majority candidates received.  If one looks at the Google’s visualization of the 
+Massachusetts voting results, all of the counties are blue and one would get the impression that no one voted 
+for Donald Trump or any other candidate.  In fact, over one million people in Massachusetts voted for Donald Trump. 
 
-To view the project, go to: https://earthlinginteractive.github.io/election-vr/
+[![Election VR](./src/assets/preview.png)](https://electionvr.earthlinglabs.com/)
+
+To view the project, go to: https://electionvr.earthlinglabs.com/
 
 The visualization can be viewed using the HTC Vive, Occulus Rift, Google Cardboard, or a Desktop browser.  The Vive and
 the Rift support controller-based interactions to move and scale the map.
@@ -42,18 +42,55 @@ Finally, per the instructions on census.gov, I must state that "This product use
 
 ### Running the project locally
 
+When making changes to this project, it's easiest to run it locally using the webpack dev server:
+
 ```bash
 npm install
 npm start
 ```
 
-### Releasing
+## Releasing
 
-The site is hosted on GitHub pages.  To release new changes:
+This project follows a Git Flow style convention with changes being merged from a feature branch through to the master branch.
+
+```
+[feature branch] --> test --> stage --> master
+```
+
+The stage and master branches use Docker and the Earthling deployment pipeline.  You can test the Docker deploy locally by running:
+```
+docker-compose up --build
+```
+and then navigating to http://localhost:8080/
+
+### Test environment
+
+The test branch gets deployed to GitHub pages: https://earthlinginteractive.github.io/election-vr/
+
+To release new changes:
 ```bash
 npm run deploy
 ```
- 
+
+### Stage environment
+
+The stage branch gets deployed to https://electionvr.ei-app.com/
+
+To release new changes, use the GitLab Pipeline bot in HipChat:
+```
+/pipeline deploy --name=electionvr --env=stage
+```
+
+### Production environment
+
+The master (production) branch gets deployed to https://electionvr.earthlinglabs.com/
+
+To release new changes, use the GitLab Pipeline bot in HipChat:
+```
+/pipeline deploy --name=electionvr --env=master
+```
+
+
 # Thanks
 * To John Samuelson, Adam Simcock, Don Smith, Jared Chapiewsky, AJ Wortley, Linda Brudz, and Jake Brudz for their feedback, testing, and support
 * To Earthling Interactive for their sponsorship
