@@ -78,7 +78,7 @@ The stage branch gets deployed to https://electionvr.ei-app.com/
 
 To release new changes, use the GitLab Pipeline bot in HipChat:
 ```
-/pipeline deploy --name=electionvr --env=stage
+/pipeline deploy --name=election-vr --env=stage
 ```
 
 ### Production environment
@@ -87,7 +87,7 @@ The master (production) branch gets deployed to https://electionvr.earthlinglabs
 
 To release new changes, use the GitLab Pipeline bot in HipChat:
 ```
-/pipeline deploy --name=electionvr --env=master
+/pipeline deploy --name=election-vr --env=master
 ```
 
 
