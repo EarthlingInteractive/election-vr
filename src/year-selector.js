@@ -3,6 +3,9 @@ import { YEARS } from './constants';
 
 const { AFRAME } = window;
 
+// For Google Tag Manager custom events
+window.dataLayer = window.dataLayer || [];
+
 /**
  * Displays a selectable button for each year
  */
@@ -37,6 +40,10 @@ AFRAME.registerComponent('year-selector', {
         }
         if (this.data.selectedYear !== oldData.selectedYear) {
             this.el.emit('year-changed', { year: this.data.selectedYear }, true);
+            window.dataLayer.push({
+                event: 'year-changed',
+                year: this.data.selectedYear
+            });
         }
     },
 
