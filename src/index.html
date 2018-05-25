@@ -1,19 +1,34 @@
 <!DOCTYPE html>
 <html prefix="og: http://ogp.me/ns#">
 <head>
+    <% if (process.env.NODE_ENV === 'production') { %>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-PGRN4N7');</script>
+    <!-- End Google Tag Manager -->
+    <% } %>
     <meta charset="utf-8">
     <title>ElectionVR - Popular Vote in U.S. Presidential Elections</title>
     <meta name="description" content="A visualization of the popular vote in recent U.S. Presidential elections using WebVR." />
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:creator" content="@stevebrudz" />
     <meta name="twitter:site" content="@WeAreEarthling" />
-    <meta property="og:url" content="https://earthlinginteractive.github.io/election-vr/" />
+    <meta property="og:url" content="https://electionvr.earthlinglabs.com/" />
     <meta property="og:title" content="ElectionVR - Popular Vote in U.S. Presidential Elections" />
     <meta property="og:description" content="A visualization of the popular vote in recent U.S. Presidential elections using WebVR." />
-    <meta property="og:image" content="https://earthlinginteractive.github.io/election-vr/assets/preview.png" />
+    <meta property="og:image" content="https://electionvr.earthlinglabs.com/assets/preview.png" />
     <link href="assets/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
 </head>
 <body>
+<% if (process.env.NODE_ENV === 'production') { %>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PGRN4N7"
+                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<% } %>
 <a-scene background="color: beige;">
     <a-assets>
         <a-asset-item id="json-us" src="assets/cb_2017_us_state_20m-albers-quantized.topo.json" />
