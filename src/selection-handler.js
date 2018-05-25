@@ -3,6 +3,9 @@ import 'aframe';
 const { AFRAME } = window;
 const { THREE } = AFRAME;
 
+// For Google Tag Manager custom events
+window.dataLayer = window.dataLayer || [];
+
 /**
  * Responds to a selection event on part of the map.
  */
@@ -92,6 +95,14 @@ AFRAME.registerComponent('selection-handler', {
         this.infoPanelHighlight.setAttribute('color', `#${selectionInfoComp.data.color}`);
 
         this.infoPanel.object3D.visible = true;
+
+        const { state, candidate } = selectionInfoComp.data;
+
+        window.dataLayer.push({
+            event: 'data-selected',
+            state,
+            candidate
+        });
     },
 
     calculateInfoPanelAnchorPosition() {
