@@ -17,6 +17,9 @@ AFRAME.registerComponent('selection-info', {
         votes: {
             type: 'number'
         },
+        electoralVotes: {
+            type: 'number'
+        },
         totalVotes: {
             type: 'number'
         },
@@ -37,6 +40,7 @@ AFRAME.registerComponent('selection-info', {
     getInfoText() {
         return `${this.data.state}
             ${this.data.candidate} (${this.data.party})
+            ${this.data.electoralVotes} electoral votes
             ${this.voteFormatter(this.data.votes)} votes
             ${this.percentageFormatter(this.data.percentage)} of ${this.totalVoteFormatter(this.data.totalVotes)} total`;
     }
