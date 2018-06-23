@@ -149,6 +149,7 @@ AFRAME.registerComponent('cartogram-renderer', {
                     candidate: candidateName,
                     party: candidateMetadatum.party,
                     votes: candidateData.votes,
+                    electoralVotes: candidateData.electoralVotes,
                     percentage,
                     totalVotes: candidateData.totalVoters,
                     color: candidateMetadatum.color.getHexString()
