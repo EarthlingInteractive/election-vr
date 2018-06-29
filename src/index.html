@@ -104,6 +104,31 @@
     >
         <a-plane height="5" width="10" material="visible: false;" class="selectable"></a-plane>
     </a-entity>
+
+    <a-entity id="tutorial">
+        <a-entity tutorial-step="dur: 1000" text-panel="value: Welcome to ElectionVR"></a-entity>
+        <a-entity tutorial-step="dur: 1000" text-panel="value: Created by Earthling Interactive"></a-entity>
+        <a-entity tutorial-step="dur: 1000" text-panel="value: Explore US election data in virtual reality."></a-entity>
+        <a-entity tutorial-step="controllerTypes: gaze, desktop" text-panel="value: To select something, move the cursor over it and gaze for 1 second. Try selecting the Start or Skip tutorial button."></a-entity>
+        <a-entity tutorial-step="controllerTypes: singlePointer, doublePointer" text-panel="value: To select something, point the laser at it and pull the trigger button. Try selecting the Start or Skip tutorial button."></a-entity>
+        <a-entity tutorial-step="dur: 1000" text-panel="value: Good. Now look around."></a-entity>
+        <a-entity tutorial-step="controllerTypes: desktop" text-panel="value: Use the w-a-s-d keys to move around."></a-entity>
+        <a-entity tutorial-step="dur: 1000" text-panel="value: Voting data for the candidates are shown using the 3D shapes of each state."></a-entity>
+        <a-entity tutorial-step="dur: 1000" text-panel="value: The color shows the party of the candidate."></a-entity>
+        <a-entity tutorial-step="dur: 1000" text-panel="value: The height shows the number of votes."></a-entity>
+        <a-entity tutorial-step="dur: 1000" text-panel="value: The width shows the percentage of the vote that the candidate received."></a-entity>
+        <a-entity tutorial-step="controllerTypes: singlePointer, doublePointer; triggerEvent: target-selected;" text-panel="value: To see detailed voting information, point the laser at a shape and click the trigger. Try selecting a shape now."></a-entity>
+        <a-entity tutorial-step="controllerTypes: gaze, desktop; triggerEvent: target-selected;" text-panel="value: To see detailed voting information, move the cursor over it and gaze for 1 second. Try selecting a shape now."></a-entity>
+        <a-entity tutorial-step="" text-panel="value: If 2 shapes are the same width, then the vote was very close. The winning candidate’s shape the one at the bottom."></a-entity>
+        <a-entity tutorial-step="controllerTypes: doublePointer" text-panel="value: To change the size of the map, hold down the trigger buttons on both controllers at the same time and move your hands apart or together."></a-entity>
+        <a-entity tutorial-step="controllerTypes: doublePointer" text-panel="value: To move the map around, hold down the grip button on one controller and move your hand."></a-entity>
+        <a-entity tutorial-step="controllerTypes: doublePointer" text-panel="value: To move and scale the map at the same time, hold down the grip buttons on both controllers at the same time and move your hands."></a-entity>
+        <a-entity tutorial-step="controllerTypes: doublePointer; triggerEvent: reset-view" text-panel="value: To reset the map size and position, press the menu button on either controller."></a-entity>
+        <a-entity tutorial-step="triggerEvent: year-changed" text-panel="value: View a different year by selecting a year button. Try it."></a-entity>
+        <a-entity tutorial-step="dur: 1000" text-panel="value: To restart this tutorial, select the ? button."></a-entity>
+        <a-entity tutorial-step="dur: 1000" text-panel="value: Voting data is from the Federal Election Commission. The US map data is from the US Census Bureau."></a-entity>
+        <a-entity tutorial-step="dur: 1000" text-panel="value: Now it's time to explore. Thanks for trying ElectionVR."></a-entity>
+    </a-entity>
 </a-scene>
 </body>
 </html>
