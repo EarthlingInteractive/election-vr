@@ -27,7 +27,7 @@ AFRAME.registerComponent('tutorial-step', {
         },
         offset: {
             type: 'vec3',
-            default: { x: 0, y: 0.1, z: -1 }
+            default: { x: 0, y: 0, z: -1 }
         },
         textvalue: {
             type: 'string'
@@ -68,7 +68,8 @@ AFRAME.registerComponent('tutorial-step', {
         }
     },
 
-    handleTriggerEvent() {
+    handleTriggerEvent(e) {
+        console.log('triggerEvent', e);
         this.el.emit('next-step');
     },
 
