@@ -31,7 +31,9 @@ AFRAME.registerComponent('tutorial', {
         if (prevStep !== undefined && prevStep >= 0) {
             this.tutorialSteps[prevStep].components['tutorial-step'].hide();
         }
-        this.tutorialSteps[nextStep].components['tutorial-step'].show();
+        window.setTimeout(() => {
+            this.tutorialSteps[nextStep].components['tutorial-step'].show();
+        }, 300);
     },
 
     handleNextStep() {

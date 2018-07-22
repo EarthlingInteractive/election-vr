@@ -42,7 +42,7 @@ AFRAME.registerComponent('tutorial-step', {
         this.stepEl.setAttribute('opacity', 0);
         this.stepEl.setAttribute('textopacity', 0);
         const fadeinProps = {
-            dur: 500,
+            dur: 300,
             easing: 'linear',
             from: 0,
             to: 1,
