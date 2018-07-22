@@ -6,7 +6,7 @@ AFRAME.registerComponent('tutorial', {
     schema: {
         currentStep: {
             type: 'number',
-            default: 0
+            default: -1
         }
     },
 
@@ -17,28 +17,42 @@ AFRAME.registerComponent('tutorial', {
         this.tutorialSteps = this.el.querySelectorAll('[tutorial-step]');
         this.handleNextStep = this.handleNextStep.bind(this);
         this.el.addEventListener('next-step', this.handleNextStep);
+        this.handleStartTutorial = this.handleStartTutorial.bind(this);
+        this.startTutorialButton = document.querySelector('#start-tutorial');
+        this.startTutorialButton.addEventListener('clicked', this.handleStartTutorial);
         this.handleControllerChange();
     },
 
     remove() {
         this.el.sceneEl.removeEventListener('target-selected', this.handleNextStep);
         this.el.removeEventListener('next-step', this.handleNextStep);
+        this.startTutorialButton.removeEventListener('clicked', this.handleStartTutorial);
     },
 
     update(oldData) {
-        if (this.data.currentStep !== oldData.currentStep) {
+        if (this.data.currentStep !== oldData.currentStep && this.data.currentStep >= 0) {
             this.transition(oldData.currentStep, this.data.currentStep);
         }
     },
 
     transition(prevStep, nextStep) {
-        if (prevStep !== undefined && prevStep >= 0) {
+        if (prevStep !== undefined && prevStep >= 0 && this.tutorialSteps[prevStep]) {
             this.tutorialSteps[prevStep].components['tutorial-step'].hide();
         }
+        if (this.timer) {
+            window.clearTimeout(this.timer);
+        }
         if (nextStep < this.tutorialSteps.length) {
-            window.setTimeout(() => {
+            this.timer = window.setTimeout(() => {
                 this.tutorialSteps[nextStep].components['tutorial-step'].show();
+                this.timer = null;
             }, 300);
+        }
+    },
+
+    handleStartTutorial() {
+        if (this.data.currentStep < 0) {
+            this.el.setAttribute('tutorial', 'currentStep', 0);
         }
     },
 
@@ -75,7 +89,10 @@ AFRAME.registerComponent('tutorial', {
     },
 
     handleNextStep() {
-        const nextStep = (this.data.currentStep + 1);
+        let nextStep = (this.data.currentStep + 1);
+        if (nextStep > this.tutorialSteps.length) {
+            nextStep = -1;
+        }
         this.el.setAttribute('tutorial', 'currentStep', nextStep);
     }
 });

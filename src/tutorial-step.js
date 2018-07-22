@@ -107,6 +107,9 @@ AFRAME.registerComponent('tutorial-step', {
     },
 
     hide() {
+        if (this.timeoutId) {
+            window.clearTimeout(this.timeoutId);
+        }
         if (this.data.triggerEvent) {
             this.el.sceneEl.removeEventListener(this.data.triggerEvent, this.handleTriggerEvent);
         }

@@ -59,9 +59,10 @@ AFRAME.registerComponent('button', {
     handleStateChange(evt) {
         if (evt.detail === 'clicked') {
             this.button.setAttribute('material', 'color', this.data.selectionColor);
+            this.el.emit('clicked');
             window.setTimeout(() => {
                 this.button.setAttribute('material', 'color', this.data.buttonColor);
-            }, 500);
+            }, 100);
         }
     },
 
@@ -103,9 +104,9 @@ AFRAME.registerComponent('button', {
             this.buttonBorder.addEventListener('hover-end', this.handleHoverEnd);
             this.button.appendChild(this.buttonBorder);
         }
-        const scaleFactor = 1.16;
-        this.buttonBorder.setAttribute('height', this.data.buttonHeight * scaleFactor);
-        this.buttonBorder.setAttribute('width', this.data.buttonWidth * scaleFactor);
+        const scaleFactor = 0.16;
+        this.buttonBorder.setAttribute('height', this.data.buttonHeight * (1 + scaleFactor));
+        this.buttonBorder.setAttribute('width', this.data.buttonWidth * (1 + (scaleFactor / 2)));
         this.buttonBorder.setAttribute('material', 'color', this.data.borderColor);
     }
 });
