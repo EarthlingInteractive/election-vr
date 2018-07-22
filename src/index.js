@@ -15,3 +15,4 @@ import './tutorial';
 import './tutorial-step';
 import './text-panel';
 import './button';
+import './progressive-controls';

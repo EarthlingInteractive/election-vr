@@ -29,10 +29,14 @@ AFRAME.registerComponent('selection-handler', {
         this.handleSelection = this.handleSelection.bind(this);
         this.turnSelectionOff = this.turnSelectionOff.bind(this);
         this.el.sceneEl.addEventListener('year-changed', this.turnSelectionOff);
+        this.handleControllerChange();
     },
 
-    handleControllerChange(evt) {
-        if (evt.detail.level === 'gaze') {
+    handleControllerChange() {
+        const progressiveControls = this.superHands.components['progressive-controls'];
+        const lvl = progressiveControls.currentLevel.get('right');
+        const level = progressiveControls.levels[lvl];
+        if (level === 'gaze') {
             this.el.removeEventListener('grab-end', this.handleSelection);
             this.el.addEventListener('click', this.handleSelection);
         } else {
