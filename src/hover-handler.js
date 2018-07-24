@@ -1,17 +1,12 @@
 import 'aframe';
 
 const { AFRAME } = window;
-const { THREE } = AFRAME;
 
 /**
  * Responds to the pointer hovering over a 'hoverable' part of the map.
  */
 AFRAME.registerComponent('hover-handler', {
     init() {
-        this.hoverBox = new THREE.Box3Helper(new THREE.Box3(), 'darkgrey');
-        this.hoverBox.visible = false;
-        this.el.setObject3D('hoverBox', this.hoverBox);
-
         this.handleHoverStart = this.handleHoverStart.bind(this);
         this.el.addEventListener('hover-start', this.handleHoverStart);
         this.handleHoverEnd = this.handleHoverEnd.bind(this);
@@ -28,24 +23,18 @@ AFRAME.registerComponent('hover-handler', {
     handleHoverStart(evt) {
         this.selected = evt.target;
         if (this.selected.components.hoverable) {
-            const selectedObj = this.selected.getObject3D('mesh');
-            const selectedObjWorldCenter = selectedObj.getWorldPosition();
-            const boxCenter = this.el.object3D.worldToLocal(selectedObjWorldCenter);
-
-            selectedObj.geometry.computeBoundingBox();
-            const selectionBox = new THREE.Box3();
-            selectionBox.setFromCenterAndSize(boxCenter, selectedObj.geometry.boundingBox.getSize());
-
+            this.selected.setAttribute('scale', '1.05 1.05 1.01');
+            this.selected.setAttribute('material', 'visible', true);
             if (evt.detail.hand.components.haptics) {
                 evt.detail.hand.components.haptics.pulse(0.2, 10);
             }
-            this.hoverBox.box = selectionBox;
-            this.hoverBox.visible = true;
         }
     },
 
     handleHoverEnd() {
-        this.hoverBox.visible = false;
-        this.selected = null;
+        if (this.selected && !this.selected.is('selected')) {
+            this.selected.setAttribute('scale', '1 1 1');
+            this.selected.setAttribute('material', 'visible', false);
+        }
     }
 });

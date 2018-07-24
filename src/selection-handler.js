@@ -71,10 +71,16 @@ AFRAME.registerComponent('selection-handler', {
     },
 
     setSelectionTo(targetEl) {
+        if (this.selected) {
+            this.turnSelectionOff();
+        }
         this.selected = targetEl;
         const selectedObj = this.selected.getObject3D('mesh');
         selectedObj.geometry.computeBoundingBox();
         this.showSelectionBoxFor(selectedObj);
+        this.selected.setAttribute('scale', '1.05 1.05 1.01');
+        this.selected.setAttribute('material', 'visible', true);
+        this.selected.addState('selected');
         this.showInfoPanel(selectedObj);
     },
 
@@ -131,6 +137,11 @@ AFRAME.registerComponent('selection-handler', {
     turnSelectionOff() {
         this.infoPanel.object3D.visible = false;
         this.selectionBox.visible = false;
-        this.selected = null;
+        if (this.selected) {
+            this.selected.setAttribute('scale', '1 1 1');
+            this.selected.setAttribute('material', 'visible', false);
+            this.selected.removeState('selected');
+            this.selected = null
+        }
     }
 });
