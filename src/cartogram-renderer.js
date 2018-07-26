@@ -14,7 +14,7 @@ const createExtrudedAndScaledGeometry = (height, stateShapes, percentage, zPosit
 
     const extrudedFeatureGeometry = new THREE.ExtrudeGeometry(stateShapes, extrudeSettings);
     extrudedFeatureGeometry.computeBoundingBox();
-    const center = extrudedFeatureGeometry.boundingBox.getCenter();
+    const center = extrudedFeatureGeometry.boundingBox.getCenter(new THREE.Vector3());
     extrudedFeatureGeometry.center();
     extrudedFeatureGeometry.scale(percentage, percentage, 1);
     extrudedFeatureGeometry.translate(center.x, center.y, center.z + zPosition);
@@ -29,7 +29,7 @@ const createExtrudedAndScaledGeometryPerShape = (height, stateShapes, percentage
     stateShapes.forEach((stateShape) => {
         const extrudedFeatureGeometry = new THREE.ExtrudeGeometry(stateShape, extrudeSettings);
         extrudedFeatureGeometry.computeBoundingBox();
-        const center = extrudedFeatureGeometry.boundingBox.getCenter();
+        const center = extrudedFeatureGeometry.boundingBox.getCenter(new THREE.Vector3());
         extrudedFeatureGeometry.center();
         extrudedFeatureGeometry.scale(percentage, percentage, 1);
         extrudedFeatureGeometry.translate(center.x, center.y, center.z + zPosition);
@@ -43,7 +43,7 @@ const createSelectionMask = (inputGeometry, name, attributes) => {
     const selectionMaskGeometry = new THREE.BufferGeometry();
     selectionMaskGeometry.fromGeometry(inputGeometry);
     selectionMaskGeometry.computeBoundingBox();
-    const center = selectionMaskGeometry.boundingBox.getCenter();
+    const center = selectionMaskGeometry.boundingBox.getCenter(new THREE.Vector3());
     selectionMaskGeometry.translate(-center.x, -center.y, -center.z);
 
     const mesh = new THREE.Mesh(selectionMaskGeometry);

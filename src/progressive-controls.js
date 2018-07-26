@@ -1,4 +1,5 @@
 /* eslint-disable */
+// from https://github.com/wmurphyrd/aframe-super-hands-component
 import 'aframe';
 
 const { AFRAME } = window;

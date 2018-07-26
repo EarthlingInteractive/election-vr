@@ -12,6 +12,7 @@ window.dataLayer = window.dataLayer || [];
 AFRAME.registerComponent('selection-handler', {
     init() {
         this.selectionBox = new THREE.Box3Helper(new THREE.Box3(), 'black');
+        this.selectedObjWorldCenter = new THREE.Vector3();
         this.selectionBox.visible = false;
         this.el.setObject3D('selectionBox', this.selectionBox);
 
@@ -85,11 +86,11 @@ AFRAME.registerComponent('selection-handler', {
     },
 
     showSelectionBoxFor(selectedObj) {
-        const selectedObjWorldCenter = selectedObj.getWorldPosition();
-        const boxCenter = this.el.object3D.worldToLocal(selectedObjWorldCenter);
+        selectedObj.getWorldPosition(this.selectedObjWorldCenter);
+        const boxCenter = this.el.object3D.worldToLocal(this.selectedObjWorldCenter);
 
         const selectionBox = new THREE.Box3();
-        selectionBox.setFromCenterAndSize(boxCenter, selectedObj.geometry.boundingBox.getSize());
+        selectionBox.setFromCenterAndSize(boxCenter, selectedObj.geometry.boundingBox.getSize(new THREE.Vector3()));
 
         this.selectionBox.box = selectionBox;
         this.selectionBox.visible = true;
@@ -141,7 +142,7 @@ AFRAME.registerComponent('selection-handler', {
             this.selected.setAttribute('scale', '1 1 1');
             this.selected.setAttribute('material', 'visible', false);
             this.selected.removeState('selected');
-            this.selected = null
+            this.selected = null;
         }
     }
 });
