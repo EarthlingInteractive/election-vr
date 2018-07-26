@@ -35,7 +35,9 @@ AFRAME.registerComponent('tutorial', {
     remove() {
         this.el.sceneEl.removeEventListener('target-selected', this.handleNextStep);
         this.el.removeEventListener('next-step', this.handleNextStep);
+        this.nextStepButton.removeEventListener('clicked', this.handleNextStep);
         this.startTutorialButton.removeEventListener('clicked', this.handleStartTutorial);
+        this.stopTutorialButton.removeEventListener('clicked', this.handleStopTutorial);
     },
 
     update(oldData) {
@@ -51,15 +53,22 @@ AFRAME.registerComponent('tutorial', {
         if (nextStep < this.tutorialSteps.length && this.tutorialSteps[nextStep]) {
             this.tutorialSteps[nextStep].components['tutorial-step'].show();
         }
-    },
-
-    handleStartTutorial() {
-        if (this.data.currentStep < 0) {
-            this.el.setAttribute('tutorial', 'currentStep', 0);
+        if (!this.tutorialSteps[nextStep]) {
+            this.handleStopTutorial();
         }
     },
 
+    handleStartTutorial() {
+        this.startTutorialButton.setAttribute('visible', false);
+        this.nextStepButton.setAttribute('visible', true);
+        this.stopTutorialButton.setAttribute('visible', true);
+        this.el.setAttribute('tutorial', 'currentStep', 0);
+    },
+
     handleStopTutorial() {
+        this.startTutorialButton.setAttribute('visible', true);
+        this.nextStepButton.setAttribute('visible', false);
+        this.stopTutorialButton.setAttribute('visible', false);
         this.el.setAttribute('tutorial', 'currentStep', -1);
     },
 
