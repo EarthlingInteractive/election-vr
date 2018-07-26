@@ -21,7 +21,7 @@
     <meta property="og:description" content="A visualization of the popular vote in recent U.S. Presidential elections using WebVR." />
     <meta property="og:image" content="https://electionvr.earthlinglabs.com/assets/preview.png" />
     <link href="assets/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
-<script type="text/javascript" src="aframe.bundle.js?8328ddb860888fa398b7"></script><script type="text/javascript" src="app.bundle.js?8328ddb860888fa398b7"></script></head>
+<script type="text/javascript" src="aframe.bundle.js?643bbe422eb95be9e00d"></script><script type="text/javascript" src="app.bundle.js?643bbe422eb95be9e00d"></script></head>
 <body>
 
 <!-- Google Tag Manager (noscript) -->
@@ -34,10 +34,10 @@
         <a-asset-item id="json-us" src="assets/cb_2017_us_state_20m-albers-quantized.topo.json" />
         <img id="ei-logo" src="assets/earthling-logo.png">
         <a-mixin id="gaze-cursor" cursor="fuse: true;"
-                 geometry="primitive: ring; radius-inner: 0.002; radius-outer: 0.003;"
-                 position="0 0 -0.2"
+                 geometry="primitive: ring; radius-inner: 0.02; radius-outer: 0.03;"
+                 position="0 0 -1.05"
                  material="color: black; shader: flat"
-                 text="value: +; color: white; align: center; height: 0.005; width: 0.005; wrapCount: 1; xOffset: -0.00015;"
+                 text="value: +; color: white; align: center; height: 0.05; width: 0.05; wrapCount: 1; xOffset: -0.0015;"
                  animation__fusing="property: scale; dur: 1500; dir: backwards;
                                   from: 1 1 1; to: 0.2 0.2 0.2; startEvents: fusing"
                  animation__stopfusing="property: scale; dur: 150; dir: forwards;
@@ -73,6 +73,8 @@
             </a-plane>
             <a-text color="black" height="0.35" position="-1.6 -0.75 0.01" scale="0.65 0.65 0.65" value="Certified election data from https://www.fec.gov/"></a-text>
             <a-entity id="start-tutorial" button="value: Start Tutorial; textWrapCount: 14; buttonWidth: 0.7;" position="0 -1.25 0.01"></a-entity>
+            <a-entity id="stop-tutorial" visible="false" button="value: Stop Tutorial; textWrapCount: 14; buttonWidth: 0.7;" position="-0.5 -1.25 0.01"></a-entity>
+            <a-entity id="next-tutorial-step" visible="false" button="value: Next Step; textWrapCount: 14; buttonWidth: 0.7;" position="0.5 -1.25 0.01"></a-entity>
         </a-plane>
     </a-plane>
 
@@ -110,7 +112,7 @@
         <a-entity tutorial-step="dur: 3000; textvalue: Welcome to ElectionVR"></a-entity>
         <a-entity tutorial-step="dur: 3000; textvalue: Created by Earthling Interactive"></a-entity>
         <a-entity tutorial-step="dur: 3000; textvalue: Explore US election data in virtual reality."></a-entity>
-        <a-entity tutorial-step="triggerEvent: year-changed; controllerTypes: gaze, desktop; textvalue: To select something, move the cursor over it and gaze for 1 second. Try selecting a year button."></a-entity>
+        <a-entity tutorial-step="offset: 0 0.2 -1; triggerEvent: year-changed; controllerTypes: gaze, desktop; textvalue: To select something, move the cursor over it and gaze for 1 second. Try selecting a year button."></a-entity>
         <a-entity tutorial-step="triggerEvent: year-changed; controllerTypes: singlePointer, doublePointer; textvalue: To select something, point the laser at it and pull the trigger button. Try selecting a year button."></a-entity>
         <a-entity tutorial-step="dur: 2000; textvalue: Good. Now look around."></a-entity>
         <a-entity tutorial-step="dur: 3000; controllerTypes: desktop; textvalue: Use the w-a-s-d keys to move around."></a-entity>
@@ -119,7 +121,7 @@
         <a-entity tutorial-step="dur: 3000; textvalue: The height shows the number of votes."></a-entity>
         <a-entity tutorial-step="dur: 4000; textvalue: The width shows the percentage of the vote that the candidate received."></a-entity>
         <a-entity tutorial-step="controllerTypes: singlePointer, doublePointer; triggerEvent: target-selected; textvalue: To see detailed voting information, point the laser at a shape and click the trigger. Try selecting a shape now."></a-entity>
-        <a-entity tutorial-step="controllerTypes: gaze, desktop; triggerEvent: target-selected; textvalue: To see detailed voting information, move the cursor over a shape and gaze for 1 second. Try selecting a shape now."></a-entity>
+        <a-entity tutorial-step="offset: 0 0.2 -1; controllerTypes: gaze, desktop; triggerEvent: target-selected; textvalue: To see detailed voting information, move the cursor over a shape and gaze for 1 second. Try selecting a shape now."></a-entity>
         <a-entity tutorial-step="dur: 2000; textvalue: Good."></a-entity>
         <a-entity tutorial-step="dur: 4000; textvalue: If 2 shapes are the same width, then the vote was very close."></a-entity>
         <a-entity tutorial-step="dur: 4000; textvalue: The winning candidate&apos;s shape is the one at the bottom."></a-entity>
