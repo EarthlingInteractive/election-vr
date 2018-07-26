@@ -15,11 +15,20 @@ AFRAME.registerComponent('tutorial', {
         this.handleControllerChange = this.handleControllerChange.bind(this);
         this.superHands.addEventListener('controller-progressed', this.handleControllerChange);
         this.tutorialSteps = this.el.querySelectorAll('[tutorial-step]');
+
         this.handleNextStep = this.handleNextStep.bind(this);
         this.el.addEventListener('next-step', this.handleNextStep);
+        this.nextStepButton = document.querySelector('#next-tutorial-step');
+        this.nextStepButton.addEventListener('clicked', this.handleNextStep);
+
         this.handleStartTutorial = this.handleStartTutorial.bind(this);
         this.startTutorialButton = document.querySelector('#start-tutorial');
         this.startTutorialButton.addEventListener('clicked', this.handleStartTutorial);
+
+        this.handleStopTutorial = this.handleStopTutorial.bind(this);
+        this.stopTutorialButton = document.querySelector('#stop-tutorial');
+        this.stopTutorialButton.addEventListener('clicked', this.handleStopTutorial);
+
         this.handleControllerChange();
     },
 
@@ -30,7 +39,7 @@ AFRAME.registerComponent('tutorial', {
     },
 
     update(oldData) {
-        if (this.data.currentStep !== oldData.currentStep && this.data.currentStep >= 0) {
+        if (this.data.currentStep !== oldData.currentStep) {
             this.transition(oldData.currentStep, this.data.currentStep);
         }
     },
@@ -39,14 +48,8 @@ AFRAME.registerComponent('tutorial', {
         if (prevStep !== undefined && prevStep >= 0 && this.tutorialSteps[prevStep]) {
             this.tutorialSteps[prevStep].components['tutorial-step'].hide();
         }
-        if (this.timer) {
-            window.clearTimeout(this.timer);
-        }
-        if (nextStep < this.tutorialSteps.length) {
-            this.timer = window.setTimeout(() => {
-                this.tutorialSteps[nextStep].components['tutorial-step'].show();
-                this.timer = null;
-            }, 300);
+        if (nextStep < this.tutorialSteps.length && this.tutorialSteps[nextStep]) {
+            this.tutorialSteps[nextStep].components['tutorial-step'].show();
         }
     },
 
@@ -54,6 +57,10 @@ AFRAME.registerComponent('tutorial', {
         if (this.data.currentStep < 0) {
             this.el.setAttribute('tutorial', 'currentStep', 0);
         }
+    },
+
+    handleStopTutorial() {
+        this.el.setAttribute('tutorial', 'currentStep', -1);
     },
 
     handleControllerChange() {
