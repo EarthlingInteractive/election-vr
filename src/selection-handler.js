@@ -12,6 +12,7 @@ window.dataLayer = window.dataLayer || [];
 AFRAME.registerComponent('selection-handler', {
     init() {
         this.selectionBox = new THREE.Box3Helper(new THREE.Box3(), 'black');
+        this.selectedObjWorldCenter = new THREE.Vector3();
         this.selectionBox.visible = false;
         this.el.setObject3D('selectionBox', this.selectionBox);
 
@@ -29,10 +30,14 @@ AFRAME.registerComponent('selection-handler', {
         this.handleSelection = this.handleSelection.bind(this);
         this.turnSelectionOff = this.turnSelectionOff.bind(this);
         this.el.sceneEl.addEventListener('year-changed', this.turnSelectionOff);
+        this.handleControllerChange();
     },
 
-    handleControllerChange(evt) {
-        if (evt.detail.level === 'gaze') {
+    handleControllerChange() {
+        const progressiveControls = this.superHands.components['progressive-controls'];
+        const lvl = progressiveControls.currentLevel.get('right');
+        const level = progressiveControls.levels[lvl];
+        if (level === 'gaze') {
             this.el.removeEventListener('grab-end', this.handleSelection);
             this.el.addEventListener('click', this.handleSelection);
         } else {
@@ -67,19 +72,25 @@ AFRAME.registerComponent('selection-handler', {
     },
 
     setSelectionTo(targetEl) {
+        if (this.selected) {
+            this.turnSelectionOff();
+        }
         this.selected = targetEl;
         const selectedObj = this.selected.getObject3D('mesh');
         selectedObj.geometry.computeBoundingBox();
         this.showSelectionBoxFor(selectedObj);
+        this.selected.setAttribute('scale', '1.05 1.05 1.01');
+        this.selected.setAttribute('material', 'visible', true);
+        this.selected.addState('selected');
         this.showInfoPanel(selectedObj);
     },
 
     showSelectionBoxFor(selectedObj) {
-        const selectedObjWorldCenter = selectedObj.getWorldPosition();
-        const boxCenter = this.el.object3D.worldToLocal(selectedObjWorldCenter);
+        selectedObj.getWorldPosition(this.selectedObjWorldCenter);
+        const boxCenter = this.el.object3D.worldToLocal(this.selectedObjWorldCenter);
 
         const selectionBox = new THREE.Box3();
-        selectionBox.setFromCenterAndSize(boxCenter, selectedObj.geometry.boundingBox.getSize());
+        selectionBox.setFromCenterAndSize(boxCenter, selectedObj.geometry.boundingBox.getSize(new THREE.Vector3()));
 
         this.selectionBox.box = selectionBox;
         this.selectionBox.visible = true;
@@ -127,6 +138,11 @@ AFRAME.registerComponent('selection-handler', {
     turnSelectionOff() {
         this.infoPanel.object3D.visible = false;
         this.selectionBox.visible = false;
-        this.selected = null;
+        if (this.selected) {
+            this.selected.setAttribute('scale', '1 1 1');
+            this.selected.setAttribute('material', 'visible', false);
+            this.selected.removeState('selected');
+            this.selected = null;
+        }
     }
 });
