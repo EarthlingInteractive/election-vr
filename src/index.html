@@ -34,10 +34,10 @@
         <a-asset-item id="json-us" src="assets/cb_2017_us_state_20m-albers-quantized.topo.json" />
         <img id="ei-logo" src="assets/earthling-logo.png">
         <a-mixin id="gaze-cursor" cursor="fuse: true;"
-                 geometry="primitive: ring; radius-inner: 0.002; radius-outer: 0.003;"
-                 position="0 0 -0.2"
+                 geometry="primitive: ring; radius-inner: 0.02; radius-outer: 0.03;"
+                 position="0 0 -1.05"
                  material="color: black; shader: flat"
-                 text="value: +; color: white; align: center; height: 0.005; width: 0.005; wrapCount: 1; xOffset: -0.00015;"
+                 text="value: +; color: white; align: center; height: 0.05; width: 0.05; wrapCount: 1; xOffset: -0.0015;"
                  animation__fusing="property: scale; dur: 1500; dir: backwards;
                                   from: 1 1 1; to: 0.2 0.2 0.2; startEvents: fusing"
                  animation__stopfusing="property: scale; dur: 150; dir: forwards;
@@ -47,7 +47,7 @@
         <a-mixin id="hand-pointer" haptics></a-mixin>
     </a-assets>
 
-    <a-entity id="controls" progressive-controls="objects: .selectable; gazeMixin: gaze-cursor; pointMixin: hand-pointer; maxLevel: point;" help></a-entity>
+    <a-entity id="controls" progressive-controls="objects: .selectable; gazeMixin: gaze-cursor; pointMixin: hand-pointer; maxLevel: point;"></a-entity>
 
     <a-plane material="color:black"
              position="0 2 -5"
@@ -72,6 +72,9 @@
                 <a-entity year-selector="selectedYear: 2016;" position="-0.25 0 0.01"></a-entity>
             </a-plane>
             <a-text color="black" height="0.35" position="-1.6 -0.75 0.01" scale="0.65 0.65 0.65" value="Certified election data from https://www.fec.gov/"></a-text>
+            <a-entity id="start-tutorial" button="value: Start Tutorial; textWrapCount: 14; buttonWidth: 0.7;" position="0 -1.25 0.01"></a-entity>
+            <a-entity id="stop-tutorial" visible="false" button="value: Stop Tutorial; textWrapCount: 14; buttonWidth: 0.7;" position="-0.5 -1.25 0.01"></a-entity>
+            <a-entity id="next-tutorial-step" visible="false" button="value: Next Step; textWrapCount: 14; buttonWidth: 0.7;" position="0.5 -1.25 0.01"></a-entity>
         </a-plane>
     </a-plane>
 
@@ -100,9 +103,39 @@
               selection-handler
               stretchable
               clickable="startButtons: triggerdown; endButtons: triggerup;"
-              grabbable="startButtons: gripdown; endButtons: gripup; suppressY: false;"
+              grabbable="startButtons: gripdown; endButtons: gripup; suppressY: true;"
     >
         <a-plane height="5" width="10" material="visible: false;" class="selectable"></a-plane>
+    </a-entity>
+
+    <a-entity id="tutorial" position="0 1.6 -1" tutorial>
+        <a-entity tutorial-step="dur: 3000; textvalue: Welcome to ElectionVR"></a-entity>
+        <a-entity tutorial-step="dur: 3000; textvalue: Created by Earthling Interactive"></a-entity>
+        <a-entity tutorial-step="dur: 3000; textvalue: Explore US election data in virtual reality."></a-entity>
+        <a-entity tutorial-step="offset: 0 0.2 -1; triggerEvent: year-changed; controllerTypes: gaze, desktop; textvalue: To select something, move the cursor over it and gaze for 1 second. Try selecting a year button."></a-entity>
+        <a-entity tutorial-step="triggerEvent: year-changed; controllerTypes: singlePointer, doublePointer; textvalue: To select something, point the laser at it and pull the trigger button. Try selecting a year button."></a-entity>
+        <a-entity tutorial-step="dur: 2000; textvalue: Good. Now look around."></a-entity>
+        <a-entity tutorial-step="dur: 3000; controllerTypes: desktop; textvalue: Use the w-a-s-d keys to move around."></a-entity>
+        <a-entity tutorial-step="dur: 3000; textvalue: Voting data for the candidates are shown using the 3D shapes of each state."></a-entity>
+        <a-entity tutorial-step="dur: 3000; textvalue: The color shows the party of the candidate."></a-entity>
+        <a-entity tutorial-step="dur: 3000; textvalue: The height shows the number of votes."></a-entity>
+        <a-entity tutorial-step="dur: 4000; textvalue: The width shows the percentage of the vote that the candidate received."></a-entity>
+        <a-entity tutorial-step="controllerTypes: singlePointer, doublePointer; triggerEvent: target-selected; textvalue: To see detailed voting information, point the laser at a shape and click the trigger. Try selecting a shape now."></a-entity>
+        <a-entity tutorial-step="offset: 0 0.2 -1; controllerTypes: gaze, desktop; triggerEvent: target-selected; textvalue: To see detailed voting information, move the cursor over a shape and gaze for 1 second. Try selecting a shape now."></a-entity>
+        <a-entity tutorial-step="dur: 2000; textvalue: Good."></a-entity>
+        <a-entity tutorial-step="dur: 4000; textvalue: If 2 shapes are the same width, then the vote was very close."></a-entity>
+        <a-entity tutorial-step="dur: 4000; textvalue: The winning candidate&apos;s shape is the one at the bottom."></a-entity>
+        <a-entity tutorial-step="triggerEvent: stretch-end; controllerTypes: doublePointer; textvalue: To change the size of the map, hold down the trigger buttons on both controllers at the same time and move your hands apart or together."></a-entity>
+        <a-entity tutorial-step="dur: 2000; controllerTypes: doublePointer; textvalue: Good."></a-entity>
+        <a-entity tutorial-step="triggerEvent: drag-end; controllerTypes: singlePointer, doublePointer; textvalue: To move the map around, point at the map, hold down the grip button on one controller and move your hand."></a-entity>
+        <a-entity tutorial-step="dur: 2000; controllerTypes: singlePointer, doublePointer; textvalue: Good."></a-entity>
+        <a-entity tutorial-step="triggerEvent: stretch-end; controllerTypes: doublePointer; textvalue: To move and scale the map at the same time, hold down the grip buttons on both controllers at the same time and move your hands."></a-entity>
+        <a-entity tutorial-step="dur: 2000; controllerTypes: doublePointer; textvalue: Good."></a-entity>
+        <!--<a-entity tutorial-step="offset: 0 0.2 -1; controllerTypes: doublePointer; triggerEvent: reset-view; textvalue: To reset the map size and position, press the menu button on either controller."></a-entity>-->
+        <a-entity tutorial-step="dur: 3000; textvalue: Voting data is from the Federal Election Commission."></a-entity>
+        <a-entity tutorial-step="dur: 3000; textvalue: The US map data is from the US Census Bureau."></a-entity>
+        <a-entity tutorial-step="dur: 2000; textvalue: Now it's time to explore."></a-entity>
+        <a-entity tutorial-step="dur: 2000; textvalue: Thanks for trying ElectionVR."></a-entity>
     </a-entity>
 </a-scene>
 </body>

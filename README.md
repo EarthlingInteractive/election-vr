@@ -1,21 +1,12 @@
 # Mapping the popular vote for US President in VR
 
-The goal of this project is to build a visualization that leverages the 3D capabilities of virtual reality 
-to show a more complete and nuanced view of voting results.
+ElectionVR is an experiment in using virtual reality to give people a more intuitive and nuanced view of election data.  It allows you to walk around a map of the United States and explore the data for the last four presidential elections, showing the number and percentage of votes that each of the major candidates received in each state.  You’ll be able to see that more 1 million people in the democratic stronghold of Massachusetts voted for Donald Trump and that almost 4 million people in Texas voted for Hillary Clinton, a state which no Democrat has won since 1976.  You’ll also see the surprisingly strong showing of third-party candidates, such as Gary Johnson and Evan McMullin, especially as compared to previous elections.  
 
-For example, the 2016 presidential election results show Donald Trump winning the electoral college but Hillary Clinton 
-winning the popular vote.  The existing visualizations showing states or counties as red or blue provides 
-information about the majority vote but they hide any sense of scale and they conceal the number of votes 
-that non-majority candidates received.  If one looks at the Google’s visualization of the 
-Massachusetts voting results, all of the counties are blue and one would get the impression that no one voted 
-for Donald Trump or any other candidate.  In fact, over one million people in Massachusetts voted for Donald Trump. 
+To explore these stories and more, go to: https://electionvr.earthlinglabs.com/
 
 [![Election VR](./src/assets/preview.png)](https://electionvr.earthlinglabs.com/)
 
-To view the project, go to: https://electionvr.earthlinglabs.com/
-
-The visualization can be viewed using the HTC Vive, Occulus Rift, Google Cardboard, or a Desktop browser.  The Vive and
-the Rift support controller-based interactions to move and scale the map.
+The visualization is built in WebVR so it can be viewed using the HTC Vive, Occulus Rift, Google Cardboard, or a Desktop browser.  The Vive and the Rift support controller-based interactions to move and scale the map.
 
 ## About the data
 
