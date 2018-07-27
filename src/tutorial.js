@@ -60,6 +60,7 @@ AFRAME.registerComponent('tutorial', {
 
     handleStartTutorial() {
         this.startTutorialButton.setAttribute('visible', false);
+        this.startTutorialButton.setAttribute('position', '-5 -0.5 -1');
         this.nextStepButton.setAttribute('visible', true);
         this.stopTutorialButton.setAttribute('visible', true);
         this.el.setAttribute('tutorial', 'currentStep', 0);
@@ -67,6 +68,7 @@ AFRAME.registerComponent('tutorial', {
 
     handleStopTutorial() {
         this.startTutorialButton.setAttribute('visible', true);
+        this.startTutorialButton.setAttribute('position', '0 -1.25 0.01');
         this.nextStepButton.setAttribute('visible', false);
         this.stopTutorialButton.setAttribute('visible', false);
         this.el.setAttribute('tutorial', 'currentStep', -1);

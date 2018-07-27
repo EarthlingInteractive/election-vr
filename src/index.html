@@ -108,7 +108,7 @@
         <a-plane height="5" width="10" material="visible: false;" class="selectable"></a-plane>
     </a-entity>
 
-    <a-entity id="tutorial" position="0 2 -4.9" tutorial>
+    <a-entity id="tutorial" position="0 2 -4.8" tutorial>
         <a-entity tutorial-step="dur: 3000; textvalue: Welcome to ElectionVR"></a-entity>
         <a-entity tutorial-step="dur: 3000; textvalue: Created by Earthling Interactive"></a-entity>
         <a-entity tutorial-step="dur: 3000; textvalue: Explore US election data in virtual reality."></a-entity>
@@ -127,12 +127,9 @@
         <a-entity tutorial-step="textvalue: The winning candidate&apos;s shape is the one at the bottom."></a-entity>
         <a-entity tutorial-step="triggerEvent: year-changed; offset: 0 1 0; textvalue: You can change the election year data you&apos;re looking at. Try selecting a different Year button now."></a-entity>
         <a-entity tutorial-step="dur: 2000; textvalue: Good."></a-entity>
-        <a-entity tutorial-step="triggerEvent: stretch-end; controllerTypes: doublePointer; textvalue: To change the size of the map, hold down the trigger buttons on both controllers at the same time and move your hands apart or together."></a-entity>
-        <a-entity tutorial-step="dur: 2000; controllerTypes: doublePointer; textvalue: Good."></a-entity>
-        <a-entity tutorial-step="triggerEvent: drag-end; controllerTypes: singlePointer, doublePointer; textvalue: To move the map around, point at the map, hold down the grip button on one controller and move your hand."></a-entity>
-        <a-entity tutorial-step="dur: 2000; controllerTypes: singlePointer, doublePointer; textvalue: Good."></a-entity>
-        <a-entity tutorial-step="triggerEvent: stretch-end; controllerTypes: doublePointer; textvalue: To move and scale the map at the same time, hold down the grip buttons on both controllers at the same time and move your hands."></a-entity>
-        <a-entity tutorial-step="dur: 2000; controllerTypes: doublePointer; textvalue: Good."></a-entity>
+        <a-entity tutorial-step="controllerTypes: doublePointer; textvalue: To change the size of the map, point at the map with both controllers, hold down the trigger buttons at the same time, and move your hands apart or together."></a-entity>
+        <a-entity tutorial-step="controllerTypes: singlePointer, doublePointer; textvalue: To move the map around, point at the map with one controller, hold down the grip button, and move your hand."></a-entity>
+        <a-entity tutorial-step="controllerTypes: doublePointer; textvalue: To move and scale the map at the same time, point at the map with both controllers, hold down the grip buttons on both, and move your hands."></a-entity>
         <!--<a-entity tutorial-step="offset: 0 0.2 -1; controllerTypes: doublePointer; triggerEvent: reset-view; textvalue: To reset the map size and position, press the menu button on either controller."></a-entity>-->
         <a-entity tutorial-step="dur: 3000; textvalue: Voting data is from the Federal Election Commission."></a-entity>
         <a-entity tutorial-step="dur: 3000; textvalue: The US map data is from the US Census Bureau."></a-entity>

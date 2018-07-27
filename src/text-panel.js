@@ -16,8 +16,9 @@ AFRAME.registerPrimitive('a-text-panel', {
         },
         text: {
             color: 'white',
-            align: 'left',
-            wrapCount: 20
+            align: 'center',
+            wrapCount: 32,
+            zOffset: 0.005
         }
     },
 
