@@ -1,4 +1,4 @@
-# Mapping the popular vote for US President in VR
+# ElectionVR: Mapping the popular vote for US President in VR
 
 ElectionVR is an experiment in using virtual reality to give people a more intuitive and nuanced view of election data.  It allows you to walk around a map of the United States and explore the data for the last four presidential elections, showing the number and percentage of votes that each of the major candidates received in each state.  You’ll be able to see that more 1 million people in the democratic stronghold of Massachusetts voted for Donald Trump and that almost 4 million people in Texas voted for Hillary Clinton, a state which no Democrat has won since 1976.  You’ll also see the surprisingly strong showing of third-party candidates, such as Gary Johnson and Evan McMullin, especially as compared to previous elections.  
 
