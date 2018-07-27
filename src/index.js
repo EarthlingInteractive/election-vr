@@ -11,3 +11,8 @@ import './selection-handler';
 import './selection-info';
 import './year-selector';
 import './help';
+import './tutorial';
+import './tutorial-step';
+import './text-panel';
+import './button';
+import './progressive-controls';

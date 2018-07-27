@@ -6,8 +6,6 @@ import candidateInfo from './candidate-info';
 const { AFRAME } = window;
 const { THREE } = AFRAME;
 
-const invisibleMaterial = new THREE.MeshBasicMaterial({ visible: false });
-
 const createExtrudedAndScaledGeometry = (height, stateShapes, percentage, zPosition) => {
     const extrudeSettings = {
         amount: height,
@@ -16,7 +14,7 @@ const createExtrudedAndScaledGeometry = (height, stateShapes, percentage, zPosit
 
     const extrudedFeatureGeometry = new THREE.ExtrudeGeometry(stateShapes, extrudeSettings);
     extrudedFeatureGeometry.computeBoundingBox();
-    const center = extrudedFeatureGeometry.boundingBox.getCenter();
+    const center = extrudedFeatureGeometry.boundingBox.getCenter(new THREE.Vector3());
     extrudedFeatureGeometry.center();
     extrudedFeatureGeometry.scale(percentage, percentage, 1);
     extrudedFeatureGeometry.translate(center.x, center.y, center.z + zPosition);
@@ -31,7 +29,7 @@ const createExtrudedAndScaledGeometryPerShape = (height, stateShapes, percentage
     stateShapes.forEach((stateShape) => {
         const extrudedFeatureGeometry = new THREE.ExtrudeGeometry(stateShape, extrudeSettings);
         extrudedFeatureGeometry.computeBoundingBox();
-        const center = extrudedFeatureGeometry.boundingBox.getCenter();
+        const center = extrudedFeatureGeometry.boundingBox.getCenter(new THREE.Vector3());
         extrudedFeatureGeometry.center();
         extrudedFeatureGeometry.scale(percentage, percentage, 1);
         extrudedFeatureGeometry.translate(center.x, center.y, center.z + zPosition);
@@ -45,10 +43,10 @@ const createSelectionMask = (inputGeometry, name, attributes) => {
     const selectionMaskGeometry = new THREE.BufferGeometry();
     selectionMaskGeometry.fromGeometry(inputGeometry);
     selectionMaskGeometry.computeBoundingBox();
-    const center = selectionMaskGeometry.boundingBox.getCenter();
+    const center = selectionMaskGeometry.boundingBox.getCenter(new THREE.Vector3());
     selectionMaskGeometry.translate(-center.x, -center.y, -center.z);
 
-    const mesh = new THREE.Mesh(selectionMaskGeometry, invisibleMaterial);
+    const mesh = new THREE.Mesh(selectionMaskGeometry);
     mesh.name = name;
     const selectionMaskEntity = document.createElement('a-entity');
     selectionMaskEntity.setAttribute('id', name);
@@ -56,6 +54,9 @@ const createSelectionMask = (inputGeometry, name, attributes) => {
     selectionMaskEntity.setAttribute('class', 'selectable');
     selectionMaskEntity.setAttribute('selection-info', attributes);
     selectionMaskEntity.setAttribute('hoverable', '');
+    selectionMaskEntity.setAttribute('material', {
+        visible: false, opacity: 0.25, transparent: true, color: 'white'
+    });
     selectionMaskEntity.setObject3D('mesh', mesh);
     return selectionMaskEntity;
 };

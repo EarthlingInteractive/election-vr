@@ -17,7 +17,7 @@
     },
     "homepage": "https://electionvr.earthlinglabs.com/",
     "bugs": {
-        "url" : "https://github.com/EarthlingInteractive/election-vr/issues"
+        "url": "https://github.com/EarthlingInteractive/election-vr/issues"
     },
     "scripts": {
         "start": "webpack-dev-server --port 3000 --open",
@@ -35,7 +35,7 @@
         "aframe-look-at-component": "^0.6.0",
         "d3-format": "^1.2.2",
         "d3-scale": "^2.0.0",
-        "super-hands": "wmurphyrd/aframe-super-hands-component#06469351ecf1b3211e1dd490faf9acd4a7a73002"
+        "super-hands": "^3.0.0"
     },
     "devDependencies": {
         "babel-core": "^6.26.3",
