@@ -24,6 +24,7 @@ AFRAME.registerPrimitive('a-text-panel', {
     mappings: {
         primitive: 'geometry.primitive',
         width: 'geometry.width',
+        height: 'geometry.height',
         textcolor: 'text.color',
         textalign: 'text.align',
         textwrapcount: 'text.wrapCount',
