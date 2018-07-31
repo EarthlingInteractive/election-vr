@@ -47,15 +47,23 @@ AFRAME.registerComponent('tutorial', {
     },
 
     transition(prevStep, nextStep) {
-        if (prevStep !== undefined && prevStep >= 0 && this.tutorialSteps[prevStep]) {
-            this.tutorialSteps[prevStep].components['tutorial-step'].hide();
+        if (this.hasStep(prevStep)) {
+            this.getStep(prevStep).hide();
         }
-        if (nextStep < this.tutorialSteps.length && this.tutorialSteps[nextStep]) {
-            this.tutorialSteps[nextStep].components['tutorial-step'].show();
+        if (this.hasStep(nextStep)) {
+            this.getStep(nextStep).show();
         }
         if (!this.tutorialSteps[nextStep]) {
             this.handleStopTutorial();
         }
+    },
+
+    getStep(index) {
+        return this.tutorialSteps[index].components['tutorial-step'];
+    },
+
+    hasStep(index) {
+        return (index !== undefined && index >= 0 && this.tutorialSteps[index]);
     },
 
     handleStartTutorial() {
