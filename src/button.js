@@ -93,6 +93,7 @@ AFRAME.registerComponent('button', {
         this.button.setAttribute('text', 'value', this.data.value);
         this.button.setAttribute('text', 'color', this.data.textColor);
         this.button.setAttribute('text', 'wrapCount', this.data.textWrapCount);
+        this.button.setAttribute('text', 'zOffset', 0.005);
 
         if (!this.buttonBorder) {
             this.buttonBorder = document.createElement('a-plane');
