@@ -47,19 +47,28 @@ AFRAME.registerComponent('tutorial', {
     },
 
     transition(prevStep, nextStep) {
-        if (prevStep !== undefined && prevStep >= 0 && this.tutorialSteps[prevStep]) {
-            this.tutorialSteps[prevStep].components['tutorial-step'].hide();
+        if (this.hasStep(prevStep)) {
+            this.getStep(prevStep).hide();
         }
-        if (nextStep < this.tutorialSteps.length && this.tutorialSteps[nextStep]) {
-            this.tutorialSteps[nextStep].components['tutorial-step'].show();
+        if (this.hasStep(nextStep)) {
+            this.getStep(nextStep).show();
         }
         if (!this.tutorialSteps[nextStep]) {
             this.handleStopTutorial();
         }
     },
 
+    getStep(index) {
+        return this.tutorialSteps[index].components['tutorial-step'];
+    },
+
+    hasStep(index) {
+        return (index !== undefined && index >= 0 && this.tutorialSteps[index]);
+    },
+
     handleStartTutorial() {
         this.startTutorialButton.setAttribute('visible', false);
+        this.startTutorialButton.setAttribute('position', '-5 -0.5 -1');
         this.nextStepButton.setAttribute('visible', true);
         this.stopTutorialButton.setAttribute('visible', true);
         this.el.setAttribute('tutorial', 'currentStep', 0);
@@ -67,6 +76,7 @@ AFRAME.registerComponent('tutorial', {
 
     handleStopTutorial() {
         this.startTutorialButton.setAttribute('visible', true);
+        this.startTutorialButton.setAttribute('position', '0 -1.25 0.01');
         this.nextStepButton.setAttribute('visible', false);
         this.stopTutorialButton.setAttribute('visible', false);
         this.el.setAttribute('tutorial', 'currentStep', -1);

@@ -16,14 +16,16 @@ AFRAME.registerPrimitive('a-text-panel', {
         },
         text: {
             color: 'white',
-            align: 'left',
-            wrapCount: 20
+            align: 'center',
+            wrapCount: 32,
+            zOffset: 0.005
         }
     },
 
     mappings: {
         primitive: 'geometry.primitive',
         width: 'geometry.width',
+        height: 'geometry.height',
         textcolor: 'text.color',
         textalign: 'text.align',
         textwrapcount: 'text.wrapCount',

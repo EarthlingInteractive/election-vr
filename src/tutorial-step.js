@@ -15,11 +15,11 @@ AFRAME.registerComponent('tutorial-step', {
         },
         anchor: {
             type: 'selector',
-            default: 'a-camera'
+            default: '[tutorial]'
         },
         offset: {
             type: 'vec3',
-            default: { x: 0, y: 0, z: -1 }
+            default: { x: 0, y: 0, z: 0 }
         },
         textvalue: {
             type: 'string'
@@ -32,6 +32,8 @@ AFRAME.registerComponent('tutorial-step', {
         this.stepEl.object3D.visible = false;
         this.stepEl.setAttribute('opacity', 0);
         this.stepEl.setAttribute('textopacity', 0);
+        this.stepEl.setAttribute('height', 2);
+        this.stepEl.setAttribute('width', 4);
         const fadeinProps = {
             dur: 400,
             easing: 'linear',
