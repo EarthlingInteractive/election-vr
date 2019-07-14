@@ -103,7 +103,7 @@
               selection-handler
               stretchable
               clickable="startButtons: triggerdown; endButtons: triggerup;"
-              grabbable="startButtons: gripdown; endButtons: gripup; suppressY: true;"
+              grabbable="startButtons: gripdown, trackpaddown; endButtons: gripup, trackpadup; suppressY: true;"
     >
         <a-plane height="5" width="10" material="visible: false;" class="selectable"></a-plane>
     </a-entity>
@@ -128,7 +128,7 @@
         <a-entity tutorial-step="triggerEvent: year-changed; offset: 0 1 0; textvalue: You can change the election year data you&apos;re looking at. Try selecting a different Year button now."></a-entity>
         <a-entity tutorial-step="dur: 2000; textvalue: Good."></a-entity>
         <a-entity tutorial-step="controllerTypes: doublePointer; textvalue: To change the size of the map, point at the map with both controllers, hold down the trigger buttons at the same time, and move your hands apart or together."></a-entity>
-        <a-entity tutorial-step="controllerTypes: singlePointer, doublePointer; textvalue: To move the map around, point at the map with one controller, hold down the grip button, and move your hand."></a-entity>
+        <a-entity tutorial-step="controllerTypes: singlePointer, doublePointer; textvalue: To move the map around, point at the map with one controller, hold down the grip button or the trackpad button, and move your hand."></a-entity>
         <a-entity tutorial-step="controllerTypes: doublePointer; textvalue: To move and scale the map at the same time, point at the map with both controllers, hold down the grip buttons on both, and move your hands."></a-entity>
         <!--<a-entity tutorial-step="offset: 0 0.2 -1; controllerTypes: doublePointer; triggerEvent: reset-view; textvalue: To reset the map size and position, press the menu button on either controller."></a-entity>-->
         <a-entity tutorial-step="dur: 3000; textvalue: Voting data is from the Federal Election Commission."></a-entity>
