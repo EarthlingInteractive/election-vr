@@ -9,14 +9,6 @@ module.exports = {
     mode: isProd ? 'production' : 'development',
     devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
     entry: {
-        aframe: [
-            'aframe',
-            'aframe-animation-component',
-            'aframe-geo-projection-component',
-            'aframe-haptics-component',
-            'aframe-look-at-component',
-            'super-hands'
-        ],
         app: ['./src/index.js']
     },
     output: {
@@ -39,17 +31,6 @@ module.exports = {
                 }
             }
         ]
-    },
-    optimization: {
-        splitChunks: {
-            cacheGroups: {
-                commons: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: 'aframe',
-                    chunks: 'all'
-                }
-            }
-        }
     },
     plugins: [
         new HtmlWebpackPlugin({
