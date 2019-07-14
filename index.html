@@ -21,7 +21,7 @@
     <meta property="og:description" content="A visualization of the popular vote in recent U.S. Presidential elections using WebVR." />
     <meta property="og:image" content="https://electionvr.earthlinglabs.com/assets/preview.png" />
     <link href="assets/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
-<script type="text/javascript" src="app.bundle.js?65c81b0768ce5b4ccd6f"></script></head>
+<script type="text/javascript" src="app.bundle.js?cc932af895726b020207"></script></head>
 <body>
 
 <!-- Google Tag Manager (noscript) -->
@@ -47,7 +47,7 @@
         <a-mixin id="hand-pointer" haptics></a-mixin>
     </a-assets>
 
-    <a-entity id="controls" progressive-controls="objects: .selectable; gazeMixin: gaze-cursor; pointMixin: hand-pointer; maxLevel: point;"></a-entity>
+    <a-entity id="controls" progressive-controls="objects: .selectable; gazeMixin: gaze-cursor; pointMixin: hand-pointer; maxLevel: point;" zoom-handler></a-entity>
 
     <a-plane material="color:black"
              position="0 2 -5"
