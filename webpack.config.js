@@ -22,11 +22,11 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                exclude: [/node_modules/, 'src/assets'],
+                exclude: [/node_modules/, path.resolve(__dirname, 'src/assets')],
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['babel-preset-env']
+                        presets: ['@babel/preset-env']
                     }
                 }
             }
