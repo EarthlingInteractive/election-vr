@@ -18,6 +18,7 @@ build-image:
     only:
         - master
         - stage
+        - upgrade-to-pipeline-v2
 
 upgrade-master:
     environment:
@@ -40,3 +41,4 @@ upgrade-stage:
         - upgrade --rancher-url $RANCHER_URL --rancher-key $RANCHER_KEY --rancher-secret $RANCHER_SECRET --stack $RANCHER_STACK --service $RANCHER_SERVICE --environment $RANCHER_ENV --new-image $IMAGE --wait-for-upgrade-to-finish --start-before-stopping --batch-size 1
     only:
         - stage
+        - upgrade-to-pipeline-v2
