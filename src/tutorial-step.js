@@ -30,7 +30,6 @@ AFRAME.registerComponent('tutorial-step', {
         this.handleTriggerEvent = this.handleTriggerEvent.bind(this);
         this.stepEl = document.createElement('a-text-panel');
         this.stepEl.object3D.visible = false;
-        this.stepEl.setAttribute('opacity', 0);
         this.stepEl.setAttribute('textopacity', 0);
         this.stepEl.setAttribute('height', 2);
         this.stepEl.setAttribute('width', 4);
@@ -41,7 +40,6 @@ AFRAME.registerComponent('tutorial-step', {
             to: 1,
             startEvents: 'show-step'
         };
-        this.stepEl.setAttribute('animation__fadein_panel', { property: 'opacity', ...fadeinProps });
         this.stepEl.setAttribute('animation__fadein_text', { property: 'textopacity', ...fadeinProps });
     },
 
@@ -70,7 +68,6 @@ AFRAME.registerComponent('tutorial-step', {
 
     show() {
         this.stepEl.object3D.visible = true;
-        this.stepEl.setAttribute('opacity', 0);
         this.stepEl.setAttribute('textopacity', 0);
         if (this.data.triggerEvent) {
             this.el.sceneEl.addEventListener(this.data.triggerEvent, this.handleTriggerEvent);

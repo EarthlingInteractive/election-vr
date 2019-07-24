@@ -48,11 +48,16 @@ This project follows a Git Flow style convention with changes being merged from 
 [feature branch] --> test --> stage --> master
 ```
 
-The stage and master branches use Docker and the Earthling deployment pipeline.  You can test the Docker deploy locally by running:
+The stage and master branches use Docker and the Earthling deployment pipeline V2.  You can test the Docker deploy locally by running:
 ```
 docker-compose up --build
 ```
 and then navigating to http://localhost:8080/
+
+Deployment is handled by GitLab CI/CD.  To deploy, you'll need an EI Platform GitLab account with access and then set up a remote:
+```
+git remote add gitlab ssh://git@git.ei-platform.com:2222/EarthlingInteractive/APP/election-vr.git
+```
 
 ### Test environment
 
@@ -67,20 +72,21 @@ npm run deploy
 
 The stage branch gets deployed to https://electionvr.ei-app.com/
 
-To release new changes, use the GitLab Pipeline bot in HipChat:
+To release new changes, merge them into the stage branch, push to GitHub, and then push to GitLab:
 ```
-/pipeline deploy --name=election-vr --env=stage
+git push origin stage
+git push gitlab stage
 ```
 
 ### Production environment
 
 The master (production) branch gets deployed to https://electionvr.earthlinglabs.com/
 
-To release new changes, use the GitLab Pipeline bot in HipChat:
+To release new changes, merge them into the master branch, push to GitHub, and then push to GitLab:
 ```
-/pipeline deploy --name=election-vr --env=master
+git push origin master
+git push gitlab master
 ```
-
 
 # Thanks
 * To John Samuelson, Adam Simcock, Don Smith, Jared Chapiewsky, AJ Wortley, Linda Brudz, and Jake Brudz for their feedback, testing, and support
