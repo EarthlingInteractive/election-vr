@@ -9,14 +9,6 @@ module.exports = {
     mode: isProd ? 'production' : 'development',
     devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
     entry: {
-        aframe: [
-            'aframe',
-            'aframe-animation-component',
-            'aframe-geo-projection-component',
-            'aframe-haptics-component',
-            'aframe-look-at-component',
-            'super-hands'
-        ],
         app: ['./src/index.js']
     },
     output: {
@@ -30,26 +22,15 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                exclude: [/node_modules/, 'src/assets'],
+                exclude: [/node_modules/, path.resolve(__dirname, 'src/assets')],
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['babel-preset-env']
+                        presets: ['@babel/preset-env']
                     }
                 }
             }
         ]
-    },
-    optimization: {
-        splitChunks: {
-            cacheGroups: {
-                commons: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: 'aframe',
-                    chunks: 'all'
-                }
-            }
-        }
     },
     plugins: [
         new HtmlWebpackPlugin({

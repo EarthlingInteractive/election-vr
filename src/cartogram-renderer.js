@@ -8,7 +8,7 @@ const { THREE } = AFRAME;
 
 const createExtrudedAndScaledGeometry = (height, stateShapes, percentage, zPosition) => {
     const extrudeSettings = {
-        amount: height,
+        depth: height,
         bevelEnabled: false
     };
 
@@ -22,7 +22,7 @@ const createExtrudedAndScaledGeometry = (height, stateShapes, percentage, zPosit
 };
 const createExtrudedAndScaledGeometryPerShape = (height, stateShapes, percentage, zPosition) => {
     const extrudeSettings = {
-        amount: height,
+        depth: height,
         bevelEnabled: false
     };
     const extrudeGeometry = new THREE.Geometry();

@@ -1,0 +1,42 @@
+image: registry.ei-platform.com/earthlinginteractive/base-images/dind:master
+
+stages:
+    - build
+    - deploy
+
+variables:
+    IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+
+build-image:
+    environment:
+        name: build
+    stage: build
+    script:
+        - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+        - docker build -t $IMAGE -f ./Dockerfile ./
+        - docker push $IMAGE
+    only:
+        - master
+        - stage
+
+upgrade-master:
+    environment:
+        name: production
+        url: https://electionvr.earthlinglabs.com/
+    stage: deploy
+    image: cdrx/rancher-gitlab-deploy
+    script:
+        - upgrade --rancher-url $RANCHER_URL_PROD --rancher-key $RANCHER_KEY_PROD --rancher-secret $RANCHER_SECRET_PROD --stack $RANCHER_STACK_PROD --service $RANCHER_SERVICE_PROD --environment $RANCHER_ENV_PROD --new-image $IMAGE --wait-for-upgrade-to-finish --start-before-stopping --batch-size 1
+    only:
+        - master
+
+upgrade-stage:
+    environment:
+        name: stage
+        url: https://electionvr.ei-app.com/
+    stage: deploy
+    image: cdrx/rancher-gitlab-deploy
+    script:
+        - upgrade --rancher-url $RANCHER_URL --rancher-key $RANCHER_KEY --rancher-secret $RANCHER_SECRET --stack $RANCHER_STACK --service $RANCHER_SERVICE --environment $RANCHER_ENV --new-image $IMAGE --wait-for-upgrade-to-finish --start-before-stopping --batch-size 1
+    only:
+        - stage
