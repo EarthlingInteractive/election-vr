@@ -47,7 +47,7 @@
         <a-mixin id="hand-pointer" haptics></a-mixin>
     </a-assets>
 
-    <a-entity id="controls" progressive-controls="objects: .selectable; gazeMixin: gaze-cursor; pointMixin: hand-pointer; maxLevel: point;"></a-entity>
+    <a-entity id="controls" progressive-controls="objects: .selectable; gazeMixin: gaze-cursor; pointMixin: hand-pointer; maxLevel: point;" zoom-handler></a-entity>
 
     <a-plane material="color:black"
              position="0 2 -5"
